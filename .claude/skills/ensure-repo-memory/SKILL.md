@@ -1,5 +1,7 @@
 ---
 name: ensure-repo-memory
+version: 1.0.0
+updated: 2026-06-14
 description: >-
   Ensure this repository's Claude auto-memory is redirected into the version-controlled
   <repo-root>/.claude/memory folder (via autoMemoryDirectory in the machine-local
