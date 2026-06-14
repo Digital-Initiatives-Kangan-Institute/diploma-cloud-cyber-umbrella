@@ -1,0 +1,16 @@
+{
+  "$comment": "PROJECT-SCOPE MCP SERVERS (shared, committed to git). Lives at the repo root, NOT inside .claude/. Each key under mcpServers is a server. 'type' is one of: stdio | http | sse | ws. This is an EXAMPLE scaffold — the server below is illustrative; replace or remove it. Approve project servers via /mcp or settings (enableAllProjectMcpServers / enabledMcpjsonServers).",
+  "mcpServers": {
+    "example-stdio-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@some/mcp-server@latest", "--flag", "value"],
+      "env": { "SOME_API_KEY": "set-in-settings-or-env-not-here" }
+    },
+    "example-http-server": {
+      "type": "http",
+      "url": "https://example.com/mcp",
+      "headers": { "Authorization": "Bearer <token>" }
+    }
+  }
+}

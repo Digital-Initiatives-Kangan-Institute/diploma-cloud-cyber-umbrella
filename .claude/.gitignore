@@ -1,0 +1,3 @@
+# Personal / machine-local Claude assets — never synced across machines.
+settings.local.json
+agent-memory-local/

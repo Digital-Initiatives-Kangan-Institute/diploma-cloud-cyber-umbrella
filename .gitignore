@@ -1,0 +1,11 @@
+# =============================================================================
+# Umbrella (parent) repo .gitignore
+# =============================================================================
+
+# Nested working repos — version-controlled independently by their own remotes.
+# The parent (umbrella) repo must not track anything inside them.
+/diploma-cloud-cyber-content/
+/diploma-cloud-cyber-website/
+
+# Personal, machine-local instructions — not synced across machines.
+/CLAUDE.local.md

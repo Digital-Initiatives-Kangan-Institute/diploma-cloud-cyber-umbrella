@@ -1,0 +1,71 @@
+{
+  "//": "REFERENCE ONLY — Claude Code does NOT load this file (it reads only settings.json + settings.local.json). This is a catalogue of commonly-used keys with example values; copy what you actually want into settings.json and give it real values. Keys prefixed with // are inert comment placeholders.",
+
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "//model": "Default model for the project. Aliases: sonnet | opus | haiku | fable, or a full id.",
+  "model": "opus",
+
+  "//permissions": "allow pre-approves; deny blocks. defaultMode: default | acceptEdits | plan | dontAsk | bypassPermissions. additionalDirectories grants access to paths OUTSIDE the workspace (sub-repos nested inside the umbrella are already in scope, so they do NOT need listing here).",
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Read(./**)"
+    ],
+    "deny": [
+      "Read(./**/.env)",
+      "Bash(rm -rf:*)"
+    ],
+    "additionalDirectories": [
+      "C:/some/external/shared-assets"
+    ],
+    "defaultMode": "default"
+  },
+
+  "//env": "Environment variables injected into every session in this project.",
+  "env": {
+    "EXAMPLE_VAR": "value"
+  },
+
+  "//hooks": "Harness-run logic on lifecycle events. Two examples below: (1) the REAL SessionStart memory self-heal we use, and (2) an illustrative PreToolUse gate on Bash.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/skills/ensure-repo-memory/ensure_repo_memory.ps1\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/example-hook.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+
+  "//statusLine": "Custom status line: a command that prints one line, or point at .claude/status-line.md.",
+  "statusLine": {
+    "type": "command",
+    "command": "${CLAUDE_PROJECT_DIR}/.claude/status-line.md"
+  },
+
+  "//other-common-keys": "A few more you may want — uncomment into settings.json as needed:",
+  "//outputStyle": "name-of-an-output-style-from-output-styles",
+  "//enableAllProjectMcpServers": false,
+  "//autoMemoryEnabled": true,
+  "//cleanupPeriodDays": 30,
+  "//editorMode": "normal | vim",
+  "//includeGitInstructions": true
+}

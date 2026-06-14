@@ -1,0 +1,6 @@
+{
+  "$comment": "OUTPUT STYLE — adjusts Claude's system prompt tone/format. Folder name is the style id. Select it via /output-style or the `outputStyle` settings key. This is an example; edit `instructions` to shape responses for this project.",
+  "name": "example-style",
+  "description": "Shown in the /output-style menu — what this style is for.",
+  "instructions": "Additional instructions appended to the system prompt when this style is active. e.g. 'Prefer concise, checklist-style answers. Lead with the action, then the rationale.'"
+}
