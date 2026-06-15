@@ -25,7 +25,11 @@ below applies.
   location — KE is OUT of report bodies; the **instrument** carries the contextual KE *questions*
   (answered in the appendix); Part C re-covers them verbally (C5); templates are **KE-free**. CL2
   allocation: **A12 = 503 KE 3/4/6** (Solution Design); **B15 = 501 KE 1–6** (DR Plan); **`501 KE 6`
-  (monitor/alerts) moved AT2→AT1 Part B**.
+  (monitor/alerts) in AT1 Part B**.
+- **Coverage:** AT1 + AT2 together evidence every PC/FS/PE/KE in `consolidated_uoc.md` — the
+  cluster-coverage validator passes (105/105). Foundation Skills are **co-evidenced** through the
+  technical deliverables and troubleshooting (assessment plan G11), noted in the marking guides rather
+  than assessed as separate criteria.
 
 ## Key reframe — three separate concerns (Tim's; do NOT re-tangle)
 *Disaster recovery* (501) = "what if the system goes down" → DR Plan. *Design* (503: web-scale + the
@@ -72,8 +76,7 @@ CL2-only**. See docs/document-template-system.md.
 ## Open — where it needs to go
 - **501/503 standalone source assessments not in repo** → Step-3 reuse audit blocked; **505 is
   greenfield** — author fresh meanwhile.
-- Per-AT delivery TBDs (time allowed, location); cluster closeout (per-unit Assessment Mapping docs, a
-  UoC-coverage validator, institutional **Pre-Validation**); **[VERIFY]** legal/residency wording before
-  it reaches students.
+- Per-AT delivery TBDs (time allowed, location); cluster closeout (per-unit Assessment Mapping docs,
+  institutional **Pre-Validation**); **[VERIFY]** legal/residency wording before it reaches students.
 - **Lab-pack format** choice (separate runnable pack vs `.docx` appendices) — a format call, not a
   capability one.
