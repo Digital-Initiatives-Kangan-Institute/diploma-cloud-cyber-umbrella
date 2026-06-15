@@ -1,14 +1,56 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
 
-  "//hooks": "SessionStart self-heal: point this machine's auto-memory at the repo's .claude/memory (idempotent; see skills/ensure-repo-memory). Windows/PowerShell.",
+  "//permissions": "READ-ONLY profile (settings-setup Q2=B): common read-only commands auto-approved; writes, installs, network, and state-changing git still prompt (Q1=B — ask before each git write). deny baseline blocks secrets + rm -rf. git rev-parse stays allowed so the memory hook runs unprompted.",
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(file:*)",
+      "Bash(stat:*)",
+      "Bash(readlink:*)",
+      "Bash(realpath:*)",
+      "Bash(tree:*)",
+      "Bash(du:*)",
+      "Bash(df:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(pwd)",
+      "Bash(whoami)",
+      "Bash(which:*)",
+      "Bash(uname:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git config --get:*)",
+      "Read(./**)"
+    ],
+    "deny": [
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Bash(rm -rf:*)"
+    ],
+    "defaultMode": "default"
+  },
+
+  "//hooks": "SessionStart self-heal: point this machine's auto-memory at the repo's .claude/memory (idempotent; see hooks/ensure-repo-memory.mjs). Node hook — identical command on Windows/macOS/Linux.",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/skills/ensure-repo-memory/ensure_repo_memory.ps1\"",
+            "command": "node .claude/hooks/ensure-repo-memory.mjs",
             "timeout": 15
           }
         ]

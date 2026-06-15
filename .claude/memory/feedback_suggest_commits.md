@@ -1,5 +1,5 @@
 ---
-name: feedback_suggest_commits
+name: feedback-suggest-commits
 description: "When a commit seems appropriate, suggest it but wait for confirmation — never auto-commit"
 metadata: 
   node_type: memory
@@ -11,4 +11,4 @@ When a commit looks appropriate (memory changes, a finished unit of work, a good
 
 **Why:** The user wants to stay in control of what enters git history and when, especially because this work spans two machines where commit/push timing affects sync.
 
-**How to apply:** Surface the suggestion ("this looks like a good point to commit — want me to?") and pause. Applies to all commits, with extra relevance to `[[memory_principles_not_state]]` memory writes, which are now version-controlled and only sync between machines once committed and pushed.
+**How to apply:** Surface the suggestion ("this looks like a good point to commit — want me to?") and pause. Applies to all commits, with extra relevance to `[[memory-principles-not-state]]` memory writes, which are now version-controlled and only sync between machines once committed and pushed.

@@ -1,9 +1,12 @@
-# `.claude/` — capabilities scaffold
+# `.claude/` — capabilities reference
 
-This directory is a **self-documenting scaffold**. Every subfolder/file below is an
-**example** showing what Claude Code *can* hold at the project level — not necessarily
-what this project actively uses yet. Read each file's comments to learn the format, then
-replace the examples with real content (or delete the ones you don't need).
+This is the **canonical reference** for what Claude Code can hold at the project level — the
+single place (across the umbrella and both sub-repos) that explains each folder/file. The repo
+carries a **uniform skeleton**: folders that aren't in use yet are held open by a `.gitkeep` and
+are ready to fill (drop a skill in `skills/`, a rule in `rules/`, etc.). Live assets currently in
+use: `settings.json` (incl. the SessionStart memory hook), `hooks/ensure-repo-memory.mjs`,
+`rules/`, and `memory/`. `settings.example.json` is an inert catalogue of keys you can copy into
+`settings.json`.
 
 > Scope note: this is the **project / umbrella** layer. There is also a **user layer**
 > at `~/.claude/` (settings, skills, agents, rules, keybindings, CLAUDE.md) that applies

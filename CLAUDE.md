@@ -1,115 +1,78 @@
-# Umbrella / Coordination Instructions
+# CLAUDE.md — diploma-cloud-cyber-umbrella
 
-> This is the **parent (umbrella) repo** for the Diploma Cloud Cyber project. It exists
-> to hold cross-repo coordination context and Claude Code tooling, and to version-control
-> them so they travel between machines. The actual deliverables live in two nested repos
-> that this repo deliberately **gitignores**:
->
-> - `diploma-cloud-cyber-content/`  — curriculum / assessment authoring (own remote)
-> - `diploma-cloud-cyber-website/`  — Astro scenario website (own remote)
->
-> Open Claude here, at the umbrella root, when work needs coordination across both repos.
+**diploma-cloud-cyber-umbrella** is the coordination layer for building the **ICT50220 Diploma of IT
+— Cloud & Cybersecurity** teaching and assessment materials. It holds no deliverables itself; it sits
+above two independent working repos — **`diploma-cloud-cyber-content`** (curriculum, cluster
+assessments, UoC mappings, validators) and **`diploma-cloud-cyber-website`** (the Astro "YAT" scenario
+website the assessments are set in) — and version-controls the tooling they share: cross-repo
+`CLAUDE.md` context, project-wide rules, and a portable, self-healing Claude memory. Its purpose is to
+give one launch point when work spans both repos and to make that tooling travel between machines via
+git.
 
-This file holds what is **common across the whole project**. Each sub-repo keeps its own
-`CLAUDE.md` for repo-specific context, so nothing is duplicated and each session loads only
-what's relevant.
+**⭐ The one rule: always launch Claude with the umbrella as the workspace root** — even when editing
+inside a sub-repo. Skills and `CLAUDE.md` cascade down to where you're working; agents, settings,
+rules, and memory load *only* from the launch dir, so launching from a sub-repo silently loses the
+shared layer.
+
+## Read first — REQUIRED
+- **[docs/INDEX.md](docs/INDEX.md) — read this every session.** It is the catalogue of all project
+  documentation (the single docs surface for the umbrella *and* both sub-repos). Knowing what docs
+  exist is mandatory; **load the relevant doc before doing related work** (assessment authoring,
+  delivery planning, scenario/website work, lab-packs). This is the same index-then-load-on-demand
+  pattern as MEMORY — but `docs/INDEX.md` is **not** auto-injected, so reading it is on you.
+- [README.md](README.md) — what the project is, the layout, and the new-machine setup flow.
+- [docs/doco-structure.md](docs/doco-structure.md) — the four doc surfaces and the `CLAUDE.md`⇄`MEMORY` split.
+- [.claude/README.md](.claude/README.md) — reference for what each `.claude/` folder holds.
 
 ## Sub-repo context
-
-Each sub-repo has its own `CLAUDE.md`, **auto-loaded when Claude reads a file in that repo**:
+Each sub-repo has its own `CLAUDE.md`, **auto-loaded (lazily) when Claude reads a file in that repo**:
 [content](diploma-cloud-cyber-content/CLAUDE.md) · [website](diploma-cloud-cyber-website/CLAUDE.md).
-
-## How CLAUDE.md works (so future-you remembers)
-
-- This file is loaded automatically when Claude runs with this folder in scope.
-- At launch, Claude reads CLAUDE.md by walking from the working directory **upward** toward
-  home. It also **lazily** loads a nested sub-repo's `CLAUDE.md` the moment it reads a file in
-  that repo — so sub-repo context arrives automatically when (and only when) it's relevant.
-- `CLAUDE.local.md` (same dir) is appended after this file but is **gitignored** (personal).
-
-## Project context
-
-<!-- Fill in: what the diploma project is, who it's for, the relationship between the
-     content repo and the website repo, and any cross-repo invariants. -->
+(Plain links, never `@imports` — the cascade is lazy by design.)
 
 ## Cross-repo conventions
+- The **content** repo authors the curriculum/assessments; the **website** renders the in-world YAT
+  scenario those assessments reference.
+- Scenario / intranet content is **in-world only** — no course/assessment/cluster meta-language (sole
+  exception: the UoC footer on migrated docs).
+- Each sub-repo owns its own history (own remote); the umbrella **gitignores** them entirely.
+- Per-cluster system↔scenario mappings and delivery state live in **MEMORY**, not here (they change).
 
-<!-- e.g. shared naming, how content maps to website pages, build/deploy ordering. -->
+## Working discipline — assumptions & documentation
 
-## Working agreements with Claude — standing rules
+Never record anything as *decided / agreed / canonical* unless it was actively discussed **and**
+explicitly approved. Flag anything not yet agreed with `[TBD — needs discussion: <what is open>]`
+rather than writing it as settled.
 
-Standing rules for how I (Claude) operate across this project — the umbrella repo and both
-sub-repos. Loaded at the start of every session from the umbrella root.
+- Capture only what was discussed and agreed; don't extrapolate a principle into unraised specifics.
+- Flag open questions explicitly with `[TBD — …]` so a later session picks them up deliberately.
+- Distinguish archived/historical material from in-conversation decisions.
+- Smaller is better — three faithfully-captured points beat ten padded ones.
+- Self-correct — if you catch yourself writing beyond what was discussed, remove it or mark it `[TBD]`.
+- Docs describe the **current state only**; what-was lives in git history, not in prose.
 
-### Rule 1 — No presumptive planning
+## Git safety — destructive operations require explicit approval
 
-I do **not** record anything as *decided*, *locked in*, *finalised*, *agreed*, *canonical*,
-or any equivalent unless **both** of the following are true:
+Never run a destructive git operation without explicit, in-conversation approval for that specific
+action — regardless of any settings allowlist or prior approval. Destructive includes: force push,
+hard reset, discarding uncommitted changes, `git clean -f`, force-deleting branches, history rewrites
+(`rebase`, `amend` on pushed commits, `filter-branch`/`filter-repo`), dropping stashes, deleting tags,
+and any `--no-verify` / `--no-gpg-sign` bypass. Force-pushing a protected branch (`main`/`master`/
+`release/*`) must be refused outright. When unsure whether something can lose work or rewrite history,
+treat it as destructive and ask.
 
-1. The item has been actively discussed with Tim in conversation.
-2. Tim has explicitly approved it.
+**Non-destructive git too (this project's convention):** do **not** run state-changing git — in *any*
+repo (umbrella or either sub-repo) — on your own. Propose the exact command(s) + rationale and wait
+for explicit approval; "go ahead" approves *that* operation only, not a standing licence. Read-only
+git (`status`, `diff`, `log`, `show`, …) is always fine.
 
-This applies to — but is not limited to — phases, schedules, sequencing, priorities, scope,
-scope exclusions, naming conventions, folder structures, technology choices, tool choices,
-cluster composition, audit methodology, assessment strategies, validation approaches, and
-anything else a future reader of the document might treat as a project decision.
+## Project status
+Current delivery state is **not** recorded here (it goes stale) — see **MEMORY** (the per-cluster
+assessment/delivery entries) and each sub-repo's `CLAUDE.md`.
 
-If something is *my own suggestion* that hasn't been through that loop, it is not a decision.
-It is a proposal at best, and must be visibly marked as such (see Rule 2).
-
-### Rule 2 — TBD marker for unapproved items
-
-If I think something is worth capturing but it has **not** yet been discussed and approved by
-Tim, I flag it clearly with **TBD (to be discussed)**. Examples of acceptable forms:
-
-- Inline: `**TBD** — proposed sequencing: audit before build.`
-- Section heading: `## TBD items` collecting all open proposals in one place.
-- Table column: an explicit `Status` column with `TBD` as a value.
-
-Whichever form I use, the TBD must be visible at a glance — not buried in a paragraph or only
-implied by context.
-
-### Rule 3 — When in doubt, ask or mark TBD
-
-If I'm unsure whether something counts as "agreed", it doesn't. Either:
-
-- ask Tim in chat before recording it, or
-- record it as TBD.
-
-I do not optimise for the appearance of decisiveness by presenting proposals as if they were
-decisions.
-
-### Rule 4 — Retroactive corrections
-
-If I notice a previous document of mine contains items I treated as decisions when they were
-actually my proposals, I flag them. I do not silently rewrite them, but I do clearly note the
-issue (either at the top of the document or against the specific item).
-
-### Rule 5 — No unilateral git operations
-
-I do **not** run any git command that changes repository state — in **any** repo (the umbrella
-or either sub-repo) — unless Tim has explicitly approved that specific operation. This includes
-— but is not limited to — `git add`, `git commit`, `git restore`, `git checkout`, `git reset`,
-`git rm`, `git mv`, `git branch`, `git merge`, `git rebase`, `git stash`, `git push`, `git pull`,
-`git fetch`, `git tag`, `git config` (writing values), `git clean`, and any subcommand that
-mutates the working tree, index, refs, or config.
-
-Read-only commands (`git status`, `git diff`, `git log`, `git show`, `git config --get`,
-`git ls-files`, etc.) are fine to run whenever they help me answer Tim's question.
-
-If I think a state-changing git operation is warranted, I **suggest** it in chat — naming the
-exact command(s) I would run — and wait for explicit approval before executing. If Tim says "go
-ahead" or equivalent for that specific suggestion, that's approval for that operation only, not
-a standing licence to keep running git commands.
-
-If I'm uncertain whether something counts as a state change, I treat it as a state change and
-ask first.
-
-### Origin of these rules
-
-- Rules 1–4 recorded on 2026-05-15 after Tim observed that I had presumptively drafted a project
-  plan (phases, critical path, sequencing) and presented it as if it had been agreed, when in
-  fact none of it had been discussed with him.
-- Rule 5 added on 2026-05-15 to extend the same "explicit-approval" principle to git operations.
-- Lifted from `diploma-cloud-cyber-content/CLAUDE.md` to this umbrella file (project-wide scope)
-  on 2026-06-14, so the rules govern every repo rather than just the content repo.
+## Where things live (audience decides)
+- **`docs/`** — knowledge needed by **both humans and agents** (project, processes, conventions,
+  scenario, website, lab-packs). The single docs surface for the umbrella *and* both sub-repos;
+  catalogued in [docs/INDEX.md](docs/INDEX.md) (required reading, above). Sub-repos hold **no** docs.
+- **MEMORY** (`.claude/memory/`, auto-loaded) — **LLM-only** durable knowledge: how Claude should
+  behave here, and the per-cluster working state. Not for human consumption.
+- **README** — user-facing framing + setup. **`.claude/README.md`** — `.claude/` asset reference.

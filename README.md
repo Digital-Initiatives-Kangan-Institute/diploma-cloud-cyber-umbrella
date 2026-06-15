@@ -122,18 +122,19 @@ never syncs between machines. Here it's relocated **into the repo** so it travel
 - **The memory files** live in `.claude/memory/` (committed, synced).
 - **The redirect** is `autoMemoryDirectory` in `.claude/settings.local.json` — which is
   **machine-local and gitignored**, because the path is absolute and differs per machine.
-- **The self-heal** is the vendored skill `.claude/skills/ensure-repo-memory/`, run
-  automatically by a `SessionStart` hook (in `settings.json`). On each machine it checks
-  that `settings.local.json` points at this repo's `.claude/memory/`, and sets it if not —
+- **The self-heal** is the vendored Node hook `.claude/hooks/ensure-repo-memory.mjs`, run
+  automatically by a `SessionStart` hook (in `settings.json`, as `node .claude/hooks/ensure-repo-memory.mjs`
+  — an identical command on Windows/macOS/Linux). On each machine it checks that
+  `settings.local.json` points at this repo's `.claude/memory/`, and sets it if not —
   idempotently (a no-op once correct).
 
-**New-machine flow:** clone → first umbrella session → the hook sets the path and asks you to
-relaunch → relaunch once → memory now loads from the repo. Every session after that, the
-hook just confirms `OK` silently.
+**New-machine flow:** clone → ensure **Node** is installed (the hook runs via `node`) → first umbrella
+session → the hook sets the path and asks you to relaunch → relaunch once → memory now loads from the
+repo. Every session after that, the hook just confirms `OK` silently.
 
-> The skill is **vendored** (committed in-repo) rather than installed centrally, so it
-> arrives with the clone — no per-machine install. If it's ever improved, re-copy it into
-> the repos that use it.
+> The hook is **vendored** (committed in-repo) rather than installed centrally, so it arrives
+> with the clone — no per-machine install. **Node is a prerequisite** (not bundled with Claude
+> Code's native installer). If the hook is ever improved, re-copy it into the repos that use it.
 
 ---
 

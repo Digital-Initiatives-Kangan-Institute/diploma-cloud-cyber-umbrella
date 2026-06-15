@@ -28,37 +28,33 @@
     "EXAMPLE_VAR": "value"
   },
 
-  "//hooks": "Harness-run logic on lifecycle events. Two examples below: (1) the REAL SessionStart memory self-heal we use, and (2) an illustrative PreToolUse gate on Bash.",
+  "//hooks": "Harness-run logic on lifecycle events. The SessionStart entry below is the REAL memory self-heal we use (a Node hook — identical command on every OS). A PreToolUse gate is shown as an inert example (//PreToolUse) — to use it, drop a real script in .claude/hooks/ and uncomment.",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/skills/ensure-repo-memory/ensure_repo_memory.ps1\"",
+            "command": "node .claude/hooks/ensure-repo-memory.mjs",
             "timeout": 15
           }
         ]
       }
     ],
-    "PreToolUse": [
+    "//PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/example-hook.sh",
-            "timeout": 10
-          }
+          { "type": "command", "command": "node .claude/hooks/your-gate.mjs", "timeout": 10 }
         ]
       }
     ]
   },
 
-  "//statusLine": "Custom status line: a command that prints one line, or point at .claude/status-line.md.",
-  "statusLine": {
+  "//statusLine": "Custom status line — an inert example. To use it, point 'command' at a real script that prints one line, then rename this key to statusLine.",
+  "//statusLine-example": {
     "type": "command",
-    "command": "${CLAUDE_PROJECT_DIR}/.claude/status-line.md"
+    "command": "node .claude/hooks/your-status-line.mjs"
   },
 
   "//other-common-keys": "A few more you may want — uncomment into settings.json as needed:",
