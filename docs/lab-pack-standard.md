@@ -80,8 +80,9 @@ lab-pack README must state, for its activity:
    geography").
 
 Students may switch environments between activities — that is expected; the README removes the
-confusion by being explicit every time. *(The specific environment for each activity still
-depends on what Kangan provisions.)*
+confusion by being explicit every time. **Kangan provisions *both* products for the cohort** (the
+Learner Lab and the Cloud Architecting Sandbox), so each activity is free to use whichever its
+outcome needs — there is no single-product constraint to design around.
 
 **Serverless on `LabRole` — proven.** In the Learner Lab, an API-GW → SQS → Lambda → DynamoDB stack
 deploys and runs via CloudFormation with `LabRole` serving as **both** the Lambda execution role **and**
