@@ -14,7 +14,7 @@ Workflow for served artefacts: an agent builds the `.docx`, Tim prints it to PDF
 
 - `build_bc_template.py` holds the docx helpers: palette, `configure_styles`, `build_header_footer`, `wordmark`, `set_cell_borders`, `shade_cell`, `add_field`/TOC, `guidance`, `response`, `table`.
 - `pptx_brand.py` holds the deck helpers.
-- `build_bc_exemplar.py` holds the filled-table/prose helpers: `etable`, `para`, `bullets`, `uoc`.
+- `build_s1_cl1_at1_bc_exemplar.py` holds the filled-table/prose helpers: `etable`, `para`, `bullets`, `uoc`.
 
 Brand per `scenario/branding/brand-pack.md` §4/§5.2/§5.3: teal `#1F5A5C` headings, terracotta `#C5613B` accent, **ochre `#C99932` disclosure banner in the page header (docx) / master-slide footer (pptx) on every page**, cream cover band, Source Sans 3, professional cover, and a Word TOC field.
 

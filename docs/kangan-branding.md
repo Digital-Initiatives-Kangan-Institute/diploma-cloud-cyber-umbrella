@@ -66,7 +66,7 @@ sans-serif throughout; tagline "Unleash You". Corporate-but-approachable TAFE po
 
 ## Applying it to the teaching deck
 
-**Adopted as the brand for all teaching decks (2026-06-01).** All brand + layout code lives in **`scripts/kangan_deck.py`** — the shared base for every deck. Per-Topic builders (`build_kangan_topic1_deck.py`, `build_kangan_topic2_deck.py`, `build_kangan_topic3_deck.py`, …) are **content-only**: they `import kangan_deck as k` and assemble slides from its layouts. Conventions used:
+**Adopted as the brand for all teaching decks (2026-06-01).** All brand + layout code lives in **`scripts/kangan_deck.py`** — the shared base for every deck. Per-Topic builders (`build_s1_cl1_topic01_deck.py`, `build_s1_cl1_topic02_deck.py`, `build_s1_cl1_topic03_deck.py`, …) are **content-only**: they `import kangan_deck as k` and assemble slides from its layouts. Conventions used:
 
 - **16:9**, white slides, charcoal text, **gold primary** for title rules, table headers,
   the active marker (`■`) and footer rule.
