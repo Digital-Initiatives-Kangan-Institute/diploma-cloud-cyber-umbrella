@@ -3,11 +3,15 @@
 Umbrella (parent) repository for the **ICT50220 Diploma of Information Technology — Cloud
 and Cybersecurity** development work.
 
+**This is the entry point for the whole project.** Clone this repo first; the two working repos
+(`diploma-cloud-cyber-content`, `diploma-cloud-cyber-website`) are cloned **inside** it and
+**gitignored** here, and you always **launch Claude from this umbrella root** — never from a sub-repo.
+
 This repo doesn't hold the deliverables. It is a thin **coordination layer** that sits
 *above* the two working repos and holds the things they share: cross-repo `CLAUDE.md`
-context, project-wide rules, and a version-controlled, portable Claude memory. Its job is
-to give you one place to launch Claude from when work spans both repos — and to make all of
-that tooling travel between machines via git.
+context, project-wide rules, project documentation (`docs/`), and a version-controlled, portable
+Claude memory. Its job is to give you one place to launch Claude from when work spans both repos — and
+to make all of that tooling travel between machines via git.
 
 ---
 
