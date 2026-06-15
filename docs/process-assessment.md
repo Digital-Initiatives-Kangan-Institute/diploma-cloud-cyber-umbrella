@@ -34,7 +34,7 @@ the reference if you need to run the underlying script by hand.
 | 2.5 | Check a consolidation is complete | `validate-uoc-consolidation` | `validate_consolidated.py` | Haiku |
 | 6 | Check one AT's UoC traceability (every criterion tagged, every reference real) | `validate-at-traceability` | `validate_at_traceability.py` | Haiku |
 | 6–7 | Check the cluster's ATs together evidence every consolidated item | `validate-cluster-coverage` | `validate_cluster_coverage.py` | Haiku |
-| delivery 3 | Gate a teaching deck's size before committing | `inspect-deck` | `inspect_deck.py` | Haiku |
+| delivery 3 | Gate a teaching deck's size before committing | `inspect-file-size` | `inspect-file-size/inspect_file_size.py` | Haiku |
 
 The skills call deterministic, **stdlib-only** scripts in `.claude/skills/scripts/`, so the work is
 faithful by construction and runs anywhere with `python3` (no virtualenv). Composition is by shared
