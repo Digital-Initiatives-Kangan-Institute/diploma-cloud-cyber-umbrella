@@ -1,16 +1,19 @@
 ---
 name: s1cl1-assessment
-description: S1-CL1 (Cloud Design and Build) pilot cluster, assessment workstream — AT shape, settled cross-AT design decisions, and open items needed before live delivery.
+description: S1-CL1 (Cloud Design and Build) pilot cluster, assessment workstream — COMPLETE (2026-06-15): AT shape, settled cross-AT design decisions, and the now-closed pre-delivery items.
 metadata:
   node_type: memory
   type: project
 ---
 
+> **STATUS: COMPLETE (2026-06-15).** The CL1 assessment workstream is done — all instruments
+> finalised, the Multi-AZ risk resolved, the Records Management Policy authored. See **Status** at the
+> foot of this entry. Don't reopen unless something material changes.
+
 S1-CL1 (Cloud Design and Build) is the **pilot cluster**, developed end-to-end. This entry holds the
-**assessment workstream**: the cluster's **AT shape**, its **settled design decisions**, and the **open
-items** still needed before live delivery. Delivery-planning (sessions/teaching materials) is a
-separate workstream — see [[s1cl1-delivery]]. General authoring rules live in
-docs/cluster-authoring-conventions.md.
+**assessment workstream**: the cluster's **AT shape**, its **settled design decisions**, and its
+**completion status**. Delivery-planning (sessions/teaching materials) is a separate workstream — see
+[[s1cl1-delivery]]. General authoring rules live in docs/cluster-authoring-conventions.md.
 
 ## Cluster shape
 
@@ -46,14 +49,22 @@ longer the source of truth.
 - **AT3 Multi-AZ is a real live demo (not a fallback).** The hardened end-state — RDS `MultiAZ: true`
   **and** cross-AZ ASG+ALB — is proven deployable in the **AWS Academy Cloud Architecting Sandbox**
   (`ap-southeast-2`, 2026-06-15). The old "Multi-AZ RDS not supported" reading was wrong for that lab.
-  **Required lab for AT3 = the Cloud Architecting Sandbox** (record it in AT3 Resources / Assessment
-  Conditions). The design+simulated-failover fallback is NOT needed.
+  **Required lab for AT3 = the Cloud Architecting Sandbox** — recorded in the AT3 assessment conditions
+  (C1 names AWS Academy Cloud Architecting [172221] + Cloud Foundations [104469] and RDS access). The
+  design+simulated-failover fallback is NOT needed.
 
-## Open — needed before live delivery
+## Status — COMPLETE (2026-06-15)
 
-- **Records Management Policy** scenario doc still a placeholder stub on the website
-  (`src/content/policies/records-management.md`) — needs drafting; referenced by CL1 AT1/AT2/AT3
-  (and CL2/CL3). In-world YAT policy, no course/assessment meta-language.
-- **Record the AT3 required lab** (Cloud Architecting Sandbox) in the AT3 assessor `.docx`
-  Resources / Assessment Conditions (the Multi-AZ capability is proven — see the settled decision
-  above; this is just propagating it into the instrument).
+The CL1 assessment workstream is complete. Nothing outstanding blocks live delivery:
+
+- **9 instruments** (AT1/AT2/AT3 × assessor / student / exemplar) — finalised. The assessor + student
+  instruments are **hand-authored, version-controlled, known-good** `.docx`. Generators for them were
+  explored and **deliberately not pursued** — the CL1 assessors carry a much richer marking benchmark
+  (per-section Satisfactory/NYS guidance + worked CBA examples + benchmark tables) than the CL2/CL3
+  *generated* assessors, so forcing them into the generated structure would lose that content. Future
+  changes are deliberate **manual edits** to the known-good `.docx`. (The **exemplars** do have
+  generators: `scripts/s1_cl1/build_s1_cl1_at*_*_exemplar.py`.)
+- **Multi-AZ RDS** resolved and recorded (see the settled decision above); **AT2 baseline
+  CloudFormation** + **AT3 lab-pack** proven live in the Cloud Architecting Sandbox.
+- **Records Management Policy** authored on the website (`src/content/policies/records-management.md`).
+- Delivery workstream: see [[s1cl1-delivery]] (also complete).

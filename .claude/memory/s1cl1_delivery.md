@@ -1,9 +1,13 @@
 ---
 name: s1cl1-delivery
-description: S1-CL1 (Cloud Design and Build) delivery workstream — cluster-specific Topic/session structure, the Accounting/Ledgerline practice scenario, the AT3 practice model, and remaining session-sizing work.
+description: S1-CL1 (Cloud Design and Build) delivery workstream — COMPLETE (2026-06-15): Topic/session structure, the Accounting/Ledgerline practice scenario, the AT3 practice model.
 metadata:
   type: project
 ---
+
+> **STATUS: COMPLETE (2026-06-15).** CL1 delivery is done for the pilot — 14 topic decks built,
+> session-sizing adequate. See **Status** at the foot. (Assessment workstream also complete —
+> [[s1cl1-assessment]].)
 
 The **delivery-planning** workstream for S1-CL1 (sessions + teaching materials; separate from
 assessment authoring — see [[s1cl1-assessment]]). General method is in
@@ -30,8 +34,12 @@ Server, internal ALB over campus VPN, 99.5%; AT3 needs a parallel HA design). We
 `ha-database-requirements.md`), **not** a finished design — AWS/502 materials cover the exemplar
 pattern, so a bespoke finished Accounting HA design would be redundant.
 
-## Open — remaining build-side work
-- **Session sizing** — lay the 14 content Topics + lettered assessment sessions (a–i) onto S2–S28
-  against the tempo bands (WIP `S1_CL1_Delivery_Plan.docx`).
-- **Parked confirms** — verify the AT2 marking-criterion letters (A3/A4) and the AT2/AT3 contextual-KE
-  question lists against the assessor docs.
+## Status — COMPLETE (2026-06-15)
+- **14 topic decks** built (`delivery/topic_*/Topic_*_Slides.pptx`); their generators
+  (`scripts/s1_cl1/build_s1_cl1_topic*_deck.py`) run.
+- **Session sizing** (`S1_CL1_Delivery_Plan.docx`) — **adequate for now** (per Tim); refine from live
+  delivery experience if needed.
+- **Parked confirms** (AT2 marking-criterion letters, AT2/AT3 contextual-KE lists) — satisfied by the
+  finalised, known-good assessor instruments ([[s1cl1-assessment]]).
+
+CL1 delivery is complete for the pilot; tune from delivery feedback.
