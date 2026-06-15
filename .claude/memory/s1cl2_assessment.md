@@ -73,10 +73,9 @@ match templates. The **Solution Design + Deployment Report templates are SHARED 
 web-scale / serverless variants, state-gated by slug) → do NOT strip them; the **DR-plan template is
 CL2-only**. See docs/document-template-system.md.
 
-## Open — where it needs to go
-- **501/503 standalone source assessments not in repo** → Step-3 reuse audit blocked; **505 is
-  greenfield** — author fresh meanwhile.
-- Per-AT delivery TBDs (time allowed, location); cluster closeout (per-unit Assessment Mapping docs,
-  institutional **Pre-Validation**); **[VERIFY]** legal/residency wording before it reaches students.
-- **Lab-pack format** choice (separate runnable pack vs `.docx` appendices) — a format call, not a
-  capability one.
+## Open — external gates only (authoring + coverage are complete: 105/105)
+Nothing further is authorable here; what remains needs an external input:
+- **Institutional Pre-Validation** — the colleague validation meeting (Tim to arrange).
+- **`[VERIFY]` legal/residency wording** — review before student-facing release.
+- Minor: AT1 working title / website `s1-cl2-at1` label may broaden to "Design & DR Plan"; per-AT
+  time/location conditions sit with [[s1cl2-delivery]].
