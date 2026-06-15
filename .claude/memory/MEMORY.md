@@ -19,7 +19,7 @@ and the current standing of each cluster workstream ("principles, not state" —
 ## Cluster workstreams (S1) — assessment + delivery per cluster (current working state)
 - [S1-CL1 assessment](s1cl1_assessment.md) — **COMPLETE (2026-06-15)** — pilot cluster, assessment workstream: AT shape, settled cross-AT design decisions; all 9 instruments finalised, Multi-AZ resolved, Records Policy authored.
 - [S1-CL1 delivery](s1cl1_delivery.md) — **COMPLETE (2026-06-15)** — CL1 delivery workstream: Topic/session structure, Accounting/Ledgerline practice scenario, AT3 practice model; 14 decks built, session-sizing adequate.
-- [S1-CL2 assessment](s1cl2_assessment.md) — **COMPLETE (authoring + coverage 105/105, 2026-06-15)** — Cloud DR cluster (501/503/505): vehicle, AT structure, the DR≠design≠residency reframe, offshore-India spine, lab usage, template parity; only external gates remain (Pre-Validation meeting, legal `[VERIFY]`).
+- [S1-CL2 assessment](s1cl2_assessment.md) — **COMPLETE (authoring + coverage 105/105, 2026-06-15)** — Cloud DR cluster (501/503/505): vehicle, AT structure, the DR≠design≠residency reframe, offshore-India spine, lab usage, template parity; only the institutional Pre-Validation meeting remains.
 - [S1-CL2 delivery](s1cl2_delivery.md) — CL2 delivery workstream: week/session frame, 10-Topic spine (AT1 design / AT2 build), LMS practice vehicle, re-check vs the re-pointed assessments.
 - [S1-CL3 assessment](s1cl3_assessment.md) — Cloud Infrastructure Improvement (504 + 401, lightest): team-led improve-loop; 3 ATs individual→group→individual; owned-dimension + team-leadership evidence model.
 - [S1-CL3 delivery](s1cl3_delivery.md) — CL3 delivery workstream: not started yet (assessment authoring leads).

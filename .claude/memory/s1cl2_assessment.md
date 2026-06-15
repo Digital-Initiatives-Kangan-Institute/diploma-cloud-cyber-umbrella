@@ -74,8 +74,11 @@ web-scale / serverless variants, state-gated by slug) → do NOT strip them; the
 CL2-only**. See docs/document-template-system.md.
 
 ## Open — external gates only (authoring + coverage are complete: 105/105)
-Nothing further is authorable here; what remains needs an external input:
-- **Institutional Pre-Validation** — the colleague validation meeting (Tim to arrange).
-- **`[VERIFY]` legal/residency wording** — review before student-facing release.
-- Minor: AT1 working title / website `s1-cl2-at1` label may broaden to "Design & DR Plan"; per-AT
-  time/location conditions sit with [[s1cl2-delivery]].
+Nothing further is authorable here; the only remaining gate is the **institutional Pre-Validation**
+meeting (the colleague validation Tim will arrange). Minor: AT1 working title / website `s1-cl2-at1`
+label may broaden to "Design & DR Plan"; per-AT time/location conditions sit with [[s1cl2-delivery]].
+
+**Residency/legal content — settled, do NOT re-flag.** The India residency/legal framing (DPDP Act,
+CERT-In, the Companies Act analogue) is LLM-grounded and accepted as-is: this is an imaginary
+pre-university case study, not a real compliance deliverable, so no legal review is engaged. Applies
+across clusters (CL2 + CL3). Don't reopen it as a `[VERIFY]`.
