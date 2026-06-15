@@ -57,14 +57,12 @@ longer the source of truth.
 
 The CL1 assessment workstream is complete. Nothing outstanding blocks live delivery:
 
-- **9 instruments** (AT1/AT2/AT3 × assessor / student / exemplar) — finalised. The assessor + student
-  instruments are **hand-authored, version-controlled, known-good** `.docx`. Generators for them were
-  explored and **deliberately not pursued** — the CL1 assessors carry a much richer marking benchmark
-  (per-section Satisfactory/NYS guidance + worked CBA examples + benchmark tables) than the CL2/CL3
-  *generated* assessors, so forcing them into the generated structure would lose that content. Future
-  changes are deliberate **manual edits** to the known-good `.docx`. (The **exemplars** do have
-  generators: `scripts/s1_cl1/build_s1_cl1_at*_*_exemplar.py`.)
-- **Multi-AZ RDS** resolved and recorded (see the settled decision above); **AT2 baseline
-  CloudFormation** + **AT3 lab-pack** proven live in the Cloud Architecting Sandbox.
-- **Records Management Policy** authored on the website (`src/content/policies/records-management.md`).
-- Delivery workstream: see [[s1cl1-delivery]] (also complete).
+- **9 instruments** (AT1/AT2/AT3 × assessor / student / exemplar) are final. The assessor + student
+  instruments are **hand-authored, version-controlled `.docx`** — no generators (the CL1 assessors'
+  richer marking benchmark — per-section Satisfactory/NYS guidance + worked CBA examples + tables —
+  doesn't fit the CL2/CL3 generated structure); **edit the `.docx` directly**. The **exemplars** have
+  generators (`scripts/s1_cl1/build_s1_cl1_at*_*_exemplar.py`).
+- **AT3 uses a real live Multi-AZ failover demo** (proven in the Cloud Architecting Sandbox); the AT2
+  baseline CloudFormation + AT3 lab-pack deploy there.
+- The **Records Management Policy** is authored on the website (`src/content/policies/records-management.md`).
+- Delivery workstream: see [[s1cl1-delivery]].

@@ -11,8 +11,9 @@ Decisions + open questions only; for what is *built* read the repo
 authoring rules: docs/cluster-authoring-conventions.md.
 
 **Vehicle (per docs/scenario-flow.md):** assesses on the **website** (`website-global-expansion`),
-practises on the **LMS** (`lms-global-expansion`). **AT1 is re-pointed to the website; AT2 is still
-LMS-framed → next** (substance transfers unchanged except the practice↔assessment contrast below).
+practises on the **LMS** (`lms-global-expansion`). **AT1** = Design + DR Plan; **AT2** = implement the
+website's audit-log microservice (503 build + 505 IaC + monitoring). The practice↔assessment contrast
+below applies.
 
 ## AT structure (settled)
 - **AT1 — Design & DR Plan, three parts:** **A** Solution Design (503 design: web-scale + the
@@ -69,9 +70,6 @@ web-scale / serverless variants, state-gated by slug) → do NOT strip them; the
 CL2-only**. See docs/document-template-system.md.
 
 ## Open — where it needs to go
-- **AT2 — re-point LMS→website** (microservice build + IaC + monitoring); **drop `501 KE 6`** (now in
-  AT1 B15); add the KE-appendix structure (503 KE 1/2/5 + 505 KE 1–11) with the KE questions in the
-  instrument; same template-parity approach as AT1.
 - **501/503 standalone source assessments not in repo** → Step-3 reuse audit blocked; **505 is
   greenfield** — author fresh meanwhile.
 - Per-AT delivery TBDs (time allowed, location); cluster closeout (per-unit Assessment Mapping docs, a
