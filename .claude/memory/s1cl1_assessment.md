@@ -43,16 +43,17 @@ longer the source of truth.
   assessor distributes an AT2 baseline CloudFormation template so every student starts AT3 consistent.
 - **AT3 maintenance-window framing:** simulated Saturday late-night ~3.5h window; brief blips
   acceptable; must end HA-done or rolled back.
+- **AT3 Multi-AZ is a real live demo (not a fallback).** The hardened end-state — RDS `MultiAZ: true`
+  **and** cross-AZ ASG+ALB — is proven deployable in the **AWS Academy Cloud Architecting Sandbox**
+  (`ap-southeast-2`, 2026-06-15). The old "Multi-AZ RDS not supported" reading was wrong for that lab.
+  **Required lab for AT3 = the Cloud Architecting Sandbox** (record it in AT3 Resources / Assessment
+  Conditions). The design+simulated-failover fallback is NOT needed.
 
 ## Open — needed before live delivery
 
-- **⚠️ AWS Academy lab — Multi-AZ RDS for AT3.** The Learner Lab (Foundation Services) documents
-  "Multi-AZ deployments not supported" — conflicts with AT3's "convert the DB to Multi-AZ + trigger
-  failover" build. **Only the live Multi-AZ DB is at risk** — compute HA (cross-AZ ASG + ALB) is fully
-  supported. **Resolution (per Tim):** make the correct AWS Academy enrolment an AT3 condition/resource
-  rather than changing content — (a) confirm which enrolment gives an open-build env that also permits
-  Multi-AZ RDS; (b) smoke-test it; (c) record the required course/lab in AT3 Resources + Assessment
-  Conditions + assessor notes. **Fallback:** reframe DB-HA as design+template (`Multi-AZ: true`) +
-  simulated failover (reboot/terminate).
-- **AT2 baseline CloudFormation YAML** still to author (placeholder spec exists; ~400–600 lines).
-- **Records Management Policy** scenario doc still to author (placeholder exists).
+- **Records Management Policy** scenario doc still a placeholder stub on the website
+  (`src/content/policies/records-management.md`) — needs drafting; referenced by CL1 AT1/AT2/AT3
+  (and CL2/CL3). In-world YAT policy, no course/assessment meta-language.
+- **Record the AT3 required lab** (Cloud Architecting Sandbox) in the AT3 assessor `.docx`
+  Resources / Assessment Conditions (the Multi-AZ capability is proven — see the settled decision
+  above; this is just propagating it into the instrument).

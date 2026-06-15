@@ -110,9 +110,13 @@ Cloud Architecting Sandbox, 2026-06-07.)
   region before deploying**; the template adapts via the SSM AMI parameter + `!GetAZs`. ✔
 - **Instance/DB classes are parameters.** The sandbox allows EC2 `t2/t3` nano–medium and RDS
   `db.t3.micro`–`db.t3.medium` only. Default `t3.medium` / `db.t3.medium`; adjust per lab. ✔
-- **RDS Multi-AZ is NOT supported** in the Cloud Architecting Sandbox ("do not create a standby
-  instance"). This is **only RDS** — multi-AZ *compute* (ASG across AZs + ALB) is fine. Plan any
-  HA assessment around this (the compute/AZ failure sims work; the DB-failover demo doesn't). ✔
+- **RDS Multi-AZ IS supported** in the Cloud Architecting Sandbox — **proven live 2026-06-15**
+  (RDS `MultiAZ: true`, MySQL 8.4.8, `db.t3.medium`, synchronous standby in a 2nd AZ) reaching
+  CREATE_COMPLETE alongside cross-AZ compute (2× `t3.medium`, AZs 2a/2b, healthy). **This corrects
+  an earlier mistaken "not supported / do not create a standby instance" note** (the doc previously
+  said the opposite — it is wrong; do not reinstate it). So the **full multi-AZ HA end-state**
+  (Multi-AZ RDS **and** ASG-across-AZs + ALB) deploys cleanly, and an HA assessment can use a **real
+  live DB failover demo** (reboot-with-failover), not just compute failover. ✔ (2026-06-15)
 - **2-AZ gotchas:** an internet-facing **ALB needs ≥2 subnets in 2 AZs**, and an **RDS DB subnet
   group needs ≥2 AZs** — so even a "single-AZ baseline" must include a 2nd public + 2nd data
   subnet to deploy. Keep the **compute (ASG) single-AZ** to preserve the non-HA state. ✔
