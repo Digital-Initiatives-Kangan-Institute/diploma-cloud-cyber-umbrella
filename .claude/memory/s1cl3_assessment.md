@@ -43,10 +43,15 @@ scenario world from CL2 ([[s1cl2-assessment]]). **New** = the 401 instruments (t
 led-meeting observation checklist, reflection, performance review), the Ledgerline baseline lab-pack,
 the Ledgerline scenario context.
 
-## Open — where it needs to go
-- **Group size + team model** (how groups form; how each student's led meeting is scheduled and
-  observed) — needed before authoring AT2.
-- 504/401 standalone source-assessment reuse audit (if sources surface); Step-1 verbatim transcription
-  check of the `_Complete_` unit docs; scenario specifics (role names).
-- **Author AT1 first** (team plan/Role Brief + Ledgerline requirements/analysis exemplars →
-  instruments); build the Ledgerline baseline lab-pack.
+## Open — authoring only (design is settled; no blocking TBDs)
+Design fully resolved (team model = teams of 4 / assessor-formed / rotating-chair; vehicle;
+author-fresh accepted; scenario built). **AT1 (Team Setup) is built** — assessor + student +
+team-plan exemplar + generators. Coverage 10/72 until AT2/AT3 land. Remaining:
+- **AT2 (group) — Analyse, Design & Approve** (the heaviest AT; both units integrate here): the new
+  **Architecture Analysis** doc type (template + exemplar), the owned-dimension Solution Design
+  exemplar, the new **led-meeting observation checklist**, **reflection prompt** + **performance-review
+  template**, the approval presentation + sign-off record, and the AT2 student/assessor instruments.
+- **AT3 (individual) — Implement:** as-deployed Deployment Report exemplar, AT3 student/assessor
+  instruments, and the **Ledgerline baseline lab-pack**.
+- **`mappings/`** — per-unit Assessment Mapping docs (504 + 401), generated as CL1/CL2's were.
+- Downstream external gate (as CL1/CL2): institutional **Pre-Validation**.
