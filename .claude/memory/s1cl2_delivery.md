@@ -1,6 +1,6 @@
 ---
 name: s1cl2-delivery
-description: S1-CL2 (Cloud Disaster Recovery) delivery workstream — week/session frame, the 10-Topic spine (AT1 design / AT2 build), the LMS practice vehicle, and the re-check-against-re-pointed-assessments step.
+description: S1-CL2 (Cloud Disaster Recovery) delivery workstream — week/session frame, the 10-Topic spine (AT1 design / AT2 build), the LMS practice vehicle, and the topic-coverage re-check against the finalised website assessments.
 metadata:
   type: project
 ---
@@ -25,9 +25,8 @@ web-scale teaching needs. (Assessed on the website, practised on the LMS — see
 docs/scenario-flow.md.)
 
 ## Open — where it needs to go
-- **Re-check the AT1 design-depth Topic coverage against the re-pointed (website) assessments** before
-  building decks — CL2's assessment was re-vehicled LMS→website, so the design-phase Topic coverage must
-  align to the finalised website-framed AT1.
+- **Re-check the AT1 design-depth Topic coverage against the (website-framed) assessments** before
+  building decks — the design-phase Topic coverage must align to the finalised AT1.
 - **Then Step 3:** `slide_plan.md` → Kangan deck per Topic, then size Topics onto the 30 sessions.
-- **Blocked-ish on:** the web-scale practice app and the lab-product choice (Learner Lab vs Architecting
-  Sandbox — shapes the T6–T9 demos).
+- **Blocked-ish on:** the web-scale practice app for the T6–T9 demos. (The lab environment is settled —
+  both AWS Academy products are provisioned; each activity uses whichever fits. See docs/lab-pack-standard.md.)
