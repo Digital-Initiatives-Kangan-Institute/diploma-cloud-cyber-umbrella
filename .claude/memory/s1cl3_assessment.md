@@ -74,8 +74,9 @@ reuses it).
   — RDS is **create-only** in the lab, so the change-set must not modify the DB (the `BackupRetentionPeriod` bump
   was removed from `improved.yaml`; DB-tier DR is design-level, not lab-executable). Failover / scale-out / PITR
   demos not run (config valid; standard behaviour). Findings in `docs/lab-pack-standard.md` + the lab-pack
-  `claude-notes.md`. Remaining follow-on: regenerate the AT3 instruments to drop their "draft pending the
-  proving run" caveat. See assessment_plan §6.8.
+  `claude-notes.md`. The AT3 instruments were authored at final confidence (no caveat, no stale lab
+  specifics); the only "draft pending proving run" hedge was a stale line in assessment_plan item 8, now
+  de-hedged. See assessment_plan §6.8.
 - **DB edition — DECIDED 2026-06-21 (do not re-litigate):** the in-world scenario **stays on SQL Server
   Standard**; the **lab deploys SQL Server Express** (`sqlserver-ex`) as a documented stand-in (README discloses
   it; the lab DB is empty so Express's 10 GB/RAM/core limits never bite — same pattern as region simulation).

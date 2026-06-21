@@ -11,6 +11,7 @@ and the current standing of each cluster workstream ("principles, not state" —
 ## Working principles (how Claude operates here)
 - [memory = principles not state](memory_principles_not_state.md) — record durable decisions/rationale (the non-derivable WHY); never repo-derivable ephemeral state (paths, commits, "what's built") — it goes stale on creation.
 - [record current-state only](feedback_process_docs_current_only.md) — record things as they ARE, not how they used to be, in everything (docs, memory, status notes): current method only, no abandoned-path archaeology; git holds it.
+- [write deliverables at final confidence](feedback_deliverables_final_confidence.md) — author docs as if open dependencies were done; track the dependency in MEMORY, never as an in-text "draft pending X" hedge (avoids redoing the doc just to strip caveats).
 - [suggest commits, don't auto-commit](feedback_suggest_commits.md) — when a commit seems appropriate, suggest it's a good time and wait for confirmation; never auto-commit (memory is version-controlled + syncs across machines).
 - [one step at a time](feedback_one_step_at_a_time.md) — for hands-on interactive walk-throughs (AWS console, lab setup), give ONE step then wait for what he sees; don't front-load 10 steps.
 - [draft naming pragmatism](feedback_draft_naming_pragmatism.md) — during drafts, don't fuss over file naming; defer naming discipline to delivery-ready versions.
