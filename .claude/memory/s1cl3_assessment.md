@@ -68,10 +68,23 @@ Deployment Report (AT3) templates/generators + scenario world; students' CL2 (50
 reuses it).
 
 ## Remaining (engineering / process, not instrument authoring)
-- **AT3 lab artefacts** — the **baseline lab-pack** (empty, encrypted, single-AZ Ledgerline; SQL Server
-  single-instance) + the **reference upgrade change-set** (app-tier Multi-AZ + DB backup/PITR/cross-Region DR +
-  India slice; **no DB Multi-AZ**) + a **live proving run** (confirms the single-instance baseline deploys + the
-  change-set mechanics; no SQL-Server-Multi-AZ to prove). See assessment_plan §6.8.
+- **AT3 lab-pack — PROVEN live 2026-06-21** (Cloud Architecting Sandbox): Express baseline deploys (`us-east-1`
+  + Sydney `ap-southeast-2`); apply-as-update yields app-tier Multi-AZ with the **DB untouched**; India slice
+  deploys in Mumbai (`ap-south-1`). **Key constraint found: the `voclabs` lab role denies `rds:ModifyDBInstance`**
+  — RDS is **create-only** in the lab, so the change-set must not modify the DB (the `BackupRetentionPeriod` bump
+  was removed from `improved.yaml`; DB-tier DR is design-level, not lab-executable). Failover / scale-out / PITR
+  demos not run (config valid; standard behaviour). Findings in `docs/lab-pack-standard.md` + the lab-pack
+  `claude-notes.md`. Remaining follow-on: regenerate the AT3 instruments to drop their "draft pending the
+  proving run" caveat. See assessment_plan §6.8.
+- **DB edition — DECIDED 2026-06-21 (do not re-litigate):** the in-world scenario **stays on SQL Server
+  Standard**; the **lab deploys SQL Server Express** (`sqlserver-ex`) as a documented stand-in (README discloses
+  it; the lab DB is empty so Express's 10 GB/RAM/core limits never bite — same pattern as region simulation).
+  Driver: SE (`sqlserver-se`, license-included) is rejected on the sandbox's permitted classes (`db.t3.medium`,
+  proven live), so both lab templates default to Express. **Why not change the engine** (e.g. PostgreSQL,
+  which deploys cleanly): it spans ~30+ files across active CL3 **and completed CL1/CL2**, and it would **delete
+  the commercial-licensing cost-benefit element** (~$27k/yr Ledgerline+SQL-Server licensing; license-included
+  vs BYOL) that is the *assessed* differentiator from the open-source LMS — too costly, and it guts pedagogy.
+  Residual tidy only: the soft `~13.5 vs ~22 GB` SQL-data figure (low priority).
 - **`mappings/`** Assessment Mapping docs (504, 401); an **AT2 team-plan exemplar** (a model team plan;
   base on `build_s1_cl3_at1_team_plan_exemplar.py`).
 - Downstream: scenario `IR-6` wording (re-point "Improvement Business Case" → the Solution Design's

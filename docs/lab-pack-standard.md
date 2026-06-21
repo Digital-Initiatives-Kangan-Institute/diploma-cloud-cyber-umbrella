@@ -118,6 +118,18 @@ Cloud Architecting Sandbox, 2026-06-07.)
   said the opposite — it is wrong; do not reinstate it). So the **full multi-AZ HA end-state**
   (Multi-AZ RDS **and** ASG-across-AZs + ALB) deploys cleanly, and an HA assessment can use a **real
   live DB failover demo** (reboot-with-failover), not just compute failover. ✔ (2026-06-15)
+- **SQL Server: use Express in the sandbox.** RDS rejects **`sqlserver-se` (Standard, license-included) on
+  `db.t3.medium`** ("RDS does not support creating a DB instance with the following combination") — SE needs a
+  larger class than the sandbox permits. **Express (`sqlserver-ex`) deploys fine** on `db.t3.medium` (proven in
+  `us-east-1` **and** `ap-southeast-2`, 2026-06-21). For an empty lab DB the edition is immaterial; if the
+  scenario calls for Standard, ship Express as a documented stand-in. ✔ (2026-06-21)
+- **The sandbox role denies `rds:ModifyDBInstance` — RDS is create-only.** The `voclabs` role can **create** an
+  RDS instance but **cannot modify** an existing one (a change-set altering `BackupRetentionPeriod` failed with
+  `AccessDenied`, 2026-06-21, CL3 AT3). **For any apply-as-update / change-set lab-pack: never modify an existing
+  RDS instance** — set the DB's final config at *create* time and leave it untouched by later updates. This
+  blocks in-lab DB modification via **both** CloudFormation and the console, so DB-tier changes needing
+  `ModifyDBInstance` (retention, etc.) are not lab-executable; show DB reliability via PITR/restore instead
+  (restore perms not yet verified). ✔ (2026-06-21)
 - **2-AZ gotchas:** an internet-facing **ALB needs ≥2 subnets in 2 AZs**, and an **RDS DB subnet
   group needs ≥2 AZs** — so even a "single-AZ baseline" must include a 2nd public + 2nd data
   subnet to deploy. Keep the **compute (ASG) single-AZ** to preserve the non-HA state. ✔
