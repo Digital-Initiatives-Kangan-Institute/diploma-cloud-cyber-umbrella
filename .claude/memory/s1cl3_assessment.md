@@ -1,8 +1,10 @@
 ---
 name: s1cl3-assessment
-description: S1-CL3 (Cloud Infrastructure Improvement, ICTCLD504 + BSBXTW401) assessment workstream — the write-is-the-seam AT model (504 individual on design+deploy, 401 on the divided YAML write); instruments authored + validated 72/72.
-metadata:
+description: "S1-CL3 (Cloud Infrastructure Improvement, ICTCLD504 + BSBXTW401) assessment workstream — the write-is-the-seam AT model (504 individual on design+deploy, 401 on the divided YAML write); instruments authored + validated 72/72."
+metadata: 
+  node_type: memory
   type: project
+  originSessionId: 2dc8de09-19d6-46e4-8f5c-7f0c6cb6cb5e
 ---
 
 CL3 = **Cloud Infrastructure Improvement**: **ICTCLD504** (improve cloud infrastructure) + **BSBXTW401**
@@ -40,8 +42,15 @@ touches no individual 504 evidence. Don't re-tangle the two units onto one deliv
   the lab database deploys **empty and encrypted at rest**. CL3 is an *infrastructure*-improvement exercise
   — encryption is not an improvement and there is no data migration, so every AT3 change is an
   **in-place/additive change-set** (no replacement, no IR-4 data-loss exposure).
-- **Multi-AZ HA** (RDS Multi-AZ + multi-AZ compute); parameterised CloudFormation; a **light India residency
-  slice** (CERT-In logs + Companies-Act books-of-account only — main system in Sydney, DPDP permits).
+- **Reliability = application-tier Multi-AZ + database backup/restore + cross-Region DR (Melbourne, data stays
+  in Australia); the database is NOT Multi-AZ.** Ledgerline is a legacy app, vendor-certified single-instance
+  only — a **Multi-AZ database limitation** surfaced as a discovered finding from the cloud migration (TF-03)
+  and seeded through the current-state ICT records as a **breadcrumb trail**. The only route to DB failover
+  (replace the accounting product — licence + data migration + change management + risk) is rejected as
+  disproportionate (IR-2/IR-6); that cost-benefit call is the **AT1 analysis centrepiece**, with an **ASSESSOR
+  FOCUS** pushback note on the AT1 Part B presentation checklist for candidates who reflexively propose a
+  Multi-AZ database. Parameterised CloudFormation; a **light India residency slice** (CERT-In logs +
+  Companies-Act books-of-account only — main system in Sydney, DPDP permits).
 - **Scalability = elastic-capacity-on-demand, demonstrable by test** (not a forecast of load growth) — lets
   each component carry a real scalability story on an internal low-load finance system without breaching
   IR-2 (over-provisioning would be the gold-plating IR-2 forbids).
@@ -59,9 +68,10 @@ Deployment Report (AT3) templates/generators + scenario world; students' CL2 (50
 reuses it).
 
 ## Remaining (engineering / process, not instrument authoring)
-- **AT3 lab artefacts** — the **baseline lab-pack** (empty, encrypted, single-AZ Ledgerline) + the **reference
-  upgrade change-set** + a **live proving run** (confirms SQL-Server-Multi-AZ feasibility in the Academy lab).
-  See assessment_plan §6.8.
+- **AT3 lab artefacts** — the **baseline lab-pack** (empty, encrypted, single-AZ Ledgerline; SQL Server
+  single-instance) + the **reference upgrade change-set** (app-tier Multi-AZ + DB backup/PITR/cross-Region DR +
+  India slice; **no DB Multi-AZ**) + a **live proving run** (confirms the single-instance baseline deploys + the
+  change-set mechanics; no SQL-Server-Multi-AZ to prove). See assessment_plan §6.8.
 - **`mappings/`** Assessment Mapping docs (504, 401); an **AT2 team-plan exemplar** (a model team plan;
   base on `build_s1_cl3_at1_team_plan_exemplar.py`).
 - Downstream: scenario `IR-6` wording (re-point "Improvement Business Case" → the Solution Design's
