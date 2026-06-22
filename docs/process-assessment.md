@@ -80,19 +80,17 @@ the cluster's units (in `original_materials/`) and might be reusable. **Judgemen
 > `evaluate-legacy-materials` agent has been run and its surfaced candidates are **in hand as an input to
 > step 4** — where the human decides what (if anything) to reuse while building the plan + scenario.
 
-**4 · Assessment plan and scenario design** *(human-led — co-developed)*
-Two outputs, developed **together**: (a) the **assessment plan** — the cluster AT structure (typically one
-running case-study project in phases + KE coverage) and the **group coverage map** (every consolidated
-group/item → an AT); and (b) the **scenario design** — the narrative: the story, organisation, stakeholders,
-situation and constraints that give the assessments their meaningful shape, **captured** in a scenario
-design brief. They are co-developed because a scenario is only viable when judged against a clear view of
-**what every assessment must cover** — and the scenario is a **shared cross-cluster asset**, so that view
-spans clusters, not just this one. → [scenario-flow.md](scenario-flow.md) · detail [§4](#4--assessment-plan-and-scenario-design).
-> **⟱ Gate 4→5:** *human review* — (a) the coverage map assigns **every** group/item to an AT; (b) the
-> scenario narrative is **agreed and captured**; (c) the scenario **coherently provides the conditions every
-> assessment needs to cover its UoC items** — this cluster *and* consistent with the other clusters' needs
-> (no contradiction, no leakage). *(No script — inherently human; part (a) is the prime candidate for a
-> future plan-coverage validator.)*
+**4 · Assessment plan and scenario design** *(co-developed)*
+Two outputs, developed **together**: (a) the **assessment plan** (one per cluster, to the format standard) —
+the AT structure with, **per AT**, its **UoC coverage** (canonical `[UNIT SEC num]` tags) and its
+**scenario requirements** (`SR-*`); and (b) the **scenario design** — the narrative the assessments need to
+be meaningful, captured in the scenario plan. Co-developed because a scenario is only viable judged against
+a clear, **cross-cluster** view of what every assessment must cover (the scenario is a shared asset). →
+[assessment-plan-format.md](assessment-plan-format.md) · [scenario-flow.md](scenario-flow.md) · detail [§4](#4--assessment-plan-and-scenario-design).
+> **⟱ Gate 4→5:** (a) *validator* `validate-assessment-plan` = **PASS** — the plan conforms to the format
+> and every consolidated PC/PE/KE/FS item is covered by an AT; **+** (b) *human review* — the AT-structure
+> design is sound and the scenario requirements (`SR-*`) are captured. *(Whether the scenario actually
+> provides those `SR-*` is checked at Gate 5's scenario cross-check.)*
 
 **5 · Scenario materials**
 Author the shared cluster scenario **from the agreed design (step 4)** — the in-world content the ATs
@@ -201,10 +199,13 @@ here — that source set isn't in this repo, and S1's audit is long done).
 design brief. The assessment plan and the scenario narrative shape each other, so develop them in
 conjunction — not plan-then-scenario.
 
-- **Assessment plan** — propose the cluster AT structure (typically one running case-study project in
-  phases + KE coverage), map provenance per AT (specific source ATs/parts, as-is vs modified), and build
-  the **group coverage map**: one row per consolidated group/item → which AT covers it + how. No row
-  missing. Also list modifications, new authoring, drops, and open questions (mark **TBD**).
+- **Assessment plan** — author `assessments/assessment_plan.md` to the **format standard**
+  (`docs/assessment-plan-format.md`): the cluster AT structure with, **per AT**, its **UoC coverage**
+  (canonical `[UNIT SEC num]` tags — the authoritative item→AT mapping) and its **scenario requirements**
+  (`SR-*`, which subsume the unit's AC items), plus provenance, the coverage-verification rollup, and the
+  scenario-requirements register. Checked by **`validate-assessment-plan`** (format linter + every
+  consolidated PC/PE/KE/FS item covered by an AT). One plan per cluster; the cross-cluster view is derived
+  by tooling reading across them.
 - **Scenario design (the narrative)** — discuss and arrive at the story, organisation, stakeholders,
   situation and constraints that give the assessments their meaningful shape, and **capture** the agreed
   shape in a scenario design brief. Largely a human conversation; it is the upstream creative decision the
