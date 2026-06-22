@@ -41,3 +41,15 @@ plan is a two-part artefact (narrative story-bible + forward build checklist), d
 consolidated assessment plan, and the website is generated **from** it (forward), not reverse-mapped from an
 existing website. This reverse-mapped S1 was the diagnostic that proved the model; S1's checklist items are
 real/`built` and keep their concrete locations, but new scenarios author the checklist forward (`to-build`).
+
+**Gate 7→8 proven on S1 (2026-06-22).** The `verify-scenario-realisation` agent (see [[scenario-plan-model]])
+ran against S1's built website/repos: all 23 items realised. It retired one stale gap (SE-13 — IR-1…7 now
+matches the contract) and confirmed/refined the rest; S1.md §4 is the live worklist. **Outstanding for a later
+session (deferred by the user "until the morning"):**
+- four Gate 7→8 delivery gaps in `scenario-plans/S1.md` §4 — SE-05 (web-app payload is a placeholder, no
+  code), SE-10 (CL2 AT2 appendices exist only inline in the AT2 docx, not single-sourced — the IaC is
+  *intentionally* faulty, not a gap), SE-11 (no standalone DR risk register), SE-16 (no combined AT3 assessor
+  fallback + the AT3 instrument doesn't name the fallback path);
+- **`website-improvement/` keep-or-retire decision** — a registered CL3 website-side engagement parallel to
+  `ledgerline-improvement/`, bound to no `SE-NN`, still using the retired "Improvement Business Case" term
+  (un-refreshed). `[TBD — needs decision]`. The no-leakage invariant + system-state consistency otherwise held.
