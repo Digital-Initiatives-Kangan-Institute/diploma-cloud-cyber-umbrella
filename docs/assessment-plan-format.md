@@ -115,8 +115,8 @@ PE: … (all placed). KE: … (all placed). Verification: every consolidated ite
 
 ## See also
 
-- [process-assessment.md](process-assessment.md) — the run-sheet; step 4 produces this plan, step 5 the
-  scenario plan it maps to.
+- [process-assessment.md](process-assessment.md) — the run-sheet; step 4 produces this plan, step 5
+  consolidates the per-cluster plans, step 6 authors the scenario materials it maps to.
 - [cluster-authoring-conventions.md](cluster-authoring-conventions.md) — the UoC traceability rule the tag
   conventions share.
 - The scenario-plan format (to be written) — defines the elements the `SR-*` map back to.
