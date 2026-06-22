@@ -16,11 +16,14 @@ pipeline). Durable points to keep in mind:
   `--build`; the `validate-mapping-doc` skill checks completeness (vs the unit's own UoC) + accuracy (vs the
   benchmark inversion — PC/PE/KE hard, FS/AC advisory closest-fit).
 
-- **CL1 is only partly conformant — open follow-on ("Route A").** CL1's mappings are now engine-generated
-  and validate clean, but they are driven from a direct inversion *synthesised from the hand-authored
-  `DATA_*` dicts*; CL1's three assessor instruments still have **no machine-readable, UoC-tagged
-  benchmark**, so `validate-at-traceability` can't check them. Full conformance = authoring real `BENCHMARK`
-  structures for CL1's 3 assessors (like CL2/CL3). Separately scoped; not yet done.
+- **CL1 is conformant (2026-06-22).** Mappings engine-generated + validate clean; all three assessor
+  instruments carry UoC-tagged benchmarks and pass `validate-at-traceability` (AT2/AT3 had tag-notation
+  defects — section repeated inside compound tags `[… PE 1, PE 2]` / `[… FS a, FS b]`, and abbreviated
+  `[KE n]` — now fixed). The engine drives CL1's mapping from its hand-authored `DATA_*` (faithful to those
+  benchmarks); the only optional gap vs CL2/CL3 is a single Python `BENCHMARK` that both builds the docx
+  and drives the mapping. **Separate pre-existing finding (not chased):** `validate-cluster-coverage`
+  under-reads CL1's pilot-era docx (its `at_items` only scans the detected benchmark section, missing
+  items that ARE present, e.g. ICTCLD502 PC 2.x) — a coverage-validator parsing quirk on CL1, not a real gap.
 
 - **Why the engine exists:** building the validator surfaced that the three clusters' generators had
   diverged (CL1 hand-authored/in-place; CL2 flat-list + prefix split; CL3 per-AT split). The engine unified
