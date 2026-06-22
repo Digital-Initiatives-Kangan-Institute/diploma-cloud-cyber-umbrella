@@ -67,11 +67,18 @@ grouped where assessment overlap is plausible (grouping is the only judgement la
 > **⟱ Gate 2→3:** *validator* `validate-uoc-consolidation` (`validate_consolidated.py`) = **PASS** — every
 > item appears exactly once (no MISSING / UNEXPECTED / DUPLICATED) **+ human review**.
 
-**3 · Audit source assessments** *(judgement — no validator yet)*
-Inventory each unit's existing standalone ATs in `original_materials/` for reuse: format, apparent UoC
-coverage (by inspection, not by reading any pre-existing mapping), and reusable scenario assets. → detail [§3](#3--audit-source-assessments).
-> **⟱ Gate 3→4:** *human review* — for each unit, every source AT is named with its format, apparent
-> coverage, and assets. *(No script; candidate for future tooling.)*
+**3 · Audit source assessments** *(brownfield only — optional; skip if greenfield)*
+A **legacy / brownfield** step: it applies only when standalone assessment materials **already exist** for
+the cluster's units (in `original_materials/`) and might be reusable. **Judgement first:**
+- **Greenfield** (no pre-existing materials) → nothing to audit; **skip**.
+- **Brownfield** → run the **[`evaluate-legacy-materials` agent](../.claude/agents/evaluate-legacy-materials.md)**
+  *(read-only)*: it scans `original_materials/` against `consolidated_uoc.md` and **surfaces** candidate
+  reusable material — each source AT's format, the UoC items it appears to touch, and any scenario assets —
+  **authoring nothing and deciding nothing**. It brings options to the surface for the human to weigh. →
+  detail [§3](#3--audit-source-assessments).
+> **⟱ Gate 3→4:** *not a correctness check.* **Greenfield:** proceed. **Brownfield:** the
+> `evaluate-legacy-materials` agent has been run and its surfaced candidates are **in hand as an input to
+> step 4** — where the human decides what (if anything) to reuse while building the plan + scenario.
 
 **4 · Assessment plan and scenario design** *(human-led — co-developed)*
 Two outputs, developed **together**: (a) the **assessment plan** — the cluster AT structure (typically one
@@ -160,12 +167,27 @@ AC. Tags must appear **unwrapped** (not in backticks) to be counted.
   PE parent-bullet case.
 
 ## §3 — Audit source assessments
-For each unit, identify its material pattern (flat / folder-structured / validation-only / non-standard),
-list Student + Assessor variants and supporting templates, extract `.docx` text to a scratch dir, and read
-each to capture: one-line summary, apparent UoC coverage (by inspection), format, scenario assets, and
-quality issues. Feeds step 4.
+*(Brownfield only — optional.)* This is the **legacy-materials** step: when a cluster's units already have
+standalone assessment materials (the per-unit ATs in `original_materials/`), surface what's there so step 4
+can **prefer reuse over greenfield authoring**. A **greenfield** cluster (no such materials) skips it
+entirely — there is nothing to audit.
 
-**Step gotchas:**
+**The `evaluate-legacy-materials` agent — read-only; surfaces, never authors or decides.** Given `consolidated_uoc.md`
+and `original_materials/<cluster>/`, it:
+- identifies each unit's material pattern (flat / folder-structured / validation-only / non-standard) and
+  lists Student + Assessor variants and supporting templates (excluding LMS bundles);
+- reads each and surfaces, per source AT: a one-line summary, its **format**, the **UoC items it appears to
+  touch** (by inspection, against the consolidated UoC), reusable **scenario assets**, and quality issues;
+- **writes no deliverables and makes no reuse decision** — it presents the candidate set to the human.
+
+The human carries those candidates into **step 4**, where the actual reuse decisions are made (and recorded
+in the assessment plan). So there is **no separate validation gate** here: the only condition to proceed is
+*greenfield → skip*, or *brownfield → the agent has run and its candidates are surfaced as an input to
+step 4*. The agent is built — [`.claude/agents/evaluate-legacy-materials.md`](../.claude/agents/evaluate-legacy-materials.md);
+run it when a brownfield cluster with accessible `original_materials/` arrives (it can't be exercised on S1
+here — that source set isn't in this repo, and S1's audit is long done).
+
+**Step gotchas (these inform the agent's reading):**
 - **Don't trust cover-sheet titles** — e.g. ICTCLD401 AT2's sheet says "Knowledge Questions" but it's a
   6–8h AWS practical. Read the body. Source ATs also carry template residue, placeholder typos, and
   wrong-topic answer placeholders.
