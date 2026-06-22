@@ -3,111 +3,137 @@
 **Audience:** humans and LLM agents authoring a scenario's scenario plan. Paths are relative to the
 `diploma-cloud-cyber-content/` repo root.
 
-A scenario plan (`scenario-plans/<SEMESTER>.md`) is the **authored** bridge between the assessment
-contract and the in-world world: it maps every `SR-*` in the scenario's **consolidated assessment plan**
-(`assessment-plans/<SEMESTER>.md`) to the concrete **scenario element** that provides it. There is **one
-scenario plan per scenario** (a scenario spans all the semester's clusters — the world is shared, never
-duplicated per cluster; see [scenario-flow.md](scenario-flow.md)).
+A scenario plan (`scenario-plans/<SEMESTER>.md`) is the **seam between the assessment world and the delivered
+world**: the assessment contract flows *in*, the website (and lab-packs, templates) is generated *out*. It is
+developed **after** the consolidated assessment plan is complete (not in parallel with it) — the consolidated
+plan is the cross-cluster view of what every assessment must cover, which is exactly what makes a scenario
+*viable*, so the scenario is developed **from** it. There is **one scenario plan per scenario** (the world is
+shared across the semester's clusters, never duplicated; see [scenario-flow.md](scenario-flow.md)).
 
-It is the counterpart of the consolidated assessment plan: that doc is **derived** (the cross-cluster
-`SR-*` contract); this doc is **authored** (the world that satisfies it). The scenario *materials*
-themselves are single-sourced on the website (see [website-architecture.md](website-architecture.md)); the
-scenario plan does not duplicate them — it **names** each element and points at where it lives.
+It has **two parts of different nature:**
 
-This standard fixes the plan's structure so one check can run against it:
+- **Part 1 — scenario narrative (the story bible).** The fiction: the organisation, the people, the systems,
+  the situation and drivers, the constraints, the tone. **Human-led creative** work (AI assists; never
+  auto-generated). It is *not* validated item-by-item against the contract — its only test is **viability**:
+  can this world plausibly host every assessment? (a human cross-cluster judgement). It is the creative seed
+  Part 2 is written in.
+- **Part 2 — the forward build checklist.** Every artefact to **build** — policy, project document, template,
+  lab-pack, stakeholder role — each with **keynotes** (what it must contain), a **status**, a target
+  **location**, the **`SR-*`** it satisfies, and the **assessments/practice tasks** that consume it.
+  **Contract-bound and machine-validated.** Fleshed out using Part 1's fiction; it is the basis the website is
+  later built from.
 
-- **`validate-scenario-plan` (linter + cross-check — deterministic):** the required sections/fields are
-  present and well-formed (FORMAT), **and** every `SR-*` in the consolidated assessment plan is satisfied by
-  at least one scenario element, with no element claiming a non-existent `SR-*` (CROSS-CHECK, bidirectional).
-
-The **quality and coherence** of the world — whether it reads as a believable place with no leakage between
-clusters — stays a human call (the Gate 6→7 human review). The cross-check only proves the contract is
-mechanically covered.
+The split governs the tooling: Part 1 stays a free creative loop (the format **captures** it, nothing lints
+its content beyond presence); Part 2 has deterministic rails — `validate-scenario-plan` confirms the format
+and that **every `SR-*` in the consolidated assessment plan is satisfied by ≥1 checklist item**, with no item
+claiming a non-existent `SR-*`. The rails make the human↔AI creative loop faster and stop it silently dropping
+a requirement. The **quality and coherence** of the world stays the Gate 6→7 human review.
 
 ## Conventions
 
-- **Scenario-element IDs** are `SE-NN` — sequential within the one scenario plan (e.g. `SE-01`). Each is
-  declared once in the elements section (§3) and may satisfy any number of `SR-*`.
-- **Scenario-requirement references** use the canonical `SR-<CLUSTER>-NN` ids exactly as they appear in the
-  consolidated assessment plan's register (e.g. `SR-CL2-03`). They must appear **unwrapped** (not inside
-  backticks) on an element's `Satisfies:` line to count.
-- **Element locations** reference scenario content the way the relevant audience consumes it — abstractly
-  for student-facing material ("the YAT intranet's ICT Strategic Plan page"), and by the concrete asset
-  (lab id, template name, lab-pack) where that is the element. Never leak course/assessment meta-language
-  into element *descriptions* that quote in-world content (the in-world rule still applies to what the
-  scenario says); the plan itself is an authoring doc and may name clusters/ATs in its structure.
+- **Checklist-item IDs** are `SE-NN` — sequential within the one scenario plan. Each is declared once (Part 2)
+  and may satisfy any number of `SR-*`.
+- **`SR-*` references** use the canonical `SR-<CLUSTER>-NN` ids exactly as they appear in the consolidated
+  assessment plan's register; they must appear **unwrapped** (not in backticks) on an item's `Satisfies:` line
+  to count.
+- **Grouping** — order Part 2's items by **target website content-collection** (`policies` / `reference` /
+  `ict` / `projects/<slug>` / `templates` / `environments` / `roles`), so each item maps to a website entry and
+  plan→website generation is near-mechanical. Group with `### <collection>` headings; the items themselves are
+  `#### SE-NN` blocks.
+- **Status** — every item carries `to-build` | `built` | `carry-over`, so one format serves a greenfield
+  scenario (items start `to-build`) and a delivered one (items are `built` with real paths).
+- **Locations** are prefixed `website:` (the `diploma-cloud-cyber-website` repo — SSOT for in-world content),
+  `content:` (this repo: lab-packs, template generators), or `external:` (e.g. AWS Academy). For a `to-build`
+  item the location is the **target**; for a `built` item it is the actual path.
 
 ## Required sections (in order)
 
-The linter requires these headings and their key fields. Prose within each is free.
+The linter requires these headings and (in Part 2) these per-item fields. Prose within each is free.
 
-1. **Header banner** — title `# <SEMESTER> — Scenario Plan`; a `> **STATUS:** …` line; and a
-   **Assessment binding** line naming the consolidated assessment plan this scenario satisfies and linking
-   it (`assessment-plans/<SEMESTER>.md`).
-2. **`## 1. World overview`** — the shared world this scenario instantiates (the organisation, the systems
-   and their state progressions, the cluster framing). Narrative; references [scenario-flow.md](scenario-flow.md)
-   rather than restating the durable model.
-3. **`## 2. Scenario elements`** — the element table, then **per element** a `### SE-NN — <name>` block
-   carrying, as labelled fields:
-   - **Kind** — environmental/access · narrative/situational · artefact/template (free text);
-   - **Location:** where the element is single-sourced (website page/collection, lab id, lab-pack path,
-     template name) — the pointer, not a copy;
-   - **Satisfies:** the `SR-*` ids this element provides *(authoritative — the cross-check reads these)*.
-4. **`## 3. SR coverage`** — the human-readable proof that every contract requirement is met: the
-   `SR-*` → element rollup and a one-line verification statement. *(A rollup view of §2's `Satisfies:`
-   lines; may be generated. The cross-check's authoritative source is §2.)*
-5. **`## 4. Open questions / TBDs`** — choices awaiting decision (mark `[TBD — …]`).
+1. **Header banner** — title `# <SEMESTER> — Scenario Plan`; a `> **STATUS:** …` line; and an
+   **Assessment binding** line naming + linking the consolidated assessment plan
+   (`assessment-plans/<SEMESTER>.md`) this scenario satisfies.
+2. **`## Part 1 — Scenario narrative`** — the story bible (organisation, people, systems, situation/drivers,
+   constraints, tone). Free-form (sub-headings encouraged); **linted for presence only** — this is the
+   human-led creative part.
+3. **`## Part 2 — Build checklist`** — the artefacts to build, grouped by content-collection (`###` headings),
+   each a `#### SE-NN — <name>` block carrying, as labelled fields:
+   - **Status:** `to-build` | `built` | `carry-over`;
+   - **Location:** the `website:`/`content:`/`external:` target (or actual) path;
+   - **Satisfies:** the `SR-*` ids this item provides *(authoritative — the cross-check reads these)*;
+   - **Consumed by:** the AT(s) and/or practice tasks that use it;
+   - **Keynotes:** what this artefact must contain (the spec the website-build works to).
+4. **`## SR coverage`** — the `SR-*` → item rollup + a one-line verification statement. *(A rollup of Part 2's
+   `Satisfies:` lines; may be generated. The cross-check's authoritative source is Part 2.)*
+5. **`## Open questions / TBDs`** — choices awaiting decision, and delivery gaps where an item is thinner than
+   its `SR-*` implies (mark `[TBD — …]`).
 6. **`## Changelog`** — dated entries; current-state prose above, history here.
 
-## What makes a good element
+## What makes a good checklist item
 
-For each `SR-*` in the consolidated register, ask: *what real thing in the world provides this?* Capture it
-as an `SE-NN` and bind it. Typical kinds:
+For each `SR-*` in the consolidated register, ask: *what artefact in the world provides this, and what must it
+contain?* Capture it as an `SE-NN` with **keynotes** that are specific enough to build from. Typical kinds:
 
 - **Environmental / access** — a lab (AWS Academy lab id), a deployable lab-pack, the tooling an AT runs in.
-  These usually satisfy the `SR-*` whose AC link names the unit's environment Assessment Conditions.
-- **Narrative / situational** — a stakeholder role someone can play, a documented procedure on the intranet,
-  a baseline system in a specific state, a constraint document. These satisfy the narrative `SR-*` (no AC).
+- **Narrative / situational** — a stakeholder role someone can play, a documented procedure, a baseline system
+  in a specific state, a constraint document.
 - **Artefact / template** — a supplied template, an exemplar document chain, a provided code/IaC appendix.
 
-One element may satisfy several `SR-*`, and one `SR-*` may be satisfied by several elements — the cross-check
-only requires every `SR-*` to be covered by at least one. An element that satisfies **no** `SR-*` is allowed
-(pure world-building) but flagged advisory, so a forgotten binding is visible.
+One item may satisfy several `SR-*`, and one `SR-*` may be satisfied by several items — the cross-check only
+requires every `SR-*` to be covered by at least one. An item that satisfies **no** `SR-*` is allowed (pure
+world-building — policies for realism, practice-side content) but flagged advisory, so a forgotten binding is
+visible.
 
 ## Skeleton
 
 ```markdown
-# S1 — Scenario Plan
+# S2 — Scenario Plan
 > **STATUS: DRAFT.** <one line>
-> **Assessment binding:** satisfies the S1 consolidated assessment plan — see
-> [assessment-plans/S1.md](../assessment-plans/S1.md). Every SR-* in its register is bound below.
+> **Assessment binding:** satisfies the S2 consolidated assessment plan — see
+> [assessment-plans/S2.md](../assessment-plans/S2.md). Every SR-* in its register is bound in Part 2.
 
-## 1. World overview
-<the organisation; the systems + state progressions; cluster framing — references scenario-flow.md>
+## Part 1 — Scenario narrative
+### Organisation
+<name, type, sector, size, locations>
+### People
+<characters / stakeholder roles>
+### Systems
+<the systems + their states>
+### Situation & drivers
+### Constraints
+### Tone & conventions
 
-## 2. Scenario elements
-| SE | Element | Kind | Satisfies |
-|----|---|---|---|
-| SE-01 | AWS Academy lab environment | environmental | SR-CL1-01, SR-CL2-01, SR-CL3-01 |
+## Part 2 — Build checklist
 
-### SE-01 — AWS Academy lab environment
-- **Kind:** environmental / access
-- **Location:** AWS Academy — Cloud Foundations [104469] + Cloud Architecting [172221]
-- **Satisfies:** SR-CL1-01 · SR-CL2-01 · SR-CL3-01
+### Policies
+#### SE-01 — <policy name>
+- **Status:** to-build
+- **Location:** website: src/content/policies/<slug>.md
+- **Satisfies:** SR-CLn-NN
+- **Consumed by:** CLn ATx (assessment)
+- **Keynotes:** <what this document must contain to satisfy the SR + be believable>
 
-## 3. SR coverage
-SR-CL1-01 → SE-01; … Verification: every SR-* in assessment-plans/S1.md is satisfied by ≥1 element.
+### Projects — <engagement slug>
+#### SE-02 — <document name>
+- **Status:** to-build
+- **Location:** website: src/content/projects/<slug>/<doc>.md
+- **Satisfies:** SR-CLn-NN
+- **Consumed by:** CLn ATx (assessment); CLm practice
+- **Keynotes:** …
 
-## 4. Open questions / TBDs
+## SR coverage
+SR-CLn-NN → SE-01; … Verification: every SR-* in assessment-plans/S2.md is satisfied by ≥1 item.
+
+## Open questions / TBDs
 ## Changelog
 ```
 
 ## See also
 
-- [process-assessment.md](process-assessment.md) — the run-sheet; step 4 designs the scenario (and declares
-  the `SR-*`), step 5 consolidates them into the contract, step 6 authors the scenario materials this plan
-  maps; the scenario cross-check is Gate 6→7's machine condition.
+- [process-assessment.md](process-assessment.md) — the run-sheet; the cluster plans (step 4) consolidate into
+  the contract (step 5); the **scenario plan** is developed from that contract (step 6); the **website** is
+  built from the scenario plan (step 7). The scenario cross-check is the scenario-plan step's machine condition.
 - [assessment-plan-format.md](assessment-plan-format.md) — defines the `SR-*` register this plan satisfies.
-- [scenario-flow.md](scenario-flow.md) — the durable cross-cluster world model the plan instantiates.
-- [website-architecture.md](website-architecture.md) — where the scenario materials are single-sourced.
-```
+- [scenario-flow.md](scenario-flow.md) — the durable cross-cluster world model Part 1 instantiates.
+- [website-architecture.md](website-architecture.md) — the content model Part 2's items are grouped by and the
+  website-build targets.
