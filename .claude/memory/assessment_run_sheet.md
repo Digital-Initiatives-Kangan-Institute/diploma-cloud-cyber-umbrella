@@ -25,6 +25,11 @@ validator where one exists; at a gateless gate, build a tool/agent for it.
   **`validate-consolidated-plan`** (independent faithful-union tester). Generated `assessment-plans/S1.md`
   (the cross-cluster AT roster + coverage rollup + **unioned SR-* register** = the single contract the
   scenario validates against). PASS.
+- **Gate 6 scenario** — built the **scenario-plan format standard** (docs/scenario-plan-format.md) +
+  **`validate-scenario-plan`** (format linter + bidirectional SR cross-check). The **scenario plan**
+  (`scenario-plans/<S>.md`) is the *authored* counterpart of the *derived* consolidated plan: in-world
+  **`SE-NN`** elements, each `Satisfies:` the `SR-*` it provides. Authored **`scenario-plans/S1.md`** (22
+  elements binding all 24 `SR-*`); cross-check **PASS** (negative-tested: catches UNCOVERED + PHANTOM).
 - **Gates 7 assessor (validate-at-traceability) / 9 mapping (validate-mapping-doc) / 10 cluster-coverage
   (validate-cluster-coverage)** — validators already exist + passed earlier this session; back-test in the
   walk if needed. **Gate 8 student / Gate 11 pre-validation** — human.
@@ -34,8 +39,7 @@ validator where one exists; at a gateless gate, build a tool/agent for it.
 against the consolidated **SR-*** register. `SR-*` ids are **cluster-scoped** (`SR-CL3-01`) so registers
 union without collision. AC items are discharged via the SR register's **AC-link** column.
 
-**NEXT (post-compaction):** **Gate 6 — scenario** tooling — author the **scenario-plan format spec** +
-**scenario-plan linter** + **scenario cross-check** (every `SR-*` in `assessment-plans/S1.md` satisfied by a
-scenario-plan element; bidirectional). That's the open item flagged in assessment-plan-format.md ("scenario-
-plan format — to be written"). Then revisit gates 7/9/10 in the walk, then give **process-delivery.md** the
-run-sheet treatment. Related: [[mapping-pipeline]] (same derived-artefact + validator pattern).
+**NEXT:** back-test **gates 7 / 9 / 10** in the walk (validators exist — `validate-at-traceability`,
+`validate-mapping-doc`, `validate-cluster-coverage`; confirm green on S1 to close the assessment-run-sheet
+walk), then give **process-delivery.md** the same step→gate run-sheet treatment (the **delivery run-sheet**,
+validated as worked through). Related: [[mapping-pipeline]] (same derived-artefact + validator pattern).

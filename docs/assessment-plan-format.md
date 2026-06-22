@@ -119,4 +119,5 @@ PE: … (all placed). KE: … (all placed). Verification: every consolidated ite
   consolidates the per-cluster plans, step 6 authors the scenario materials it maps to.
 - [cluster-authoring-conventions.md](cluster-authoring-conventions.md) — the UoC traceability rule the tag
   conventions share.
-- The scenario-plan format (to be written) — defines the elements the `SR-*` map back to.
+- [scenario-plan-format.md](scenario-plan-format.md) — the scenario-plan format: defines the in-world
+  elements the `SR-*` map back to, and the cross-check that confirms every `SR-*` is satisfied.
