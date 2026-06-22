@@ -86,7 +86,9 @@ reuses it).
   the commercial-licensing cost-benefit element** (~$27k/yr Ledgerline+SQL-Server licensing; license-included
   vs BYOL) that is the *assessed* differentiator from the open-source LMS — too costly, and it guts pedagogy.
   Residual tidy only: the soft `~13.5 vs ~22 GB` SQL-data figure (low priority).
-- **`mappings/`** Assessment Mapping docs (504, 401); an **AT2 team-plan exemplar** (a model team plan;
-  base on `build_s1_cl3_at1_team_plan_exemplar.py`).
+- **`mappings/` Assessment Mapping docs (504, 401) — DONE 2026-06-22** (`build_s1_cl3_mapping_docs.py`:
+  auto-inverts the AT1/AT2/AT3 benchmarks into the institutional template; 0 unmapped; FS auto-tagged from
+  the benchmarks, ACs closest-fit to the instrument Conditions — AC5 legislative auto-maps to D5).
+- Remaining: an **AT2 team-plan exemplar** (a model team plan; base on `build_s1_cl3_at1_team_plan_exemplar.py`).
 - Downstream: scenario `IR-6` wording (re-point "Improvement Business Case" → the Solution Design's
   cost-benefit justification); the institutional **Pre-Validation** gate.
