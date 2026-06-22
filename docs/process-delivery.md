@@ -5,7 +5,7 @@ to [process-assessment.md](process-assessment.md) (which covers the assessment-c
 
 > **Paths** in this document are relative to the `diploma-cloud-cyber-content/` repo root.
 
-**Relationship to `process-assessment.md`:** `process-assessment.md` is the **assessment run-sheet** — how the cluster's **assessment artefacts** are created, as a step→gate pipeline (transcribe → consolidate → audit → plan → scenario → assessor/student instruments → mapping → cluster coverage → pre-validation). This document records how a cluster's **delivery plan** is produced — the trainer-facing schedule that sequences delivery and assessment across sessions. The two processes share inputs (the consolidated UoC, the assessment plan, the scenario) but produce different outputs.
+**Relationship to `process-assessment.md`:** `process-assessment.md` is the **assessment run-sheet** — how the cluster's **assessment artefacts** are created, as a step→gate pipeline (transcribe → consolidate UoC → audit → plan → consolidate plans → scenario → assessor/student instruments → mapping → cluster coverage → pre-validation). This document records how a cluster's **delivery plan** is produced — the trainer-facing schedule that sequences delivery and assessment across sessions. The two processes share inputs (the consolidated UoC, the assessment plan, the scenario) but produce different outputs.
 
 **Prerequisites you must read before acting:**
 - The umbrella `CLAUDE.md` — working discipline + git-safety rules.
