@@ -123,9 +123,10 @@ Build the in-world content **from the scenario plan's checklist (step 6)** — s
 (in-world only — no course/assessment meta-language), each checklist item realised at its target location to
 its keynotes. Expect significant human↔AI looping. →
 [scenario-flow.md](scenario-flow.md) · [website-architecture.md](website-architecture.md) · detail [§7](#7--scenario-materials).
-> **⟱ Gate 7→8:** *human review* — every checklist item is built (`built`/`carry-over`) or flagged **TBD**;
-> the built world matches its keynotes and the AC items the scenario must satisfy are covered. *(No script
-> yet — the website-build-from-plan generator is the planned tooling here.)*
+> **⟱ Gate 7→8:** the **[`verify-scenario-realisation` agent](../.claude/agents/verify-scenario-realisation.md)**
+> *(read-only)* = every Part-2 item is **realised** in the built website/repos (no NOT-FOUND) and its content
+> **meets its keynotes** (no `partial`/`mismatch`); orphans + in-world/consistency breaches surfaced **+ human
+> review**. The agent remaps plan↔website from scratch each run; re-run after each batch of fixes until clean.
 
 **8 · Assessor instruments** *(loop per AT)*
 Populate the institutional assessor template for each AT: Details, Teacher/Assessor instructions, and the
@@ -283,8 +284,20 @@ and cross-checks Part 2 bidirectionally against the consolidated register: every
 in-world content at its target location, to its keynotes: author public-site + internal-intranet pages and
 state-versioned per-AT documents (`-S<X>-CL<Y>-AT<Z>.md`), and the website spec. Content is **in-world only**.
 Student-facing references are abstract ("the YAT intranet's … page"); author/assessor references use explicit
-paths. Expect significant human↔AI looping; the scenario plan is what keeps it convergent. *(A
-website-build-from-plan generator is the planned tooling for this step.)*
+paths. Expect significant human↔AI looping; the scenario plan is what keeps it convergent.
+
+The gate condition is the **`verify-scenario-realisation` agent** (read-only): it walks **every** Part-2
+`SE-NN` item, locates its realisation in the built website/content repos (mapping plan↔website **live**, from
+scratch — no stored manifest), and reports per item **FOUND / NOT-FOUND** plus a **keynote check**
+(`meets`/`partial`/`mismatch`); it also surfaces **orphans** (built content traced to no item) and
+**in-world/consistency** breaches. It *surfaces only* — the human fixes gaps, then re-runs it until the
+realisation table is clean. Why an agent and not a deterministic script here: the other gates check
+already-structured data (tags, table rows), but this gate bridges **prose items ↔ a file tree** — locating
+which file realises an item, and judging whether its content meets the keynotes, is inherently semantic, and
+the agent must read everything for the keynote check anyway. (Upstream, `validate-scenario-plan` already
+deterministically guarantees plan ↔ contract — the rail is there, where the data is structured.) *(A
+website-build-from-plan generator remains possible future tooling for authoring the materials; this step's
+**gate** is the verification agent.)*
 
 **Step gotcha:**
 - **Scenario reference framing** — student-facing artefacts reference the scenario as students consume it

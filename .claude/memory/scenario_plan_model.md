@@ -39,3 +39,18 @@ a scenario-plan step after consolidation; website build the following step.
 is near-mechanical; one format serves built *and* greenfield worlds via the **status** field. `[TBD — confirm:
 whether Part 2 should be SEEDED by a stub-per-SR scaffold generated from the consolidated register (coverage
 guaranteed by construction) vs hand-authored against it — leaning scaffold.]`
+
+**Gate 7→8 (website realises the scenario plan) — DECIDED 2026-06-22: a read-only AGENT, not a deterministic
+script + manifest.** Built the **`verify-scenario-realisation` agent** (`.claude/agents/`): given the scenario
+plan's Part 2 + the built website/content repos, it walks **every `SE-NN`** (anchored on the plan, so *missing*
+is catchable), maps each item to its real path **live/from-scratch each run** (no stored manifest/`Targets`
+field), reports FOUND / NOT-FOUND + a **keynote check** (meets/partial/mismatch), plus orphans + in-world/
+consistency breaches. Surfaces only; human fixes; re-run until clean. **Why agent, not a rail:** the other
+gates check already-structured data (tags, rows) — pure string ops — but this gate bridges **prose items ↔ a
+file tree**; locating which file realises an item and judging keynote-conformance is irreducibly semantic, and
+the agent must read everything for keynotes anyway, so a deterministic existence rail would only duplicate the
+item→file matching (as a hand-maintained `Targets` list). Rejected alternatives, with reasons: a persistent
+**manifest/site-map** (would be redundant machinery the agent has to re-verify anyway; Astro's `@astrojs/sitemap`
+also *excludes* `/intranet/`, where the scenario lives); a **`Targets` field + deterministic validator** (the
+duplication above). The deterministic rail stays **upstream** where the data is structured —
+`validate-scenario-plan` already guarantees plan ↔ contract.
