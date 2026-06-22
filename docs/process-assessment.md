@@ -34,6 +34,7 @@ the reference if you need to run the underlying script by hand.
 | 2.5 | Check a consolidation is complete | `validate-uoc-consolidation` | `validate_consolidated.py` | Haiku |
 | 6 | Check one AT's UoC traceability (every criterion tagged, every reference real) | `validate-at-traceability` | `validate_at_traceability.py` | Haiku |
 | 6–7 | Check the cluster's ATs together evidence every consolidated item | `validate-cluster-coverage` | `validate_cluster_coverage.py` | Haiku |
+| post-7 | Check a unit's Assessment Mapping docx is complete + accurate | `validate-mapping-doc` | `validate_mapping_doc.py` | Haiku |
 | delivery 3 | Gate a teaching deck's size before committing | `inspect-file-size` | `inspect-file-size/inspect_file_size.py` | Haiku |
 
 The skills call deterministic, **stdlib-only** scripts in `.claude/skills/scripts/`, so the work is
@@ -386,7 +387,7 @@ AT3-specific operational artefact authored during the process: a **CloudFormatio
 
 As of 2026-05-26, S1-CL1 has reached the end of Step 7 for all three ATs. Remaining work:
 
-1. **Per-UoC mapping documents** — uses workspace `templates/Assessment Mapping Tool.docx`. One per UoC in the cluster (three for S1-CL1). Tim has started edits to the three mapping docx files; not yet locked in. Maps each PC/PE/KE/FS/AC of each UoC to where in the cluster's ATs it is evidenced.
+1. **Per-UoC mapping documents** — one per unit in the cluster, mapping each PC/PE/KE/FS/AC to where in the cluster's ATs it is evidenced. These are a **derived artefact**, generated from the source UoC + the assessor marking benchmarks (not hand-edited) and checked with the `validate-mapping-doc` skill. See **[mapping-document-standard.md](mapping-document-standard.md)** for the contract, the generate → validate pipeline, and the FS/AC closest-fit convention.
 2. **Operational delivery artefacts** — see the cluster's working state (in LLM memory) § Pending — operational / pre-delivery for the running list (CloudFormation YAML, Records Management Policy content, AT1 templates, exemplars batch).
 3. **Cluster coverage check** — once a cluster's ATs are authored, run the **`validate-cluster-coverage`** skill to confirm the ATs together evidence every required (PC/FS/PE/KE) item in `consolidated_uoc.md`; close any gaps it reports. (AC items are environment-satisfied and not required in criteria.) This is the capstone to the per-AT `validate-at-traceability` checks from Step 6.
 4. **Pre-validation pass** — run the institutional Pre-Validation Tool over each AT.

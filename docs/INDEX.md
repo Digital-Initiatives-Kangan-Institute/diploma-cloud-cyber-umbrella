@@ -21,6 +21,7 @@ whenever you add a doc — an un-indexed document is invisible.
 - [process-delivery.md](process-delivery.md) — the cluster **delivery-planning** process (AT → Topic → component; coverage + slide-plan → generated Kangan deck; teach/practice/assess).
 - [cluster-authoring-conventions.md](cluster-authoring-conventions.md) — standing conventions for authoring assessment artefacts: UoC traceability, KE locations, template workflow, cross-AT shape, folder layout.
 - [document-template-system.md](document-template-system.md) — the branded YAT/MTS document system: generator scripts, the consulting-chain document set, the three artefact roles (template / assessor exemplar / student model).
+- [mapping-document-standard.md](mapping-document-standard.md) — the Assessment Mapping document as a derived artefact: the contract (machine-readable, UoC-tagged benchmarks), the generate → validate pipeline, the FS/AC closest-fit convention, and the shared template layout.
 - [kangan-branding.md](kangan-branding.md) — the Kangan/BKI brand spec used for teaching decks.
 - [lab-pack-standard.md](lab-pack-standard.md) — the course-wide lab-pack standard: runnable CloudFormation + local validation harness students deploy into ephemeral AWS Academy labs, and the Academy constraints (proven live).
 
