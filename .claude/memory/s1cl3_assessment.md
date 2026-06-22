@@ -89,6 +89,15 @@ reuses it).
 - **`mappings/` Assessment Mapping docs (504, 401) — DONE 2026-06-22** (`build_s1_cl3_mapping_docs.py`:
   auto-inverts the AT1/AT2/AT3 benchmarks into the institutional template; 0 unmapped; FS auto-tagged from
   the benchmarks, ACs closest-fit to the instrument Conditions — AC5 legislative auto-maps to D5).
-- Remaining: an **AT2 team-plan exemplar** (a model team plan; base on `build_s1_cl3_at1_team_plan_exemplar.py`).
-- Downstream: scenario `IR-6` wording (re-point "Improvement Business Case" → the Solution Design's
-  cost-benefit justification); the institutional **Pre-Validation** gate.
+- **AT2 team-plan exemplar — DONE 2026-06-22**: rewritten to the **component-division** model (network /
+  compute / database / storage, one per member; no business case) as `build_s1_cl3_at2_team_plan_exemplar.py`
+  → `assessments/AT2/`; the old dimension-model AT1 exemplar + generator deleted; the blank
+  `YAT-Team-Plan-Template.docx` reworked to match.
+- **"Improvement Business Case" retired — DONE 2026-06-22**: the concept was woven through the whole
+  `ledgerline-improvement` scenario (MSA deliverables/phases/fees, role-brief, consultation-notes, IR-6,
+  indian-reg). All re-pointed to the **Solution Design** (cost-benefit inside it) + its **approval
+  presentation / sign-off-to-proceed**. CL1's and the LMS's business cases are legitimate and were left
+  untouched.
+- **CL3 assessment is now Claude-complete** — the only outstanding item is the institutional **Pre-Validation**
+  gate (human; can't be progressed in-session). CL3 **delivery** (decks) is the next workstream — see
+  [[s1cl3-delivery]].
