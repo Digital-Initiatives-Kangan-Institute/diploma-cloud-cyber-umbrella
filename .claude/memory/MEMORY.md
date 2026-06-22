@@ -25,5 +25,5 @@ and the current standing of each cluster workstream ("principles, not state" —
 - [S1-CL3 assessment](s1cl3_assessment.md) — Cloud Infrastructure Improvement (504 + 401, lightest): **Claude-complete 2026-06-22** — instruments validated 72/72, AT3 lab-pack proven live, mappings + AT2 team-plan exemplar built, "Improvement Business Case" retired (→ Solution Design). Write-is-the-seam model (504 individual design+deploy; 401 the divided YAML write in AT2); encryption baseline + data out of scope. Only the institutional **Pre-Validation** gate (human) remains.
 - [S1-CL3 delivery](s1cl3_delivery.md) — CL3 delivery workstream: not started yet (instruments authored; delivery decks are the next CL3 workstream).
 
-## Open tooling task
-- [mapping-doc validator task](mapping_doc_validator_task.md) — **NEXT (post-compaction):** build a `validate-mapping-doc` skill that checks an Assessment Mapping docx matches the AT marking-benchmark mappings (no such validator exists yet; reuse the existing stdlib validators + the build script's `invert_benchmarks()`).
+## Mapping pipeline
+- [mapping pipeline](mapping_pipeline.md) — **BUILT 2026-06-22:** Assessment Mapping docs are a derived artefact; one engine (`scripts/mapping/generate_mapping_doc.py`) generates all clusters + the `validate-mapping-doc` skill checks completeness/accuracy (see docs/mapping-document-standard.md). Never hand-edit a mapping docx. **Open follow-on:** CL1 instruments lack machine-readable benchmarks (Route A retrofit).
