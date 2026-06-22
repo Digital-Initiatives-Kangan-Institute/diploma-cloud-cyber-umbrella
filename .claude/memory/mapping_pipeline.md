@@ -21,9 +21,16 @@ pipeline). Durable points to keep in mind:
   defects — section repeated inside compound tags `[… PE 1, PE 2]` / `[… FS a, FS b]`, and abbreviated
   `[KE n]` — now fixed). The engine drives CL1's mapping from its hand-authored `DATA_*` (faithful to those
   benchmarks); the only optional gap vs CL2/CL3 is a single Python `BENCHMARK` that both builds the docx
-  and drives the mapping. **Separate pre-existing finding (not chased):** `validate-cluster-coverage`
-  under-reads CL1's pilot-era docx (its `at_items` only scans the detected benchmark section, missing
-  items that ARE present, e.g. ICTCLD502 PC 2.x) — a coverage-validator parsing quirk on CL1, not a real gap.
+  and drives the mapping. **All three clusters now pass `validate-cluster-coverage` at 100%** (CL1 106/106,
+  CL2 105/105, CL3 72/72).
+
+- **`split_benchmark` bug fixed (2026-06-22).** The shared validator's `split_benchmark` took the *last*
+  "…Benchmark" heading, so a multi-part AT with two benchmark sub-sections (CL1 AT1/AT3 = Part-A Design +
+  Part-B Report benchmarks) silently dropped everything above the final one — cluster-coverage then
+  under-read CL1 (77/106). Fixed to take the *first* heading (single-section ATs unchanged; CL2/CL3 stay
+  100%). Lesson: a validator can hide a real gap behind a parsing quirk — chase a surprising FAIL to root
+  cause rather than assuming the artefact is wrong. Fixing it exposed two more CL1 tag defects (now fixed),
+  then CL1's closest-fit FS/PC items were retro-tagged into the AT1/AT2 benchmarks (labelled, per `DATA_*`).
 
 - **Why the engine exists:** building the validator surfaced that the three clusters' generators had
   diverged (CL1 hand-authored/in-place; CL2 flat-list + prefix split; CL3 per-AT split). The engine unified
