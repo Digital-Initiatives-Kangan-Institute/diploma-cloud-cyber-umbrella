@@ -17,7 +17,7 @@ whenever you add a doc — an un-indexed document is invisible.
 - [reuse-permissions.md](reuse-permissions.md) — multi-TAFE origin of the source materials + Kangan's (still-being-confirmed) reuse rights, and the fallback if legal denies reuse.
 
 ## Authoring & delivery process
-- [process-assessment.md](process-assessment.md) — the cluster **assessment-creation** process (Steps 1–7: UoC validation → consolidation → audit → assessment plan → scenario → assessor/student instruments).
+- [process-assessment.md](process-assessment.md) — the **assessment run-sheet**: the step→gate pipeline (transcribe → consolidate → audit → plan → scenario → assessor/student instruments → mapping → cluster coverage → pre-validation), each gate a validator + human review (human removable as a step earns confidence).
 - [process-delivery.md](process-delivery.md) — the cluster **delivery-planning** process (AT → Topic → component; coverage + slide-plan → generated Kangan deck; teach/practice/assess).
 - [cluster-authoring-conventions.md](cluster-authoring-conventions.md) — standing conventions for authoring assessment artefacts: UoC traceability, KE locations, template workflow, cross-AT shape, folder layout.
 - [document-template-system.md](document-template-system.md) — the branded YAT/MTS document system: generator scripts, the consulting-chain document set, the three artefact roles (template / assessor exemplar / student model).
