@@ -43,13 +43,29 @@ existing website. This reverse-mapped S1 was the diagnostic that proved the mode
 real/`built` and keep their concrete locations, but new scenarios author the checklist forward (`to-build`).
 
 **Gate 7→8 proven on S1 (2026-06-22).** The `verify-scenario-realisation` agent (see [[scenario-plan-model]])
-ran against S1's built website/repos: all 23 items realised. It retired one stale gap (SE-13 — IR-1…7 now
-matches the contract) and confirmed/refined the rest; S1.md §4 is the live worklist. **Outstanding for a later
-session (deferred by the user "until the morning"):**
-- four Gate 7→8 delivery gaps in `scenario-plans/S1.md` §4 — SE-05 (web-app payload is a placeholder, no
-  code), SE-10 (CL2 AT2 appendices exist only inline in the AT2 docx, not single-sourced — the IaC is
-  *intentionally* faulty, not a gap), SE-11 (no standalone DR risk register), SE-16 (no combined AT3 assessor
-  fallback + the AT3 instrument doesn't name the fallback path);
-- **`website-improvement/` keep-or-retire decision** — a registered CL3 website-side engagement parallel to
-  `ledgerline-improvement/`, bound to no `SE-NN`, still using the retired "Improvement Business Case" term
-  (un-refreshed). `[TBD — needs decision]`. The no-leakage invariant + system-state consistency otherwise held.
+ran against S1's built website/repos: all 23 items realised. It retired one stale gap (SE-13) and
+confirmed/refined the rest. **The whole worklist is now CLOSED (2026-06-22)** — durable lesson below.
+
+**Worklist outcome — three of four "gaps" were SPEC mis-statements, not missing artefacts.** The
+verification correctly surfaced mismatches; investigation each time drove the world+contract to a consistent
+state (usually by fixing the *SR wording*, occasionally the build):
+- **SE-05** (CL1 web-app payload) — *false positive*: the CL1 LMS app is **out of scope** (YAT in-house); the
+  lab-pack placeholder is the deliberate deliverable. Reworded SR-CL1-05; added the **lab-pack acceptance
+  criterion** to `docs/lab-pack-standard.md` + the verify agent (a lab-pack = a deployable, Academy-proven
+  *pack*, never a live deployment; provided-to-work-from artefacts are not a lab-pack either).
+- **SE-10** (CL2 AT2 appendices) — *spec mis-statement*: inline-by-design (no lab-pack) because **authoring the
+  deploy YAML is the assessed skill** (ICTCLD505) and the data-store template is **deliberately faulty**.
+  Reworded SR-CL2-04.
+- **SE-11** (CL2 DR risk register) — *spec mis-statement*: AC 1 "data to assess risk events" = provided
+  environment data; AC 3 "reporting standard" = the **DR Plan template**; the **risk register is
+  student-authored**. Reworded SR-CL2-06.
+- **SE-16** (CL3 AT3 fallback) — *part mapping-error, part one real fix*: the fallback artefact existed
+  (lab-pack `improved.yaml`); the genuine fix was the **AT3 assessor generator** now naming the fallback path
+  (edit the *generator*, not the docx, then regenerate).
+- **`website-improvement`** (CL3 practice) — **kept + refreshed** (no-leakage requires a CL3 website practice
+  vehicle): realigned to the current `ledgerline-improvement` framing (Solution Design, IR-1…7, Phase 1/2),
+  website differentiation preserved, website `solution-design.md` authored; bound as advisory **SE-24**.
+  Practice vehicles are maintained under the **delivery** run-sheet, not the assessment one.
+
+**Open follow-up (minor):** the downloadable branded `YAT-Website-Improved-Solution-Design` asset isn't
+generated (no `scripts/scenario/` builder yet) — the in-world page stands alone; a delivery-side parity task.
