@@ -66,6 +66,21 @@ state (usually by fixing the *SR wording*, occasionally the build):
   vehicle): realigned to the current `ledgerline-improvement` framing (Solution Design, IR-1…7, Phase 1/2),
   website differentiation preserved, website `solution-design.md` authored; bound as advisory **SE-24**.
   Practice vehicles are maintained under the **delivery** run-sheet, not the assessment one.
+  - **FINAL scoping decision (don't re-litigate):** **keep the India / global framing** (NOT single-region) —
+    for consistency with CL2. We explored stripping it to single-region and **rejected that**. Restored the
+    **MySQL database tier** (Multi-AZ RDS) — the design had wrongly omitted it (LAMP site). The **one hard
+    line**: the website practice design must **never amount to an entire CL2 solution** — so it must stay
+    **clear of the audit-log microservice and a DR plan** (global serving + residency alone don't cross it).
+
+**DURABLE cross-cluster principle (hard-won — the website is *entangled*):** the **Website is assessed in CL2
+(global expansion) AND practised in CL3 (improvement), and CL2+CL3 run concurrently** — so **timing cannot
+prevent leakage** (CL3 practice surfaces *before/with* the CL2 assessment). The only protection is
+**work-scope separation**: CL3 = **in-region improvement** of the single-AZ; CL2 = **global expansion** (CDN/
+global serving, cross-region DR, the audit-log microservice, India residency *as the CL2 assessment*). The
+provided CL3 website practice **Solution Design is a worked model** (revealed at `s1-cl3-at2`) for the very
+artefact a student authors, assessed, in **CL2 AT1 Part A** — hence it must not be a complete CL2 solution.
+Asymmetry note: **Ledgerline** (assessed only in CL3) *can* carry cross-region DR + India residency freely;
+the **Website cannot** in CL3, because those are CL2's on that system.
 
 **Open follow-up (minor):** the downloadable branded `YAT-Website-Improved-Solution-Design` asset isn't
 generated (no `scripts/scenario/` builder yet) — the in-world page stands alone; a delivery-side parity task.
