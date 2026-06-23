@@ -65,6 +65,13 @@ python -c "import sys; sys.path.insert(0,'diploma-cloud-cyber-content/.claude/sk
    - **NOT-FOUND** — nothing in the built repos realises it (a genuine gap to fill). *(For `external` items,
      e.g. AWS Academy labs, confirm the reference/authorisation exists in-world rather than a file; mark
      EXTERNAL-OK.)*
+   - **Lab-packs / `environmental` items are delivered as a deployable PACK, never as a live environment.**
+     For these, FOUND = the pack exists (`<cluster>/assessments/<AT>/lab-pack/`: template(s) + README + tests)
+     **and** carries proven-on-AWS-Academy evidence (a "proven live" record in `claude-notes.md` and a passing
+     local harness). **Do NOT expect** a running/deployed environment or a deployed end-application — standing
+     it up is downstream (teacher/student), and where the scenario scopes the application out (e.g. **CL1**, LMS
+     app is YAT in-house) a template that serves only a placeholder page **is the complete, correct deliverable**.
+     See `docs/lab-pack-standard.md` → "Acceptance — what 'realised/done' means". Judge the *pack*, not a deployment.
 4. **Keynote check (for FOUND items):** read the artefact and judge whether its content actually delivers the
    item's **keynotes** — `meets` / `partial` (say what's missing) / `mismatch` (say what's wrong). This is the
    semantic check a file-existence test cannot do.

@@ -11,6 +11,28 @@ a lab. This is the course-wide standard for that problem.
 
 ---
 
+## Acceptance — what "realised/done" means (and what verification checks)
+
+A lab-pack is **delivered as a deployable pack, never as a live/running environment.** Standing it
+up — and deploying any end-application onto it — is **downstream** (the teacher/student in class, as
+needed), or, where the scenario puts the application out of scope entirely (e.g. **CL1**, where the LMS
+app is YAT in-house), **not at all**. So a lab-pack's **definition of done for the assessment process**
+is:
+
+1. **The pack exists** at `<cluster>/assessments/<AT>/lab-pack/` — template(s) + student README +
+   claude-notes + the local test harness.
+2. **The local validation harness passes** (cfn-lint clean + pytest).
+3. **It has been proven once in a live AWS Academy session** (deploy → serves/verifies → tear down),
+   the result recorded in `claude-notes.md`.
+
+**What verification must NOT require:** a live/running environment, a stack standing in an account, or a
+deployed end-application. The deliverable is the *proven, deployable pack* — not its deployment. A
+lab-pack whose template serves only a placeholder page is **complete** when that is the scoped end-state
+(again, CL1: "infrastructure ready for application deployment" *is* the deliverable). Checking a lab-pack
+= confirm 1–3, not "is it deployed".
+
+---
+
 ## Why the pattern exists
 
 AWS Academy labs are **ephemeral** — whatever a student built in a prior session/AT is gone.
