@@ -54,6 +54,14 @@ A lab-pack provides an environment the student is **not assessed on building**.
 
 So: CL1 = manual build + hardening; CL2 = IaC.
 
+**Provided-to-work-from artefacts are NOT a lab-pack either.** Where an AT *gives* the student code or
+templates to operate, debug, or author their own IaC around, supply them **inline as assessment appendices**,
+not as a validated pack — e.g. **CL2 AT2**: a data-store template (another contractor's, in-scenario)
+carrying a **deliberate fault the student must debug**, plus the microservice **code** the student writes
+their own deploy template for. A pre-built/validated pack would remove the assessed work, and a
+*deliberately-faulty* template must **not** be "proven to deploy". Don't flag such inline artefacts as a
+missing lab-pack — that's the wrong delivery mechanism for them.
+
 ---
 
 ## Folder structure
