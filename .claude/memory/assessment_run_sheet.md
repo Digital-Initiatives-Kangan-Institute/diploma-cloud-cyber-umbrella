@@ -59,7 +59,7 @@ union without collision. AC items are discharged via the SR register's **AC-link
 outstanding gates are human-owned: **Gate 9** (student-instrument *quality* review) and **Gate 12**
 (institutional pre-validation).
 
-**NEXT:** give **process-delivery.md** the same step→gate run-sheet treatment (the *delivery* run-sheet) —
-the second of the two run-sheets. **Deferred follow-up (non-blocking):** generate the branded
-`YAT-Website-Improved-Solution-Design` download asset (delivery-side parity). Related:
+**The delivery run-sheet is now underway** — see [[delivery-run-sheet]] (process-delivery.md restructured
+to step→gate; Step 1 built + back-tested on S1). **Deferred follow-up (non-blocking):** generate the
+branded `YAT-Website-Improved-Solution-Design` download asset (delivery-side parity). Related:
 [[mapping-pipeline]], [[scenario-plan-model]], [[scenario-plan-reverse-mapping]].
