@@ -69,6 +69,25 @@ each as an `SR-*`. Typical kinds:
   follow; a baseline system in a specific state; a constraint that drives the work (e.g. a regulatory
   requirement). No AC link; these are what make the assessment *believable*.
 
+**What an `SR-*` is NOT — write the requirement for what the scenario *provides*, not for what the assessment
+*produces or excludes*.** An `SR-*` becomes a false "gap" at the scenario cross-check / realisation step if it
+describes something the world is never meant to supply. Do **not** write an `SR-*` for:
+
+- **Student-produced artefacts (the assessed work itself).** If the student authors it, the scenario must not
+  "provide" it — provide the *inputs and the format*, not the output. E.g. the **risk register / impact
+  analysis** the student writes → the SR is the *data to assess risks from* + the *DR plan template*, not "a
+  risk register"; the **deployment IaC** the student authors → the SR is the *provided code/contract to build
+  from* + the *deliberately-faulty template to debug*, not "a working template". (If the artefact is a
+  *provided* input the student works from, that **is** a valid SR — describe it as provided, and as inline/
+  appendix vs lab-pack per its assessed use.)
+- **Things deliberately out of scope.** If the assessment scope excludes it, there is no SR. E.g. CL1's LMS
+  **application** is YAT in-house (out of scope) → the SR is the *deployable infrastructure with a placeholder
+  endpoint*, not "a deployed application".
+- **Pure delivery/practice-side needs.** Practice vehicles and teaching aids are owned by the delivery
+  run-sheet; they are not assessment `SR-*` (they may appear as advisory, non-`SR` scenario elements).
+
+When in doubt, ask: *would the scenario author build this, or does the student?* Only the former is an `SR-*`.
+
 The register is the contract the scenario plan must satisfy. The scenario cross-check fails if any `SR-*`
 declared here is not provided by the scenario plan; the **quality/coherence** of the world stays a human
 call.
