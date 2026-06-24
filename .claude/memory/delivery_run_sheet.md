@@ -1,6 +1,6 @@
 ---
 name: delivery-run-sheet
-description: The delivery process is now a formalised step→gate run-sheet (docs/process-delivery.md) mirroring the assessment run-sheet; the 3-layer gate architecture decided here, Step 1 (cluster spec) built + back-tested on all S1 clusters, and what remains (the deterministic spine).
+description: The delivery process is now a formalised step→gate run-sheet (docs/process-delivery.md) mirroring the assessment run-sheet; the 3-layer gate architecture; Steps 1 (cluster spec), 3 (coverage spine), and the slide-plan gate built + back-tested on S1; the decided Step-4 deck/image model and Step-5 practice model; what remains.
 metadata:
   type: project
 ---
@@ -43,14 +43,41 @@ the **format document is the single source of truth** — it both *informs the p
   `validate-cluster-spec` **+ human agreement to proceed**. **MET on S1** — CL1 (8h under), CL2 (+6h
   over, authorised), CL3 (+4h over, authorised) all PASS; Tim signed off the overages 2026-06-23.
 
-**The delivery SPINE is Step 3** — `validate-delivery-coverage` (to build): the union of all Topics'
-`coverage.md` UoC tags must cover **every assessed UoC item** in `consolidated_uoc.md` — the teaching-side
-analogue of the assessment run-sheet's `validate-cluster-coverage`. Deterministic (same canonical
-`[UNIT SEC num]` tags).
+**Step 3 — the coverage SPINE (`validate-delivery-coverage`) — BUILT + back-tested on CL1 (2026-06-24):
+90/90 PASS.** Imports the SAME tag machinery the assessment validators use, scans each Topic's
+"taught/developed" table, unions, diffs against the consolidated assessed set (PC/PE/KE) — teaching-side
+analogue of `validate-cluster-coverage`. **Project-wide tag standardisation done with it:** all delivery
+`coverage.md` tags retrofitted to the one canonical standard (unwrapped `[UNIT SEC num]`; 110 unwrapped +
+17 numbered). The 10 gaps it surfaced were all under-tagging (teaching existed, tags didn't), now closed.
+*(Still pending to fully formalise: a `coverage.md` format standard + skill wrapper, and merging steps 2+3
+into one iterative "Topic plan" step.)*
 
-**NEXT:** build the deterministic spine, value order: **Step 3 `validate-delivery-coverage`** (the spine),
-then **Step 6 `validate-delivery-plan`** (placement + frame reconciliation + template). **Steps 2/4/5 stay
-human** (Step 4 already has `inspect-file-size` for deck size; Step 2 a candidate light structural lint;
-Step 5 the no-leakage human check). Back-test each against **CL1's built delivery** (14 topic decks +
-`coverage.md` files) — the same back-test-on-S1 discipline that proved every assessment gate. Related:
+**Step 4 — the SLIDE-PLAN gate — BUILT + back-tested on CL1 (2026-06-24): 14/14 PASS.** The slide plan
+(`delivery/topic_NN/slide_plan.md`) is now a **kept, validated artefact** (role change — it was disposable;
+superseded) — the source the deck is built from. `docs/slide-plan-format.md` (skeleton = contract) +
+`validate-slide-plan` (deterministic: format + **backwards coverage** vs the sibling `coverage.md`, reusing
+the shared tag parser — every component present, Teaches union covers every taught tag; no agent —
+pedagogical quality is human review). All 14 CL1 slide plans were **reverse-engineered from the built
+decks** via a one-off `ast` generator (structure + image sources + per-component Teaches from coverage;
+briefs not recoverable) for full back-test parity.
+
+**DECIDED design (not yet built):**
+- **Step-4 image model:** every slide carries a **mandatory `image:` field** — `none` / `reuse <ref>`
+  (existing external asset, e.g. AWS deck+slide → placeholder, **human pastes**) / `diagram
+  <graphviz|mermaid>` (technical diagram authored as code) / `gen <prompt>` (decorative, image-model,
+  generate-once+commit) / `placeholder`. **Anything *generated* renders to PNG and is placed in-pipeline
+  (no human step); only `reuse` needs a human.** PNG not SVG (python-pptx). Graphviz = lightest renderer.
+  AWS-reuse is the peculiar S1 case; most courses generate everything.
+- **Steps 2+3 merge** into one iterative "Topic plan" step: draft breakdown → soft human-accept shape →
+  spec `coverage.md` → run `validate-delivery-coverage` → loop until PASS.
+- **Step-5 practice-task model:** a practice task = the assessment **decomposed into its nominal steps, 1:1**
+  (assessment step N → practice task N), on the **practice scenario** (comparable, not identical — the
+  no-leakage guard), **interleaved** with teaching (teach→practice→…→sit the assessment; repeat per
+  assessment across the cluster). Checkable: every assessment step has a practice task. Human judgment =
+  decomposition + re-scenario.
+
+**NEXT (Tim's request):** build a **draw.io diagram skill** (author a `.drawio` + render/export to PNG) so
+generated technical diagrams flow into decks; Tim then imports his existing **image-gen skill** to complete
+the deck-image pipeline. After that: finalise the spine (coverage.md format standard + skill; merge steps
+2+3), and build **Step 6 `validate-delivery-plan`** (placement + frame reconciliation + template). Related:
 [[assessment-run-sheet]], [[scenario-plan-model]].

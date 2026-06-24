@@ -60,7 +60,7 @@ SX-CLY-<Cluster-Name>/
     ├── planning/              # working drafts: topic spine, session scaffold, AWS deck catalogue, demo catalogue
     ├── topic_NN/              # one per content Topic (steps 2–4)
     │   ├── coverage.md        #   UoC + AT alignment (the spec) — kept
-    │   ├── slide_plan.md      #   the build sheet — DISPOSABLE (delete once the deck is built)
+    │   ├── slide_plan.md      #   the kept, validated source the deck is built from (slide-plan-format.md)
     │   └── Topic_NN_Slides.pptx  # the generated Kangan deck — THE ARTEFACT OF RECORD
     └── SX_CLY_Delivery_Plan.docx  # the institutional schedule (step 6)
 ```
@@ -119,13 +119,16 @@ sets the depth ceiling** — don't teach deeper than the assessment requires. �
 > tags) **+ human review.** **to build** — *this is the delivery spine, the analogue of the assessment
 > run-sheet's `validate-cluster-coverage`.*
 
-**4 · Topic decks** *(loop per Topic)*
-Turn each `coverage.md` into a `slide_plan.md`, then **generate** the Kangan-branded Topic deck from it
-(primer-first, reuse-first from the AWS source decks; human pastes the reused AWS images). The **deck is
-the canonical artefact**; the plan is a disposable working aid. → [kangan-branding.md](kangan-branding.md) · detail [§4](#4--topic-decks). **inspect-file-size built**
-> **⟱ Gate 4→5:** *validator* `inspect-file-size` ≤ guideline (decks are git-tracked — keep them small)
-> **+ human review** — pedagogy is sound; student-facing slides stay **in-world** with **no UoC codes**
-> and no tell of which system is the assessed one; reuse-first respected; depth ceiling not overshot.
+**4 · Slide plan → Topic deck** *(loop per Topic)*
+Author each Topic's `slide_plan.md` — the **kept, validated source** (per-component `Teaches:`, each
+slide's type tag + mandatory `image:` source) — to the format standard, then **generate** the
+Kangan-branded deck from it (primer-first, reuse-first; **generated diagrams placed in-pipeline**,
+AWS-reuse images pasted by a human). The **deck is the artefact of record**; the slide plan is kept and
+validated (**not** disposable). → [slide-plan-format.md](slide-plan-format.md) · [kangan-branding.md](kangan-branding.md) · detail [§4](#4--topic-decks). **validate-slide-plan + inspect-file-size built**
+> **⟱ Gate 4→5:** *validator* `validate-slide-plan` = **PASS** (conforms + covers `coverage.md`) **before
+> the deck is built**; then `inspect-file-size` ≤ guideline on the built deck (git-tracked — keep small)
+> **+ human review** — pedagogy sound; student slides **in-world**, **no UoC codes**, no tell of the
+> assessed system; reuse-first respected; depth ceiling not overshot.
 
 **5 · Practice tasks** *(loop per AT)*
 Derive the AT-mirroring **practice task** for each AT — re-scenarioed away from the real assessment, split
@@ -198,9 +201,16 @@ deterministic.
 
 **Result (S1-CL1):** all 14 Topics specced; the canonical tags are in each `topic_NN/coverage.md`.
 
-## §4 — Topic decks
-*(loops per Topic.)* Turn the coverage into a slide plan, then **generate** the Kangan-branded Topic deck
-from it. The **deck is the canonical artefact**; the plan is a working aid, deleted when the deck is done.
+## §4 — Slide plan → Topic deck
+*(loops per Topic.)* Author the Topic's `slide_plan.md` to the [slide-plan format standard](slide-plan-format.md),
+**validate it** (`validate-slide-plan` — conforms + covers `coverage.md`), then **generate** the
+Kangan-branded deck from it. The **deck is the artefact of record**; the slide plan is the **kept,
+validated source** it is built from (no longer disposable). Each slide carries a mandatory `image:`
+source: **generated** images (`diagram` = Graphviz/Mermaid rendered to PNG, `gen` = image-model) go
+**straight into the deck in-pipeline**; only **`reuse`** of an existing external asset (e.g. an AWS
+diagram) is emitted as a labelled placeholder for a **human to paste**. (S1 leans on AWS reuse — the
+exception; most courses generate their diagrams. The draw.io render path + image-gen are delivery-side
+tooling.)
 
 **The slide-creation process:**
 1. **`slide_plan.md`** — walk the Topic's components top-to-bottom; for each, **teach then its exercise**,
