@@ -43,7 +43,7 @@
     "defaultMode": "default"
   },
 
-  "//hooks": "SessionStart self-heal: point this machine's auto-memory at the repo's .claude/memory (idempotent; see hooks/ensure-repo-memory.mjs). Node hook — identical command on Windows/macOS/Linux.",
+  "//hooks": "SessionStart preflight, both Node (identical on Windows/macOS/Linux): (1) ensure-repo-memory self-heals this machine's auto-memory to the repo's .claude/memory (idempotent); (2) ensure-python verifies a usable Python 3 is on PATH (this project carries Python skills) — quiet on success, advisory on a miss, never blocks. See docs/skill-dependencies.md.",
   "hooks": {
     "SessionStart": [
       {
@@ -51,6 +51,11 @@
           {
             "type": "command",
             "command": "node .claude/hooks/ensure-repo-memory.mjs",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/ensure-python.mjs",
             "timeout": 15
           }
         ]

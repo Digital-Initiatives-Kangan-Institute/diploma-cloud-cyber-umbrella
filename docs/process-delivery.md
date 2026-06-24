@@ -116,8 +116,8 @@ component the UoC it **teaches** (canonical `[UNIT SEC num]` tags) and the **AT 
 sets the depth ceiling** — don't teach deeper than the assessment requires. → detail [§3](#3--topic-spec).
 > **⟱ Gate 3→4:** *validator* `validate-delivery-coverage` = the union of all Topics' `coverage.md` tags
 > **covers every assessed UoC item** in `consolidated_uoc.md` (nothing assessed-but-untaught; no phantom
-> tags) **+ human review.** **to build** — *this is the delivery spine, the analogue of the assessment
-> run-sheet's `validate-cluster-coverage`.*
+> tags) **+ human review.** **built** — *this is the delivery spine, the analogue of the assessment
+> run-sheet's `validate-cluster-coverage`* (back-tested on CL1, 90/90).
 
 **4 · Slide plan → Topic deck** *(loop per Topic)*
 Author each Topic's `slide_plan.md` — the **kept, validated source** (per-component `Teaches:`, each
@@ -193,21 +193,23 @@ distinguish *taught here* vs *applied (taught earlier)*; state what is out of sc
 checklist. **Only UoC + AT cross-references** — nothing pointing at working drafts, so the file stands
 alone when those are deleted.
 
-The step-3 gate is where the **delivery spine** lives: `validate-delivery-coverage` (to build) will read
-every Topic's `coverage.md` tags and confirm their union covers every **assessed** UoC item in
-`consolidated_uoc.md` — the teaching-side mirror of the assessment run-sheet's cluster-coverage check.
-Because the `coverage.md` tags use the same canonical `[UNIT SEC num]` machinery, the check is
-deterministic.
+The step-3 gate is where the **delivery spine** lives: `validate-delivery-coverage` reads every Topic's
+`coverage.md` tags and confirms their union covers every **assessed** UoC item in `consolidated_uoc.md` —
+the teaching-side mirror of the assessment run-sheet's cluster-coverage check. Because the `coverage.md`
+tags use the same canonical `[UNIT SEC num]` machinery (the shared `valid_tag_set`/`resolve_tags` parser),
+the check is deterministic.
 
-**Result (S1-CL1):** all 14 Topics specced; the canonical tags are in each `topic_NN/coverage.md`.
+**Result (S1-CL1):** all 14 Topics specced; canonical tags in each `topic_NN/coverage.md` standardised
+project-wide; `validate-delivery-coverage` **PASSES 90/90**.
 
 ## §4 — Slide plan → Topic deck
 *(loops per Topic.)* Author the Topic's `slide_plan.md` to the [slide-plan format standard](slide-plan-format.md),
 **validate it** (`validate-slide-plan` — conforms + covers `coverage.md`), then **generate** the
 Kangan-branded deck from it. The **deck is the artefact of record**; the slide plan is the **kept,
 validated source** it is built from (no longer disposable). Each slide carries a mandatory `image:`
-source: **generated** images (`diagram` = Graphviz/Mermaid rendered to PNG, `gen` = image-model) go
-**straight into the deck in-pipeline**; only **`reuse`** of an existing external asset (e.g. an AWS
+source: **generated** images (`diagram` = an editable `.drawio` rendered to PNG by the **`draw-diagram`
+skill** (Pillow), `gen` = the **`image-gen`** skill) go **straight into the deck in-pipeline**; only
+**`reuse`** of an existing external asset (e.g. an AWS
 diagram) is emitted as a labelled placeholder for a **human to paste**. (S1 leans on AWS reuse — the
 exception; most courses generate their diagrams. The draw.io render path + image-gen are delivery-side
 tooling.)

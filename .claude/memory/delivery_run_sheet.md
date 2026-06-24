@@ -62,12 +62,6 @@ decks** via a one-off `ast` generator (structure + image sources + per-component
 briefs not recoverable) for full back-test parity.
 
 **DECIDED design (not yet built):**
-- **Step-4 image model:** every slide carries a **mandatory `image:` field** — `none` / `reuse <ref>`
-  (existing external asset, e.g. AWS deck+slide → placeholder, **human pastes**) / `diagram
-  <graphviz|mermaid>` (technical diagram authored as code) / `gen <prompt>` (decorative, image-model,
-  generate-once+commit) / `placeholder`. **Anything *generated* renders to PNG and is placed in-pipeline
-  (no human step); only `reuse` needs a human.** PNG not SVG (python-pptx). Graphviz = lightest renderer.
-  AWS-reuse is the peculiar S1 case; most courses generate everything.
 - **Steps 2+3 merge** into one iterative "Topic plan" step: draft breakdown → soft human-accept shape →
   spec `coverage.md` → run `validate-delivery-coverage` → loop until PASS.
 - **Step-5 practice-task model:** a practice task = the assessment **decomposed into its nominal steps, 1:1**
@@ -76,8 +70,20 @@ briefs not recoverable) for full back-test parity.
   assessment across the cluster). Checkable: every assessment step has a practice task. Human judgment =
   decomposition + re-scenario.
 
-**NEXT (Tim's request):** build a **draw.io diagram skill** (author a `.drawio` + render/export to PNG) so
-generated technical diagrams flow into decks; Tim then imports his existing **image-gen skill** to complete
-the deck-image pipeline. After that: finalise the spine (coverage.md format standard + skill; merge steps
-2+3), and build **Step 6 `validate-delivery-plan`** (placement + frame reconciliation + template). Related:
-[[assessment-run-sheet]], [[scenario-plan-model]].
+**Deck-image pipeline BUILT (2026-06-24).** The **`draw-diagram` skill** (umbrella `.claude/skills/`)
+authors an editable `.drawio` (stdlib) and renders it to PNG via **Pillow** — Pillow-only dependency, the
+first skill to use the **skill-dependencies convention** (docs/skill-dependencies.md: committed
+`requirements.txt` + per-skill **gitignored `.venv/`** + import guard + invoke with the venv's python;
+pure-stdlib preferred). The **`ensure-python.mjs` SessionStart hook** is now wired (settings.json, alongside
+the memory hook) — Node preflight that a usable Python 3 is on PATH. draw-diagram covers the
+box/arrow/label subset (network / cloud-arch teaching diagrams), NOT vendor icon stencils. **Validation +
+fallback (always offer):** show the render; if not close enough, the human opens the `.drawio` in draw.io and
+either (a) exports by hand — *render-only problem, diagram is correct* — or (b) the spec is fixed +
+regenerated — *underlying diagram error*. The imported **`image-gen` skill** is the decorative half.
+Mapping: slide-plan `image: diagram` → draw-diagram, `image: gen` → image-gen (both placed in-pipeline);
+only `image: reuse` needs a human paste.
+
+**NEXT:** wire draw-diagram + image-gen into the **deck build** (Step 4 — place images from the slide
+plan's `image:` fields in-pipeline); then finalise the spine (coverage.md format standard + skill; merge
+steps 2+3), and build **Step 6 `validate-delivery-plan`**. Related: [[assessment-run-sheet]],
+[[scenario-plan-model]].

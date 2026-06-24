@@ -38,8 +38,9 @@ Two checks run against it (deterministic; no agent — pedagogical quality stays
   - `image: none` — the slide has no image. **An explicit, required value, not an omission.**
   - `image: reuse <deck S#>` — an existing external asset (e.g. an AWS diagram); a **placeholder** with
     this reference is emitted and a **human pastes** it. *(The peculiar case — vendor-library courses.)*
-  - `image: diagram <graphviz|mermaid>` — a technical diagram **authored as code**, rendered to PNG and
-    placed **in-pipeline** (no human step).
+  - `image: diagram <ref>` — a technical diagram authored as an editable **`.drawio`** and rendered to
+    PNG **in-pipeline** by the **`draw-diagram` skill** (Pillow; no draw.io app). `<ref>` names the
+    diagram. Editable by students; manual draw.io export is the fallback if a render isn't close enough.
   - `image: gen <prompt>` — a non-technical/decorative image from an image model; **generate-once,
     commit, human-check** (non-deterministic).
   - `image: placeholder <note>` — a human supplies it.
@@ -118,7 +119,7 @@ ACF M05 S5–S9, S11–S13; ACA M07 S10–S20, S30, S45.
 - Teaches: [ICTCLD401 KE 9]
 - [BESPOKE] Security groups — stateful, least-privilege
   The sg-alb -> sg-app -> sg-db chain.
-  image: diagram graphviz
+  image: diagram sg-chain
 
 ### Close
 - [BESPOKE] What you built

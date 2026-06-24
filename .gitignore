@@ -9,3 +9,11 @@
 
 # Personal, machine-local instructions — not synced across machines.
 /CLAUDE.local.md
+
+# Secrets — NEVER commit. The API key lives in .env; .env.example is the committed template.
+.env
+**/.env
+
+# Per-skill virtualenvs + Python caches — machine-specific; only requirements.txt is committed.
+**/.venv/
+__pycache__/
