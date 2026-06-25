@@ -6,10 +6,13 @@ description: |
   spec, then render it to PNG with Pillow — no draw.io app, no system binary, same
   input -> same pixels. The .drawio is the single source of truth (students can
   open + edit it in draw.io free); the PNG is rendered from it for placing straight
-  into a slide deck. The renderer covers the box / container / arrow / label subset
-  this skill authors (cloud-architecture & network teaching diagrams) — not a
-  general draw.io renderer. This is the technical-diagram half of the deck image
-  pipeline (slide-plan `image: diagram` source); the decorative half is image-gen.
+  into a slide deck. Covers the shapes this skill authors — boxes, ellipse/stadium
+  terminators, decision diamonds, ER entity boxes, labelled orthogonal arrows — so
+  one spec can express a network/cloud-architecture diagram, a flowchart, or a
+  simple ERD; it is not a general draw.io renderer. Edge geometry honours fixed
+  ports + waypoints in the file, so hand-edited diagrams re-render true to source.
+  This is the technical-diagram half of the deck image pipeline (slide-plan
+  `image: diagram` source); the decorative half is image-gen.
 allowed-tools:
   - Bash
 ---
@@ -69,7 +72,19 @@ draw.io application, no system install, fully cross-platform and headless.
 
 - **nodes** lay out on a grid by `(row, col)`; a node missing both auto-stacks. `fill` is a palette name
   (`blue`/`green`/`amber`/`grey`/`purple`/`red`) or a `#hex`. `\n` in a label is a line break.
-- **edges** connect node ids; orthogonal routing + arrowhead + optional `label`.
+  - optional **`shape`**: `rounded` (default) · `rect` · `ellipse` · `stadium` · `diamond` · `entity`.
+    This is what makes one spec express a **network** (boxes), a **flowchart** (`stadium` start/end +
+    `diamond` decisions, branch edges labelled Yes/No), or a simple **ERD** (`entity` = name on the
+    first line then attributes, left/top-aligned; relationships carry cardinality as the edge `label`).
+  - optional **`w`** / **`h`**: per-node size override (e.g. taller `entity` boxes). The grid pitch grows
+    to fit the largest node, so tall/wide nodes don't collide.
+- **edges** connect node ids; orthogonal routing + arrowhead + optional `label`. Edge endpoints honour
+  any **fixed exit/entry ports** and **waypoints** present in the `.drawio` (so a hand-edited diagram
+  re-renders true to source); diagrams this skill authors get **explicit ports** written in, so they
+  render identically in draw.io and in Pillow.
+  - optional **`start`** / **`end`** crow's-foot (ER) endings for ERDs: `one` · `many` · `zero-one` ·
+    `zero-many` · `one-many`. Authored as draw.io's native ER arrows (`ERone`/`ERmany`/…), so draw.io
+    shows proper crow's foot and Pillow draws the matching tick / circle / foot glyphs.
 
 ## Validation + fallback (always offer this)
 
@@ -89,11 +104,14 @@ never blocks delivery.
 
 ## What it renders (and what it doesn't)
 
-- **Covers:** rounded/rectangular boxes, fill + stroke colours, multi-line centred labels, orthogonal
-  arrows with arrowheads + edge labels. That is ~all of a network / cloud-tier teaching diagram.
-- **Doesn't:** vendor icon stencils (e.g. the AWS service glyphs), gradients/shadows, curved/auto-routed
-  connectors, UML/BPMN/ER notations. For those, either keep to labelled boxes (clearer for teaching, and
-  vendor-neutral) or use the draw.io app + the manual-export fallback.
+- **Covers:** rounded/rect boxes, ellipse/stadium terminators, decision diamonds, ER entity boxes; fill +
+  stroke colours; multi-line labels (centred, or left/top-aligned for entities); orthogonal arrows with
+  arrowheads + edge labels; fixed exit/entry ports + waypoints honoured from the `.drawio`. Enough for a
+  network / cloud-tier diagram, a flowchart, or a simple ERD.
+- **Doesn't:** vendor icon stencils (e.g. the AWS service glyphs), gradients/shadows, curved connectors,
+  and **obstacle-avoidance routing** — a connector whose path crosses another node draws *behind* it, so
+  lay diagrams out to avoid running a line through a box (draw.io's live router detours; this one doesn't).
+  For richer notation use the draw.io app + the manual-export fallback.
 
 ## Notes
 

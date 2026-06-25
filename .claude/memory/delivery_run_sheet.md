@@ -75,8 +75,12 @@ authors an editable `.drawio` (stdlib) and renders it to PNG via **Pillow** — 
 first skill to use the **skill-dependencies convention** (docs/skill-dependencies.md: committed
 `requirements.txt` + per-skill **gitignored `.venv/`** + import guard + invoke with the venv's python;
 pure-stdlib preferred). The **`ensure-python.mjs` SessionStart hook** is now wired (settings.json, alongside
-the memory hook) — Node preflight that a usable Python 3 is on PATH. draw-diagram covers the
-box/arrow/label subset (network / cloud-arch teaching diagrams), NOT vendor icon stencils. **Validation +
+the memory hook) — Node preflight that a usable Python 3 is on PATH. draw-diagram covers the shapes it
+authors — boxes, ellipse/stadium terminators, decision diamonds, ER entity boxes, labelled orthogonal
+arrows, crow's-foot (ER) edge endings — so one spec expresses a network, a flowchart, or a simple ERD
+(NOT vendor icon stencils, and no obstacle-avoidance routing). Its renderer **honours fixed exit/entry ports + waypoints** from the .drawio
+(hand-edited diagrams re-render true to source) and **authors explicit ports** so its own diagrams render
+identically in draw.io and Pillow (proven 2026-06-25 against draw.io on network/flowchart/ERD). **Validation +
 fallback (always offer):** show the render; if not close enough, the human opens the `.drawio` in draw.io and
 either (a) exports by hand — *render-only problem, diagram is correct* — or (b) the spec is fixed +
 regenerated — *underlying diagram error*. The imported **`image-gen` skill** is the decorative half.

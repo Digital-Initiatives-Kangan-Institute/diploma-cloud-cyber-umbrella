@@ -56,11 +56,103 @@ class TestParseRoundTrip(unittest.TestCase):
         nodes, edges = dd.parse_drawio(dd.build_drawio(SPEC))
         self.assertEqual(set(nodes), {"fw", "sw", "pc"})
         self.assertEqual(nodes["pc"]["label"], "PC-1\n10.0.0.11")   # \n preserved
-        self.assertIn({"source": "fw", "target": "sw", "label": "LAN"}, edges)
+        e = next(e for e in edges if e["source"] == "fw" and e["target"] == "sw")
+        self.assertEqual(e["label"], "LAN")
 
     def test_fill_resolves(self):
         nodes, _ = dd.parse_drawio(dd.build_drawio(SPEC))
         self.assertEqual(nodes["fw"]["fill"], dd.PALETTE["red"][0])
+
+
+class TestAnchors(unittest.TestCase):
+    def test_build_authors_exit_entry(self):
+        # vertical edge fw(row1)->sw(row2): exit bottom-centre, entry top-centre
+        xml = dd.build_drawio(SPEC)
+        _, edges = dd.parse_drawio(xml)
+        e = next(e for e in edges if e["source"] == "fw" and e["target"] == "sw")
+        self.assertEqual(e["exit"], (0.5, 1.0, 0.0, 0.0))
+        self.assertEqual(e["entry"], (0.5, 0.0, 0.0, 0.0))
+
+    def test_side_dir(self):
+        self.assertEqual(dd._side_dir(0.5, 1), "down")
+        self.assertEqual(dd._side_dir(0.5, 0), "up")
+        self.assertEqual(dd._side_dir(1, 0.5), "right")
+        self.assertEqual(dd._side_dir(0, 0.5), "left")
+
+    def test_route_honours_fixed_anchor(self):
+        # source above-left of target; force entry on the target's TOP -> last segment travels down
+        a = {"x": 0, "y": 0, "w": 200, "h": 70}
+        b = {"x": 300, "y": 300, "w": 200, "h": 70}
+        edge = {"exit": (0.5, 1.0, 0.0, 0.0), "entry": (0.5, 0.0, 0.0, 0.0), "waypoints": []}
+        pts, arrow = dd._edge_route(a, b, edge)
+        self.assertEqual(arrow, "down")                     # enters the top, pointing down
+        self.assertEqual(pts[0], (100.0, 70.0))             # exit bottom-centre of a
+        self.assertEqual(pts[-1], (400.0, 300.0))           # entry top-centre of b
+
+    def test_route_side_entry(self):
+        # entry on the target's LEFT -> last segment travels right into it
+        a = {"x": 0, "y": 0, "w": 200, "h": 70}
+        b = {"x": 300, "y": 0, "w": 200, "h": 70}
+        edge = {"exit": (1.0, 0.5, 0.0, 0.0), "entry": (0.0, 0.5, 0.0, 0.0), "waypoints": []}
+        pts, arrow = dd._edge_route(a, b, edge)
+        self.assertEqual(arrow, "right")
+        self.assertEqual(pts[-1], (300.0, 35.0))            # left-centre of b
+
+    def test_route_honours_waypoints(self):
+        a = {"x": 0, "y": 0, "w": 200, "h": 70}
+        b = {"x": 0, "y": 300, "w": 200, "h": 70}
+        edge = {"exit": (0.5, 1.0, 0.0, 0.0), "entry": (0.5, 0.0, 0.0, 0.0),
+                "waypoints": [(100.0, 150.0)]}
+        pts, _ = dd._edge_route(a, b, edge)
+        self.assertIn((100.0, 150.0), pts)
+
+    def test_floating_fallback_when_no_anchor(self):
+        # no anchors -> dominant-direction floating: vertical pair feeds bottom->top
+        a = {"x": 0, "y": 0, "w": 200, "h": 70}
+        b = {"x": 0, "y": 300, "w": 200, "h": 70}
+        edge = {"exit": None, "entry": None, "waypoints": []}
+        pts, arrow = dd._edge_route(a, b, edge)
+        self.assertEqual(arrow, "down")
+        self.assertEqual(pts[0], (100.0, 70.0))
+
+
+class TestShapes(unittest.TestCase):
+    def test_shape_round_trip(self):
+        spec = {"nodes": [
+            {"id": "s", "label": "Start", "row": 0, "col": 0, "shape": "stadium"},
+            {"id": "d", "label": "OK?",   "row": 1, "col": 0, "shape": "diamond"},
+            {"id": "p", "label": "Do it", "row": 2, "col": 0, "shape": "rect"},
+            {"id": "e", "label": "Entity\nid\nname", "row": 0, "col": 1, "shape": "entity",
+             "w": 200, "h": 120},
+        ], "edges": [{"from": "s", "to": "d"}, {"from": "d", "to": "p", "label": "yes"}]}
+        nodes, _ = dd.parse_drawio(dd.build_drawio(spec))
+        self.assertEqual(nodes["s"]["shape"], "stadium")
+        self.assertEqual(nodes["d"]["shape"], "diamond")
+        self.assertEqual(nodes["p"]["shape"], "rect")
+        self.assertEqual(nodes["e"]["shape"], "entity")
+        self.assertEqual(nodes["e"]["h"], 120.0)          # per-node size honoured
+
+    def test_default_shape_is_rounded(self):
+        nodes, _ = dd.parse_drawio(dd.build_drawio(SPEC))
+        self.assertEqual(nodes["fw"]["shape"], "rounded")
+
+
+class TestCrowsFoot(unittest.TestCase):
+    def test_er_markers_round_trip(self):
+        spec = {"nodes": [{"id": "a", "label": "A", "row": 0, "col": 0, "shape": "entity"},
+                          {"id": "b", "label": "B", "row": 0, "col": 1, "shape": "entity"}],
+                "edges": [{"from": "a", "to": "b", "start": "one", "end": "many"}]}
+        xml = dd.build_drawio(spec)
+        self.assertIn("startArrow=ERone", xml)
+        self.assertIn("endArrow=ERmany", xml)
+        _, edges = dd.parse_drawio(xml)
+        self.assertEqual(edges[0]["start_marker"], "one")
+        self.assertEqual(edges[0]["end_marker"], "many")
+
+    def test_plain_edge_has_no_er_markers(self):
+        _, edges = dd.parse_drawio(dd.build_drawio(SPEC))
+        self.assertIsNone(edges[0]["start_marker"])
+        self.assertIsNone(edges[0]["end_marker"])
 
 
 class TestRender(unittest.TestCase):
