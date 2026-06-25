@@ -124,7 +124,7 @@ Author each Topic's `slide_plan.md` — the **kept, validated source** (per-comp
 slide's type tag + mandatory `image:` source) — to the format standard, then **generate** the
 Kangan-branded deck from it (primer-first, reuse-first; **generated diagrams placed in-pipeline**,
 AWS-reuse images pasted by a human). The **deck is the artefact of record**; the slide plan is kept and
-validated (**not** disposable). → [slide-plan-format.md](slide-plan-format.md) · [kangan-branding.md](kangan-branding.md) · detail [§4](#4--topic-decks). **validate-slide-plan + inspect-file-size built**
+validated (**not** disposable). → [slide-plan-format.md](slide-plan-format.md) · [kangan-branding.md](kangan-branding.md) · detail [§4](#4--topic-decks). **generic builder `build_topic_deck.py` + validate-slide-plan + inspect-file-size built** (proven end-to-end on CL2 topic_01)
 > **⟱ Gate 4→5:** *validator* `validate-slide-plan` = **PASS** (conforms + covers `coverage.md`) **before
 > the deck is built**; then `inspect-file-size` ≤ guideline on the built deck (git-tracked — keep small)
 > **+ human review** — pedagogy sound; student slides **in-world**, **no UoC codes**, no tell of the
@@ -222,12 +222,15 @@ tooling.)
    `[EX]` (exercise). The plan **pins up front exactly which AWS slides the Topic needs** (deck + slide
    numbers, via `planning/aws-deck-catalogue-draft.md`) — this pin table drives both the agent's reading
    and the human's image-paste.
-2. **(agent) generate the deck** — a per-Topic build script (`scripts/<cluster>/build_*_topicNN_deck.py`,
-   importing the shared `scripts/helpers/kangan_deck.py`) authors **every** slide — bespoke *and*
-   AWS-sourced — fresh into the **Kangan brand layouts** (title / divider / content / activity / demo /
-   takeaways / table; see [kangan-branding.md](kangan-branding.md)). Output `Topic_NN_Slides.pptx`.
-3. **(human) paste the AWS images** — drop the reused diagrams/screenshots into the placeholder slots in
-   PowerPoint, straight from the main AWS deck folder.
+2. **(builder) generate the deck** — the **generic `scripts/build_topic_deck.py`** reads the validated
+   `slide_plan.md` and authors **every** slide into the **Kangan brand layouts** (title / divider /
+   content / activity / demo / takeaways / table; see [kangan-branding.md](kangan-branding.md)),
+   mapping each slide's `[TYPE]` to a layout and **resolving each `image:` in-pipeline** via
+   `scripts/helpers/deck_images.py` — `diagram`→the draw-diagram skill, `gen`→the image-gen skill
+   (both **placed straight into the deck**); `reuse`/`placeholder`→a labelled placeholder; `none`→none.
+   Output `Topic_NN_Slides.pptx`. *(One generic builder for every Topic — not a per-Topic script.)*
+3. **(human) paste any `reuse` images** — only `image: reuse` slots (e.g. an existing AWS diagram) need
+   a human paste; everything `diagram`/`gen` is already placed in-pipeline.
 
 **Marking the AWS source on a slide** (provenance, since there is no `source_slides/` folder):
 - **Slide carries an AWS image/diagram** → render a **labelled image placeholder** naming the diagram
@@ -260,11 +263,12 @@ parameter.
 
 **Brand:** teaching decks wear **Kangan/BKI** branding (gold `#EDAB0C` + charcoal, Roboto), **not** the
 in-world YAT case-study brand — see [kangan-branding.md](kangan-branding.md). All brand + layout code
-lives in **`scripts/helpers/kangan_deck.py`** (the shared base); per-Topic builders are content-only and
-`import kangan_deck as k`.
+lives in **`scripts/helpers/kangan_deck.py`** (the shared base); the generic `build_topic_deck.py`
+imports it and is content-agnostic (it reads each Topic's `slide_plan.md`).
 
 **Slide-build rules (apply as you place each slide):**
-- **The plan holds briefs, not finished copy.** Write the actual title + bullets at build time.
+- **The plan holds the finished slide content** (title + bullets + image directive) — the builder reads
+  it verbatim, so write the real copy in `slide_plan.md`, not a brief.
 - **Student-facing slides stay in-world** — same rule as the intranet. No course/assessment language *on
   the slide*: no "AT1 / Appendix 2 / Business Case §x", and nothing that tips **which system is the
   assessed one**. **Source-deck references MAY stay on the slide; UoC references MUST NOT.**
@@ -291,9 +295,13 @@ hand-consolidation (added source slides + images) would be lost.
 with PowerPoint > Compress Pictures (whole deck, 150 ppi, delete cropped areas) or by dropping the
 object, then re-run. Don't assume the culprit — diagnose it.
 
-**Result (S1-CL1):** Topics 1–14 built this way (mixes of bespoke + AWS-sourced, authored with
-placeholders); all Kangan-branded; each opener → components (*teach → exercise → takeaways*) → close;
-exercises run on the Accounting practice scenario.
+**Result (S1-CL1):** Topics 1–14 (mixes of bespoke + AWS-sourced); all Kangan-branded; each opener →
+components (*teach → exercise → takeaways*) → close; exercises run on the Accounting practice scenario.
+
+**Result (S1-CL2):** the generic `build_topic_deck.py` proven end-to-end on **topic_01** — `slide_plan.md`
+(full content) → 20-slide deck with the web-scale architecture diagram (draw-diagram, in-pipeline) + two
+decorative images (image-gen / Nano Banana) **placed automatically**; 1.86 MB. The remaining CL2 Topics
+need their slide plans authored, then built the same way.
 
 ## §5 — Practice tasks
 *(loops per AT.)* Derive the AT-mirroring **practice task** — re-scenarioed away from the real assessment

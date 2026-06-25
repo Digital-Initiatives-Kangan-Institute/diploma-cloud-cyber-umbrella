@@ -5,8 +5,9 @@ built (delivery run-sheet, the deck step). Paths are relative to the `diploma-cl
 root.
 
 A Topic's **slide plan** (`delivery/topic_NN/slide_plan.md`) is the **kept, validated source** the deck
-is built from — the teaching + exercise slides in deck order, each with its type, its content (brief or
-final), and (where it carries one) its image source. It is the **counterpart of `coverage.md`**:
+is built from — the teaching + exercise slides in deck order, each with its type, its **finished content**
+(title + bullets, read verbatim by `build_topic_deck.py`), and its image source. It is the **counterpart
+of `coverage.md`**:
 `coverage.md` says *what the Topic must cover* (components + UoC); the slide plan says *how each of those
 is delivered, slide by slide*. The deck is built from it; it is **no longer disposable** (the older
 convention deleted it — superseded).
@@ -57,8 +58,9 @@ linter parses.
 3. **`## Teaching source`** — bespoke / AWS-sourced / generated; which source modules where relevant.
 4. **`## AWS pin table`** *(reuse courses)* — the exact source deck + slides to reuse, or `None`.
 5. **`## Slides`** — `### Opener`, then `### C<n> — <title>` per component (each with a `Teaches:` line
-   and its slides), then `### Close`. Each slide is a `- [<TYPE>] <title>` line with its brief/content
-   beneath and an `image:` field where it carries one.
+   and its slides), then `### Close`. Each slide is a `- [<TYPE>] <title>` line with its content bullets
+   beneath (markdown `- ` items, indent = level) and a mandatory `image:` field; optional `kicker:` /
+   `timer:` (EX) / `source:` (DEMO) / `note:` (TABLE) fields, and `| … |` rows for a TABLE.
 6. **`## Build notes`** — slide count, exercise summary, inputs.
 7. **`## Changelog`** — dated entries.
 

@@ -87,7 +87,21 @@ regenerated — *underlying diagram error*. The imported **`image-gen` skill** i
 Mapping: slide-plan `image: diagram` → draw-diagram, `image: gen` → image-gen (both placed in-pipeline);
 only `image: reuse` needs a human paste.
 
-**NEXT:** wire draw-diagram + image-gen into the **deck build** (Step 4 — place images from the slide
-plan's `image:` fields in-pipeline); then finalise the spine (coverage.md format standard + skill; merge
-steps 2+3), and build **Step 6 `validate-delivery-plan`**. Related: [[assessment-run-sheet]],
-[[scenario-plan-model]].
+**Step-4 deck BUILDER built (2026-06-25).** The generic `scripts/build_topic_deck.py` generates a Kangan
+deck **FROM** a Topic's `slide_plan.md` (parser → `[TYPE]`→layout map → each slide's `image:` resolved
+**in-pipeline** by `scripts/helpers/deck_images.py`: diagram→draw-diagram, gen→image-gen/**Nano Banana**
+`google/gemini-2.5-flash-image` ~US$0.04/img, **generate-once cached + cost-gated default-off**,
+reuse/placeholder→placeholder, none→skip). `kangan_deck.place_image()` added — backward-compatible with
+the 14 CL1 per-topic scripts. **One generic builder replaces the per-topic scripts; the slide plan now
+holds FINISHED content (read verbatim), not briefs.** Proven end-to-end on CL2 topic_01:
+validate-slide-plan PASS → 20-slide deck with the web-scale diagram + 2 gen images placed automatically
+(1.86 MB).
+
+**CL2 delivery state (2026-06-25):** Gates 1 (spec PASS), 2 (10-topic spine — AT1 = Topics 1–5 / AT2 =
+6–10, each anchored to its AT), 3 (coverage **91/91 PASS**, after the tag retrofit + authoring the AT1
+specs). AT1 coverage specs (topics 1,2,3,5) authored **DRAFT — human review of allocation/depth-ceilings
+pending**. topic_01 deck built. Remaining: author the other 9 CL2 slide plans + build; CL2 Steps 5–6.
+
+**NEXT:** finalise the spine (coverage.md format standard + skill; merge steps 2+3); build **Step 6
+`validate-delivery-plan`**; author the remaining CL2 slide plans → decks. Related:
+[[assessment-run-sheet]], [[scenario-plan-model]].
