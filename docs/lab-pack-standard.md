@@ -120,6 +120,18 @@ the API-GW→SQS credentials. So Learner Lab build ATs that need a serverless ex
 CL2 microservice) **can be hands-on** — this joins the EC2/RDS baseline proven in the Cloud
 Architecting Sandbox.
 
+**Multi-AZ HA in the Learner Lab — proven (2026-06-26).** The CL1 AT3 baseline, hardened to the full
+multi-AZ end-state (RDS `MultiAZ: true` on `db.t3.medium` + an ASG spanning two private app subnets),
+deploys to `CREATE_COMPLETE` in the Learner Lab in `us-east-1`, with the **RDS standby placed in a
+second AZ** (`us-east-1a`/`1b`) — the activity log showed **no AZ or capacity refusal**. So the
+**within-region, cross-AZ HA** story (the part the substitution `Sydney→us-east-1a`, `Mumbai→us-east-1b`
+faithfully serves) ports cleanly to the Learner Lab — which also gives **session persistence**. Two
+limits this does **not** clear: (1) it is *not* the cross-region **residency/DR** story (Mumbai/Melbourne
+in separate regions) — collapsing those to two AZs of one region erases the jurisdictional boundary, so
+that material stays notional or stays in the Sandbox; (2) on a live proving run the Windows placeholder
+instances churned on an **ELB health-check replace loop** (~6 min) — a UserData/bootstrap issue, not a
+multi-AZ one, but it must be fixed before any live "lose an AZ, stay up" demo.
+
 ---
 
 ## AWS Academy constraints — bake in every time
