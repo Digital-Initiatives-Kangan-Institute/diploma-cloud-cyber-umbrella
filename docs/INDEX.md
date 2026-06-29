@@ -28,6 +28,7 @@ whenever you add a doc — an un-indexed document is invisible.
 - [mapping-document-standard.md](mapping-document-standard.md) — the Assessment Mapping document as a derived artefact: the contract (machine-readable, UoC-tagged benchmarks), the generate → validate pipeline, the FS/AC closest-fit convention, and the shared template layout.
 - [kangan-branding.md](kangan-branding.md) — the Kangan/BKI brand spec used for teaching decks.
 - [lab-pack-standard.md](lab-pack-standard.md) — the course-wide lab-pack standard: runnable CloudFormation + local validation harness students deploy into ephemeral AWS Academy labs, and the Academy constraints (proven live).
+- [region-substitution-standard.md](region-substitution-standard.md) — the notation bridging the multi-region **design** layer and the single-region (`us-east-1`) Learner Lab **deploy** layer: the `[scenario: … | deploy: …]` token, the canonical mapping, the design-stays-multi-region / deploy-is-single-region principle, and residency/DR handling.
 
 ## Scenario & website
 - [scenario-flow.md](scenario-flow.md) — the cross-cluster scenario model: system↔cluster assessment/practice matrix, no-leakage invariant, system state progressions, CL3 framing, the single-source-on-the-website rule, and the in-world-only intranet rule.

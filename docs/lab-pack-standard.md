@@ -89,48 +89,41 @@ harness, live-lab findings) goes in `claude-notes.md`.
 
 ---
 
-## Choosing the lab environment (per activity)
+## The lab environment — AWS Academy Learner Lab (`us-east-1`)
 
-There is **no single course-wide lab product.** Each activity or assessment uses the AWS Academy
-environment that best serves *its* learning outcome — chosen case by case. The two known
-environments trade off against each other, and neither does everything:
+**One course-wide lab product: the AWS Academy Learner Lab** (decided 2026-06-29). Every lab-pack,
+activity and assessment deploys there, for **consistency** (students learn one environment) and
+**session persistence** (the Learner Lab keeps state between sessions; the Cloud Architecting Sandbox
+did not). The Learner Lab exposes a **single region — `us-east-1`**.
 
-| Environment | Gives you | Costs you | Fits |
-|---|---|---|---|
-| **Cloud Architecting Sandbox** | **Real regions** (Sydney `ap-southeast-2`, Mumbai `ap-south-1`) | **No usable IAM role** (no `LabRole`; IAM read-only) | Activities needing real geography or no custom IAM — e.g. the **CL1 AT3 baseline** (EC2 serving a page, no role) |
-| **Learner Lab** | **`LabRole`** — a broad pre-provisioned role you can pass to Lambda etc. | **Regions limited to `us-east-1` / `us-west-2`** (geography is simulated) | Activities needing a serverless execution role — e.g. the **CL2 AT2 microservice** (Lambda needs a role) |
+**Region is simulated by substitution.** The YAT scenario is Australian and its architectures are
+genuinely multi-region (Sydney `ap-southeast-2`, Mumbai `ap-south-1`, Melbourne `ap-southeast-4`), but
+all of it deploys to `us-east-1`. The **design layer stays multi-region** (region choice, residency, DR
+are taught and assessed in full, with real region codes); only the **physical deploy** collapses to
+`us-east-1` — deployment is mechanically identical in any region, so nothing assessable is lost. The seam
+is the substitution token, e.g. `[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`. The full rule
+— notation, canonical mapping, residency/DR handling — is the
+[region-substitution standard](region-substitution-standard.md); **every lab-pack README must use it**
+on each deploy step.
 
-**Mandatory student-facing disclosure.** Because the environment changes per activity, every
-lab-pack README must state, for its activity:
+**`LabRole` is available** — a broad pre-provisioned role you can pass to Lambda etc. (the Cloud
+Architecting Sandbox had no usable role; that constraint no longer applies). Keep any role/instance
+profile an **optional parameter** anyway (see constraints below) so templates stay portable.
 
-1. **which** environment to use;
-2. **why** that one was chosen (the capability it provides); and
-3. **what its limitations are** — and how the activity accommodates them (e.g. "regions are
-   simulated here, so us-west-2 stands in for India; the *mechanics* are what's assessed, not the
-   geography").
+**Serverless on `LabRole` — proven.** An API-GW → SQS → Lambda → DynamoDB stack deploys and runs via
+CloudFormation with `LabRole` serving as **both** the Lambda execution role **and** the API-GW→SQS
+credentials — so build ATs needing a serverless execution role (e.g. the CL2 microservice) can be
+hands-on.
 
-Students may switch environments between activities — that is expected; the README removes the
-confusion by being explicit every time. **Kangan provisions *both* products for the cohort** (the
-Learner Lab and the Cloud Architecting Sandbox), so each activity is free to use whichever its
-outcome needs — there is no single-product constraint to design around.
-
-**Serverless on `LabRole` — proven.** In the Learner Lab, an API-GW → SQS → Lambda → DynamoDB stack
-deploys and runs via CloudFormation with `LabRole` serving as **both** the Lambda execution role **and**
-the API-GW→SQS credentials. So Learner Lab build ATs that need a serverless execution role (e.g. the
-CL2 microservice) **can be hands-on** — this joins the EC2/RDS baseline proven in the Cloud
-Architecting Sandbox.
-
-**Multi-AZ HA in the Learner Lab — proven (2026-06-26).** The CL1 AT3 baseline, hardened to the full
-multi-AZ end-state (RDS `MultiAZ: true` on `db.t3.medium` + an ASG spanning two private app subnets),
-deploys to `CREATE_COMPLETE` in the Learner Lab in `us-east-1`, with the **RDS standby placed in a
-second AZ** (`us-east-1a`/`1b`) — the activity log showed **no AZ or capacity refusal**. So the
-**within-region, cross-AZ HA** story (the part the substitution `Sydney→us-east-1a`, `Mumbai→us-east-1b`
-faithfully serves) ports cleanly to the Learner Lab — which also gives **session persistence**. Two
-limits this does **not** clear: (1) it is *not* the cross-region **residency/DR** story (Mumbai/Melbourne
-in separate regions) — collapsing those to two AZs of one region erases the jurisdictional boundary, so
-that material stays notional or stays in the Sandbox; (2) on a live proving run the Windows placeholder
-instances churned on an **ELB health-check replace loop** (~6 min) — a UserData/bootstrap issue, not a
-multi-AZ one, but it must be fixed before any live "lose an AZ, stay up" demo.
+**Multi-AZ HA — proven (2026-06-26).** The CL1 AT3 baseline, hardened to the full multi-AZ end-state
+(RDS `MultiAZ: true` on `db.t3.medium` + an ASG spanning two private app subnets), deploys to
+`CREATE_COMPLETE` in `us-east-1` with the **RDS standby in a second AZ** — no AZ or capacity refusal. So
+**within-region, cross-AZ HA is real, not simulated** (and AZs are never substituted — the token is
+region-level only). Two limits remain: (1) **cross-region residency/DR is notional** — Mumbai/Melbourne
+deploy as extra stacks in `us-east-1`, with the geography simulated and noted in-world (never fake a
+region with an AZ); (2) on a live run the Windows placeholder instances churned on an **ELB health-check
+replace loop** (~6 min) — a UserData/bootstrap issue, not a multi-AZ one, to fix before any live "lose an
+AZ, stay up" demo.
 
 ---
 
@@ -146,11 +139,13 @@ Cloud Architecting Sandbox, 2026-06-07.)
   `!If`/`AWS::NoValue` when empty. A baseline EC2 instance serving a page needs none. ✔
 - **AMIs via SSM public parameter** — `AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>`, default
   `/aws/service/ami-windows-latest/...`. Never a hardcoded AMI that ages. ✔
-- **Region = the deploy target, and real geography works.** The Cloud Architecting Sandbox
-  **deploys real regions** — `ap-southeast-2` (Sydney) proven end-to-end; `ap-south-1` (Mumbai)
-  offered. **No region simulation needed.** (The us-east-1/us-west-2-only limit is the
-  *Learner Lab*, a different product.) The console defaults to us-east-1 — **switch to the real
-  region before deploying**; the template adapts via the SSM AMI parameter + `!GetAZs`. ✔
+- **Region = `us-east-1` always; geography is simulated by substitution.** The Learner Lab exposes
+  only `us-east-1`, so **every** deploy targets it regardless of the design region — the console
+  already defaults there. The design stays multi-region; the deploy step carries the substitution
+  token (`[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`) per the
+  [region-substitution standard](region-substitution-standard.md). Templates stay region-portable
+  via the SSM AMI parameter + `!GetAZs` (so they'd still deploy elsewhere if a region were ever
+  added). ✔
 - **Instance/DB classes are parameters.** The sandbox allows EC2 `t2/t3` nano–medium and RDS
   `db.t3.micro`–`db.t3.medium` only. Default `t3.medium` / `db.t3.medium`; adjust per lab. ✔
 - **RDS Multi-AZ IS supported** in the Cloud Architecting Sandbox — **proven live 2026-06-15**
