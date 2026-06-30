@@ -43,6 +43,10 @@ no substitute**, so students learn it once and adapt automatically. Tim's draft 
 **Two limits to resolve in the reframe:**
 1. **Cross-region residency / DR is not rescued by AZ substitution** — Mumbai/Melbourne are separate
    *regions*; if collapsed into one Learner Lab region the jurisdictional boundary is notional only.
+   **DONE (2026-06-29): CL3 residency/DR is now DESIGN-ONLY** (assessed in AT1 design, never deployed);
+   the `india-residency.yaml` deploy artefact was **retired** (deleted + all refs stripped from the CL3
+   AT3 pack — README/tests/cfnlintrc/claude-notes/improved.yaml desc; pytest 13/13). **Do NOT recreate a
+   deploy artefact for residency/DR** — the benchmark lives in assessment_plan SR-CL3-04 → ICTCLD504 AC5.
 2. **CL1 Windows placeholder churns on an ELB health-check replace loop (~6 min)** — a UserData/bootstrap
    issue, not multi-AZ; fix before any live "lose an AZ, stay up" demo. Separate ticket.
 
