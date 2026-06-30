@@ -16,6 +16,7 @@ and the current standing of each cluster workstream ("principles, not state" —
 - [one step at a time](feedback_one_step_at_a_time.md) — for hands-on interactive walk-throughs (AWS console, lab setup), give ONE step then wait for what he sees; don't front-load 10 steps.
 - [draft naming pragmatism](feedback_draft_naming_pragmatism.md) — during drafts, don't fuss over file naming; defer naming discipline to delivery-ready versions.
 - [verify change impact](feedback_verify_change_impact.md) — before side-effecting changes (esp. running file-writing generators), verify where output lands + `git status` what got staged; a "helpful" regenerate once created a phantom nested sub-repo and committed it.
+- [audit generated docs via the .py builders](feedback_audit_generated_docs.md) — a cross-cutting content sweep must grep the `.py` builders under `scripts/` (instruments are generated `.docx`, decks `.pptx` — you can't grep the binaries); edit the builder, regenerate with `scripts/.venv`, verify the regenerated text. A `.md`/`.yaml`-only grep silently misses most deliverables.
 
 ## Cluster workstreams (S1) — assessment + delivery per cluster (current working state)
 - [S1-CL1 assessment](s1cl1_assessment.md) — **COMPLETE (2026-06-15)** — pilot cluster, assessment workstream: AT shape, settled cross-AT design decisions; all 9 instruments finalised, Multi-AZ resolved, Records Policy authored.
