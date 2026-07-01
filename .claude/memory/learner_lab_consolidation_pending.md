@@ -1,11 +1,18 @@
 ---
 name: learner-lab-consolidation-pending
-description: "DECIDED (boss confirmed 2026-06-29) — ALL lab-packs/activities/assessments move to the AWS Academy Learner Lab, region simulated by a substitution notation; the proven spike, the substitution-standard design (in progress), and the two limits to resolve."
+description: "COMPLETE (2026-07-01) — ALL lab-packs/activities/assessments moved to the AWS Academy Learner Lab (us-east-1), region simulated by the substitution notation; standard authored, rollout applied across S1, BOTH lab-packs proven live. The durable rule + the one CL3 residency exception."
 metadata:
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
 ---
+
+**✅ COMPLETE (2026-07-01).** Standard authored, rollout applied across all S1 deploy-layer materials
+(lab-packs, instruments, deployment exemplars, decks, plans), and **both lab-packs proven live in the
+Learner Lab `us-east-1`** — CL1 baseline (deploys + serves) and CL3 baseline→improved apply-as-update
+(UPDATE_COMPLETE in-place). There is **no CL2 lab-pack** (the student builds/deploys the microservice
+from scratch — that IS the assessed work). Nothing further to prove. The durable rule and the one CL3
+residency exception are below; the rest is history.
 
 **DECIDED — boss confirmed 2026-06-29.** Every lab-pack, activity and assessment **moves to the AWS
 Academy Learner Lab**, with **scenario region simulated by a substitution notation** shown to students.
