@@ -40,15 +40,23 @@ no substitute**, so students learn it once and adapt automatically. Tim's draft 
    Full standard authored: **docs/region-substitution-standard.md**. Multi-AZ HA stays REAL (deploys for
    real in us-east-1, no substitution for AZs).
 
-**Two limits to resolve in the reframe:**
-1. **Cross-region residency / DR is not rescued by AZ substitution** — Mumbai/Melbourne are separate
-   *regions*; if collapsed into one Learner Lab region the jurisdictional boundary is notional only.
-   **DONE (2026-06-29): CL3 residency/DR is now DESIGN-ONLY** (assessed in AT1 design, never deployed);
-   the `india-residency.yaml` deploy artefact was **retired** (deleted + all refs stripped from the CL3
-   AT3 pack — README/tests/cfnlintrc/claude-notes/improved.yaml desc; pytest 13/13). **Do NOT recreate a
-   deploy artefact for residency/DR** — the benchmark lives in assessment_plan SR-CL3-04 → ICTCLD504 AC5.
-2. **CL1 Windows placeholder churns on an ELB health-check replace loop (~6 min)** — a UserData/bootstrap
-   issue, not multi-AZ; fix before any live "lose an AZ, stay up" demo. Separate ticket.
+**THE RULE (Tim, 2026-06-30, emphatic): assessments are UNCHANGED from before the Learner Lab move —
+the ONLY difference is that deploy steps that can't run in the Learner Lab use the substitution. Nothing
+added, nothing removed.** So a cross-region element (DR backup to Melbourne, a residency store) is still
+**built and evidenced** — just **deployed to `us-east-1` as a separate stack/vault with the token**
+(`[scenario: ap-southeast-4 (Melbourne) | deploy: us-east-1]`); it is NOT "design-only" and NOT dropped.
+Assessed on successful deployment **on the substituted region**, not on location. Applied across the S1
+deploy-layer builders (CL1 AT2 + AT3 deployment exemplars — incl. the AT3 Melbourne DR backup → us-east-1
+DR destination; CL2 AT2 microservice + India store; topic06/07 decks; lab-pack READMEs).
+
+**The ONE deliberate exception — CL3 residency:** the `india-residency.yaml` deploy artefact was retired
+as **redundant** (Tim: not needed for a student to do the assessment; the assessor judges residency from
+the design). So CL3 residency is assessed at the **DESIGN** level (SR-CL3-04 → ICTCLD504 AC5), not
+deployed. Do NOT recreate a CL3 residency deploy artefact. This is a per-cluster call, NOT the general
+rule (which is substitute-and-deploy, above).
+
+**Parked ticket:** the CL1 Windows placeholder churns on an ELB health-check replace loop (~6 min) — a
+UserData/bootstrap issue, not multi-AZ; fix before any live "lose an AZ, stay up" demo.
 
 **Work the GO triggers:** finalise the substitution standard (format doc + canonical mapping table +
 linter/skill, per the project's format-doc-is-source-of-truth pattern), rework lab-pack-standard.md's
