@@ -1,6 +1,6 @@
 ---
 name: s1cl3-delivery
-description: S1-CL3 (Cloud Infrastructure Improvement) delivery workstream — 8-Topic spine agreed; Step 3 coverage PASS 64/64; next is Step 4 slide plans + decks.
+description: S1-CL3 (Cloud Infrastructure Improvement) delivery workstream — 8-Topic spine; Steps 3 (coverage 64/64) + 4 (8 slide plans PASS + 8 decks built, size-gated) COMPLETE; next is Step 5 practice.
 metadata: 
   node_type: memory
   type: project
@@ -32,9 +32,22 @@ Vehicle = **Ledgerline** (assessed); **website = practice vehicle**.
   authored (T1 11 · T2 6 · T3 2 · T4 2 · T5 15 · T6 16 · T7 8 · T8 4); every 504+401 PC/PE/KE taught by
   ≥1 Topic. The two empty leftover scaffold dirs (topic_09/10) removed. Committed + pushed.
 
-## NEXT — Step 4 (slide plans + decks)
-8 `slide_plan.md` (→ `validate-slide-plan`) then 8 decks via `build_topic_deck.py`. Then Step 5 (practice)
-and Step 6 (delivery plan — deferred per-instance, see [[delivery-run-sheet]]).
+## Step 4 (slide plans + decks) — COMPLETE 2026-07-02
+- **4a:** 8 `slide_plan.md` authored (per-topic sub-agents from each `coverage.md`), **`validate-slide-plan`
+  PASS 8/8** (backwards-coverage vs coverage.md). 96 slides; image plan = 6 draw-diagram diagrams + 8 gen
+  heroes. Committed `4dbe660`.
+- **4b:** all 8 decks built via `scripts/.venv/bin/python scripts/build_topic_deck.py … --allow-gen`
+  (**note: the deck builder needs `scripts/.venv`, which has python-pptx — NOT system python3**). 6
+  diagrams rendered (editable `.drawio` + PNG; the 2 flowcharts + 4 arch/allocation eyeballed clean) + 8
+  Nano-Banana heroes (~$0.32, generate-once cached). **Size-gated: `inspect-file-size` all 0.8–0.98 MB**
+  (well under 25 MB). Committed `7ed2288` (push 408'd once on the ~7 MB binary payload over a flaky link;
+  retry succeeded).
+- **Process note:** run `inspect-file-size` on the built decks **before** committing (the process
+  prescribes it at Step 4 — don't skip it).
+
+## NEXT — Step 5 (practice tasks)
+Then Step 6 (delivery plan — deferred per-instance, see [[delivery-run-sheet]]). CL3 practice vehicle =
+the **website** (Ledgerline is assessed); derive the AT-mirroring practice exercises per the Step-5 model.
 
 ## Flag (assessment-side, deferred)
 `S1-CL3-.../consolidated_uoc.md` "Topic & assessment structure" narrative still describes the **OLD** AT

@@ -303,6 +303,12 @@ components (*teach → exercise → takeaways*) → close; exercises run on the 
 decorative images (image-gen / Nano Banana) **placed automatically**; 1.86 MB. The remaining CL2 Topics
 need their slide plans authored, then built the same way.
 
+**Result (S1-CL3):** all 8 Topics built from their validated slide plans — 6 draw-diagram diagrams
+(2 flowcharts + 4 architecture/allocation) + 8 image-gen heroes placed in-pipeline; 13–18 slides each,
+**each deck size-gated with `inspect-file-size` (all 0.8–0.98 MB, well under guideline) before commit**.
+*(Run the size gate on the built decks **before** committing — it is part of this step, not an
+afterthought.)*
+
 ## §5 — Practice tasks
 *(loops per AT.)* Derive the AT-mirroring **practice task** — re-scenarioed away from the real assessment
 context, split into exercises that together cover all parts of the related AT (coverage is guaranteed
