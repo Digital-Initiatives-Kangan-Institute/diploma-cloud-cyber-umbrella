@@ -68,9 +68,9 @@ Practice vehicle = the **website** (Ledgerline is assessed). Confirmed:
 The only remaining CL3 step; deferred by design (semester-instance artefact, see [[delivery-run-sheet]]).
 **CL3 delivery is now course-complete through Step 5.**
 
-## Flag (assessment-side, deferred)
-`S1-CL3-.../consolidated_uoc.md` "Topic & assessment structure" narrative still describes the **OLD** AT
-model (AT1 Team Setup / AT2 group analyse+design with a *business case* / AT3 implement). The **current**
-model (AT1 Design / AT2 Team-Implementation / AT3 Implement, business-case retired) is what the validated
-instruments + these coverage files use. Tag inventory is fine (nothing downstream breaks); only the prose
-is stale. Fix belongs to the CL3 **assessment** workstream ([[s1cl3-assessment]]).
+## Resolved
+`consolidated_uoc.md` AT-model narrative **corrected 2026-07-02** to the current model (AT1 Design 504
+el 1–2 / AT2 Team-Implementation 401 el 1–4 / AT3 Implement 504 el 3–4) — the STATUS line, the
+structure-section table + AT deliverables + approval moments, and the Topic 1–2 headers + Group-1
+annotation. Topics 3–4 headers were already correct. Tag inventory untouched (delivery coverage 64/64 +
+cluster coverage still PASS).
