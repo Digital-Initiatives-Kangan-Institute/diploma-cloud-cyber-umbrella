@@ -1,8 +1,10 @@
 ---
 name: delivery-run-sheet
-description: The delivery process is now a formalised step→gate run-sheet (docs/process-delivery.md) mirroring the assessment run-sheet; the 3-layer gate architecture; Steps 1 (cluster spec), 3 (coverage spine), and the slide-plan gate built + back-tested on S1; the decided Step-4 deck/image model and Step-5 practice model; what remains.
-metadata:
+description: "The delivery process is now a formalised step→gate run-sheet (docs/process-delivery.md) mirroring the assessment run-sheet; the 3-layer gate architecture; Steps 1 (cluster spec), 3 (coverage spine), and the slide-plan gate built + back-tested on S1; the decided Step-4 deck/image model and Step-5 practice model; what remains."
+metadata: 
+  node_type: memory
   type: project
+  originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
 ---
 
 The cluster **delivery process is a formalised step→gate run-sheet** —
@@ -97,11 +99,15 @@ holds FINISHED content (read verbatim), not briefs.** Proven end-to-end on CL2 t
 validate-slide-plan PASS → 20-slide deck with the web-scale diagram + 2 gen images placed automatically
 (1.86 MB).
 
-**CL2 delivery state (2026-06-25):** Gates 1 (spec PASS), 2 (10-topic spine — AT1 = Topics 1–5 / AT2 =
-6–10, each anchored to its AT), 3 (coverage **91/91 PASS**, after the tag retrofit + authoring the AT1
-specs). AT1 coverage specs (topics 1,2,3,5) authored **DRAFT — human review of allocation/depth-ceilings
-pending**. topic_01 deck built. Remaining: author the other 9 CL2 slide plans + build; CL2 Steps 5–6.
+**CL2 delivery state (2026-07-02):** Gates 1–4 PASS. Gate 4 = **all 10 `slide_plan.md` authored +
+`validate-slide-plan` PASS 10/10** and **all 10 decks built** (155 slides; 5 draw-diagram diagrams + 9
+`gen` heroes via `--allow-gen`). **Step 5 (practice) COMPLETE** — the 28 `[EX]`s are the practice tasks;
+LMS engagement `lms-global-expansion` verified state-correct; the AT2 **practice build artefacts** authored
+as separate in-world intranet docs (comparable-not-identical: different fault + code); the missing
+**`s1-cl2-at2` state added** (cloned from at1 across 61 docs); no-leakage PASS. Detail in [[s1cl2-delivery]].
+AT1 coverage specs still **DRAFT — human review pending**.
 
-**NEXT:** finalise the spine (coverage.md format standard + skill; merge steps 2+3); build **Step 6
-`validate-delivery-plan`**; author the remaining CL2 slide plans → decks. Related:
-[[assessment-run-sheet]], [[scenario-plan-model]].
+**NEXT (CL2):** **Step 6 — delivery plan.** Build the Step-6 gate `validate-delivery-plan` (still
+decided-not-built) + generate `S1_CL2_Delivery_Plan.docx` (session grid from the cluster-spec frame).
+**STILL decided-not-built (project-wide):** steps 2+3 merge; `coverage.md` format standard + skill.
+Related: [[assessment-run-sheet]], [[scenario-plan-model]].

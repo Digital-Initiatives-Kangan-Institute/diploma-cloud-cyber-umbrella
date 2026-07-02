@@ -1,8 +1,10 @@
 ---
 name: s1cl2-delivery
-description: S1-CL2 (Cloud Disaster Recovery) delivery workstream — week/session frame, the 10-Topic spine (AT1 design / AT2 build), the LMS practice vehicle, and the topic-coverage re-check against the finalised website assessments.
-metadata:
+description: "S1-CL2 (Cloud Disaster Recovery) delivery workstream — Gates 1–4 PASS (10/10 slide plans + decks built), Step 5 practice COMPLETE (LMS engagement, AT2 practice build artefacts as separate intranet docs, s1-cl2-at2 state added, no-leakage verified); only Step 6 delivery plan remains."
+metadata: 
+  node_type: memory
   type: project
+  originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
 ---
 
 S1-CL2 **delivery-planning** workstream (separate from assessment authoring — see [[s1cl2-assessment]]).
@@ -24,19 +26,44 @@ The **LMS** (`lms-global-expansion`) is the CL2 practice vehicle — web-scale-c
 web-scale teaching needs. (Assessed on the website, practised on the LMS — see
 docs/scenario-flow.md.)
 
-## Status (2026-06-25)
-- **Gates 1–3 PASS.** Cluster spec PASS; every teaching Topic has a `topic_NN/coverage.md`;
-  `validate-delivery-coverage` **91/91** — after the project tag retrofit (65 backtick-wrapped tags
-  unwrapped in topics 04, 06–10) **and** authoring the AT1 specs (topics **1, 2, 3** were empty, **5**
-  was missing), which mapped all 33 previously-untaught items grounded in the AT1 `.docx`. The four AT1
-  coverage specs are **DRAFT — human review of the allocation + depth ceilings pending.**
-- **Step 4 proven on topic_01:** `slide_plan.md` (finished content) → 20-slide Kangan deck via the generic
-  `build_topic_deck.py`, with the web-scale architecture diagram (draw-diagram) + 2 decorative gen images
-  placed **in-pipeline**. See [[delivery-run-sheet]].
+## Status (2026-07-02)
+- **Gates 1–4 PASS.** Cluster spec PASS; coverage `validate-delivery-coverage` **91/91**; **all 10
+  `slide_plan.md` authored + `validate-slide-plan` PASS 10/10** (the 9 missing — 02–05 design, 06–10
+  build — authored to full content this session; build topics carry the region-substitution token on
+  deploy DEMO/EX slides + a `[DEMO]` before each practice). The AT1 coverage specs remain **DRAFT —
+  human review of allocation/depth-ceilings pending.**
+- **All 10 decks built** via `build_topic_deck.py` (155 slides): 5 draw-diagram diagrams (editable
+  `.drawio` + PNG) + 9 decorative `gen` heroes (via `--allow-gen`, generate-once cached; ~$0.36; the
+  key needs `OPENROUTER_API_KEY` in the umbrella-root `.env`, gitignored). Heroes vetted — the model
+  ignores "no text" ~1-in-9, so **human-check gen images** (topic_02 needed a regen for a typo).
+- **Step 5 (practice tasks) COMPLETE** — see below. Committed to both repos.
+
+## Step 5 — practice tasks (COMPLETE 2026-07-02)
+- **Model (docs/process-delivery.md §5):** practice task = the AT decomposed 1:1 into exercises on the
+  practice scenario; re-scenarioing IS the no-leakage guard. The 28 `[EX]` slides across T1–10 ARE the
+  practice tasks (coverage guaranteed — derived from the components).
+- **LMS practice engagement exists + state-correct:** `projects/lms-global-expansion/` (website repo) —
+  full parity with the assessment engagement `website-global-expansion/` (MSA/role-brief/requirements/
+  data-residency/consultation-notes). Practice inputs are YAT operational docs **referenced at the
+  HA-hardened state**, not reproduced.
+- **AT2 practice build artefacts authored** (the one real gap) — as **separate in-world docs in the
+  practice project folder** (not inline like the assessment): `provided-data-store-template.md` +
+  `provided-microservice-code.md`. **Comparable-but-not-identical:** different fault (ProvisionedThroughput
+  vs PAY_PER_REQUEST — assessment's was a KeySchema/AttributeDefinitions name mismatch) + different code
+  (LMS fields `activity_id/action/module_ref` vs `event_id/event_type/source_ip`). In-world clean (design
+  region `ap-south-1`; **no lab/us-east/token meta** — that stays in the decks).
+- **State-model fix:** CL2 had **no `s1-cl2-at2` state** (every other cluster has per-AT states). Added it
+  and **cloned `s1-cl2-at1` → `s1-cl2-at2`** across all 61 tagged docs (underlying state unchanged for the
+  build; scan found zero exceptions). Pattern for adding a per-AT state: add to `states.ts`, add the slug
+  to every appearsIn that has the prior AT's slug, scan for exceptions, `astro sync`.
+- **No-leakage PASS:** the website assessment *requires* the anonymous-public axis (CDN/WAF/SEO — "exposure
+  an internal authenticated system does not carry"); the LMS practice is clean of it → the LMS answer can't
+  be transposed to the website. LMS = CL1 assessment / CL2 practice (assessed once; practice≠assessment).
+- **No "practice baseline design" gap:** unlike Ledgerline/website (student hasn't built them → a provided
+  design is authored via `scripts/scenario/`), the **LMS is the learner's own CL1 build** → CL2 practice
+  extends it via the HA-hardened ICT records; no dedicated provided design needed.
 
 ## Open — where it needs to go
-- **Author the other 9 CL2 slide plans** (topics 2–4, 6–10) → build their decks the same way; size the
-  Topics onto the 30 sessions.
-- CL2 **Steps 5 (practice tasks) + 6 (delivery plan)** still to do.
-- **Blocked-ish on:** the web-scale practice app for the T6–T9 demos. (The lab environment is settled —
-  both AWS Academy products are provisioned; each activity uses whichever fits. See docs/lab-pack-standard.md.)
+- **Step 6 (delivery plan)** — the only remaining CL2 delivery step: build the Step-6 gate
+  `validate-delivery-plan` (not yet built, see [[delivery-run-sheet]]) + generate `S1_CL2_Delivery_Plan.docx`.
+- AT1 coverage specs still **DRAFT** — human review pending.

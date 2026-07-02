@@ -315,6 +315,19 @@ assessment one.
 system, added to the AT1 intranet as a peer engagement to the LMS, indistinguishable until the task is
 handed out. A practice-scenario deck is built via `scripts/scenario/`.
 
+**Result (S1-CL2):** the LMS practice (`lms-global-expansion`) needed no provided baseline design — the
+LMS is the learner's own CL1 build, so the practice extends it via the HA-hardened ICT records (unlike
+Ledgerline/website, which the learner hasn't built and so get a `scripts/scenario/` design). Two
+conventions settled here:
+- **Provided build artefacts for practice go as separate in-world docs in the practice project folder**
+  (e.g. a data-store template + microservice code), **not** inline like the assessment instrument. They
+  stay **comparable-but-not-identical** to the assessment's (a *different* injected fault; *different*
+  code/field names) — the no-leakage guard at the artefact level. In-world means design-region only; the
+  lab/`us-east-1` substitution stays in the delivery decks, never on the intranet.
+- **Adding a per-AT state** (CL2 lacked `s1-cl2-at2`): add the slug to `states.ts`, add it to **every**
+  `appearsIn` that carries the prior AT's slug (the underlying state is unchanged across a cluster's ATs
+  unless a doc says otherwise), scan for exceptions, then `astro sync` to validate.
+
 ## §6 — Delivery plan
 *(cluster-level — capstone.)* Lay the Topics (step 2–4) + the assessment sessions onto the session grid
 defined by the cluster-specification frame (step 1), then generate the institutional **Delivery Plan**
