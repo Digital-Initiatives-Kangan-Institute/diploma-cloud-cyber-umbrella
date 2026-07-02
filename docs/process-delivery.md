@@ -329,18 +329,42 @@ conventions settled here:
   unless a doc says otherwise), scan for exceptions, then `astro sync` to validate.
 
 ## §6 — Delivery plan
-*(cluster-level — capstone.)* Lay the Topics (step 2–4) + the assessment sessions onto the session grid
-defined by the cluster-specification frame (step 1), then generate the institutional **Delivery Plan**
-docx from `templates/Delivery_Plan_Template_v0.1.docx`. Size each Topic against the tempo bands (§4) and
-fit it to the available teaching sessions; place the assessment sessions per the frame's
-final-assessment-before-the-spare-buffer convention.
+*(cluster-level — terminal, and **per semester-instance**.)* The delivery plan lays the Topics (step
+2–4) + the assessments onto a concrete session grid and is issued as the institutional
+`…_Delivery_Plan.docx`. Unlike every earlier step, it is **not a course artefact**: the course can be
+fully developed (assessment, decks, practice) with **no** delivery plan, because the plan depends on
+facts that do not exist until a specific intake is imminent — how many sessions that intake gets, on
+which days, and which sessions are **online** vs **classroom** (typically known only ~2–4 weeks out).
+Re-run it for another intake and you get a different plan from the same course. **The plan is
+disposable-per-instance; the course is not.** So this step is deferred by nature — reaching it does not
+mean the cluster is unfinished; it means the cluster is *course-complete* and waiting on a real intake.
 
-The step-6 gate condition is `validate-delivery-plan` (to build): every Topic and every assessment is
-placed in a session, the session totals reconcile with the frame's `Total sessions` / delivered hours,
-and the docx conforms to the template. The *quality* of the sequence stays a human call.
+Those instance facts are a **prerequisite**. Once known, the plan is produced in a **collaborative
+human-AI juggling session** — try a layout, look, move things, refit — until the sequence works
+(spacing, catch-up placement, on-campus practical/presentation vs online balance). That sequencing is
+**human judgment and stays human**. The session's *output* is a machine-readable **outline
+(`<cluster>/delivery/delivery-plan.md`)** whose completeness can be checked; when it validates, an
+automated step fills the docx from it (from `kangan-templates/Delivery_Plan_Template_v0.1.docx`).
 
-**Result (S1-CL1):** `delivery/S1_CL1_Delivery_Plan.docx` produced; the session scaffold is in
+**Pipeline:** prerequisites known → juggling session writes the outline → `validate-delivery-plan` →
+(gaps reported → keep prompting the human) → PASS → generate the docx. The outline format is
+[delivery-plan-format.md](delivery-plan-format.md).
+
+The step-6 gate is **`validate-delivery-plan`** (BUILT 2026-07-02 — `validate_delivery_plan.py` +
+skill): a **completeness-for-generation** check — the outline conforms to the format (header fields +
+grid columns from the skeleton), the session grid is internally consistent (numbered `1…N`, every cell
+decided, `Mode`/`Activity` in vocabulary), **every built Topic (`delivery/topic_NN/`) and every
+assessment (`assessments/AT<n>/`) is placed**, and the grid reconciles with the frame (row count ==
+declared total; reservations honoured). It **reports** intake-vs-nominal divergence + the mode split. A
+PASS means "complete enough to generate the docx"; each FAIL is a decision still to be made. There is
+**no agent validator** — the *quality* of the sequence is the human's call, made live in the session.
+*(Still to build: the docx generator that fills the template from a validated outline — authored at
+instance-time alongside the first real plan.)*
+
+**Result (S1-CL1):** `delivery/S1_CL1_Delivery_Plan.docx` produced by hand (pre-gate) from the scaffold
 `delivery/planning/cl1-delivery-sessions-draft.md`.
+**Result (S1-CL2):** course-complete through Step 5; the Step-6 gate is built but the plan itself is
+**deferred** — no intake to plan against yet.
 
 ---
 

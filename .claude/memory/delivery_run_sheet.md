@@ -99,15 +99,35 @@ holds FINISHED content (read verbatim), not briefs.** Proven end-to-end on CL2 t
 validate-slide-plan PASS → 20-slide deck with the web-scale diagram + 2 gen images placed automatically
 (1.86 MB).
 
+**Step 6 — the DELIVERY-PLAN gate — BUILT 2026-07-02.** The delivery plan is a **semester-INSTANCE
+artefact, not a course artefact** (Tim's reframe): the course is fully developable (assessment, decks,
+practice) with **no** delivery plan, because the plan needs facts that don't exist until an intake is
+imminent — session count, days, and which sessions are **online vs classroom** (~2–4 weeks out). It is
+**prerequisite-gated + disposable-per-instance**: those instance facts → a **collaborative human-AI
+juggling session** (sequencing = human judgment, stays human) → a machine-readable **outline
+`<cluster>/delivery/delivery-plan.md`** → `validate-delivery-plan` → (gaps reported, keep prompting) →
+PASS → an automated step fills the docx. So reaching Step 6 = the cluster is **course-complete**, not
+unfinished. `docs/delivery-plan-format.md` (skeleton = contract: instance-prereq header + session grid
+`# · Week · Day · Mode · Activity · Placed`) + `validate_delivery_plan.py` + `validate-delivery-plan`
+skill. The gate is **completeness-for-generation** (each FAIL = a decision still to make): contract
+present, grid internally consistent (1..N, every cell decided, Mode/Activity in vocab), **every built
+Topic (`topic_NN/`) + every assessment (`AT<n>/`) placed** (enumerated from dirs), frame reconciliation
+(row count == declared total; reservations honoured); reports intake-vs-nominal + mode split. **No agent
+validator** (sequence quality is human). Negative-tested 9 failure modes + a clean PASS. **Still to
+build:** the docx generator (fills `kangan-templates/Delivery_Plan_Template_v0.1.docx` from a validated
+outline) — authored at instance-time with the first real plan.
+
 **CL2 delivery state (2026-07-02):** Gates 1–4 PASS. Gate 4 = **all 10 `slide_plan.md` authored +
 `validate-slide-plan` PASS 10/10** and **all 10 decks built** (155 slides; 5 draw-diagram diagrams + 9
 `gen` heroes via `--allow-gen`). **Step 5 (practice) COMPLETE** — the 28 `[EX]`s are the practice tasks;
 LMS engagement `lms-global-expansion` verified state-correct; the AT2 **practice build artefacts** authored
 as separate in-world intranet docs (comparable-not-identical: different fault + code); the missing
 **`s1-cl2-at2` state added** (cloned from at1 across 61 docs); no-leakage PASS. Detail in [[s1cl2-delivery]].
-AT1 coverage specs still **DRAFT — human review pending**.
+**CL2 is course-complete (Steps 1–5 + Step-6 gate); Step 6 execution deferred — no intake yet.** AT1
+coverage specs still **DRAFT — human review pending**.
 
-**NEXT (CL2):** **Step 6 — delivery plan.** Build the Step-6 gate `validate-delivery-plan` (still
-decided-not-built) + generate `S1_CL2_Delivery_Plan.docx` (session grid from the cluster-spec frame).
-**STILL decided-not-built (project-wide):** steps 2+3 merge; `coverage.md` format standard + skill.
-Related: [[assessment-run-sheet]], [[scenario-plan-model]].
+**Run-sheet status: all 6 step-gates now BUILT.** **NEXT forward work = apply the run-sheet to CL3
+delivery** (not started — cluster-spec exists from the Step-1 phase gate; next CL3 step is topic
+breakdown → coverage → slide plans → decks → practice; see [[s1cl3-delivery]]). **STILL decided-not-built
+(project-wide refinements):** steps 2+3 merge into one "Topic plan" step; `coverage.md` format standard +
+skill; the Step-6 docx generator (instance-time). Related: [[assessment-run-sheet]], [[scenario-plan-model]].

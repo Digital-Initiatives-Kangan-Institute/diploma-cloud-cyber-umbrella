@@ -1,6 +1,6 @@
 ---
 name: s1cl2-delivery
-description: "S1-CL2 (Cloud Disaster Recovery) delivery workstream — Gates 1–4 PASS (10/10 slide plans + decks built), Step 5 practice COMPLETE (LMS engagement, AT2 practice build artefacts as separate intranet docs, s1-cl2-at2 state added, no-leakage verified); only Step 6 delivery plan remains."
+description: "S1-CL2 (Cloud Disaster Recovery) delivery workstream — COURSE-COMPLETE through Step 5 (Gates 1–4 PASS, 10/10 slide plans + decks built; Step 5 practice complete: LMS engagement, AT2 practice build artefacts as separate intranet docs, s1-cl2-at2 state added, no-leakage verified). Step-6 gate built; the delivery plan itself is a semester-instance artefact, deferred until a real intake exists."
 metadata: 
   node_type: memory
   type: project
@@ -63,7 +63,13 @@ docs/scenario-flow.md.)
   design is authored via `scripts/scenario/`), the **LMS is the learner's own CL1 build** → CL2 practice
   extends it via the HA-hardened ICT records; no dedicated provided design needed.
 
-## Open — where it needs to go
-- **Step 6 (delivery plan)** — the only remaining CL2 delivery step: build the Step-6 gate
-  `validate-delivery-plan` (not yet built, see [[delivery-run-sheet]]) + generate `S1_CL2_Delivery_Plan.docx`.
-- AT1 coverage specs still **DRAFT** — human review pending.
+## Status of Step 6 — deferred by design
+CL2 is **course-complete through Step 5**. The Step-6 gate `validate-delivery-plan` is now **BUILT**
+(see [[delivery-run-sheet]]), but the CL2 **delivery plan itself is deferred**: the plan is a
+**semester-instance** artefact whose prerequisites (a real intake's session count / days / online-vs-
+classroom split) don't exist yet. It is produced later in a human-AI juggling session, validated, then
+filled into `S1_CL2_Delivery_Plan.docx`. Reaching this point = CL2 is finished at the course level, not
+outstanding work.
+
+## Open
+- AT1 coverage specs still **DRAFT** — human review of allocation/depth-ceilings pending.
