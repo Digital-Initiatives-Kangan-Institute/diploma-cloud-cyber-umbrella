@@ -1,6 +1,6 @@
 ---
 name: s1cl3-delivery
-description: S1-CL3 (Cloud Infrastructure Improvement) delivery workstream — 8-Topic spine; Steps 3 (coverage 64/64) + 4 (8 slide plans PASS + 8 decks built, size-gated) COMPLETE; next is Step 5 practice.
+description: S1-CL3 (Cloud Infrastructure Improvement) delivery workstream — COURSE-COMPLETE through Step 5 (8-Topic spine; coverage 64/64; 8 slide plans + decks; practice = website EX tasks + a cfn-lint-clean website practice baseline modelled on the Ledgerline AT3 baseline, open improvement). Only Step 6 (delivery plan, deferred per-instance) remains.
 metadata: 
   node_type: memory
   type: project
@@ -45,9 +45,28 @@ Vehicle = **Ledgerline** (assessed); **website = practice vehicle**.
 - **Process note:** run `inspect-file-size` on the built decks **before** committing (the process
   prescribes it at Step 4 — don't skip it).
 
-## NEXT — Step 5 (practice tasks)
-Then Step 6 (delivery plan — deferred per-instance, see [[delivery-run-sheet]]). CL3 practice vehicle =
-the **website** (Ledgerline is assessed); derive the AT-mirroring practice exercises per the Step-5 model.
+## Step 5 (practice tasks) — COMPLETE 2026-07-02
+Practice vehicle = the **website** (Ledgerline is assessed). Confirmed:
+- **Practice engagement `website-improvement`** exists with full parity to the `ledgerline-improvement`
+  assessment engagement (role-brief/consultation-notes/improvement-requirements/indian-reg/MSA/
+  solution-design), tagged `s1-cl3-at1/at2/at3`. The **EX slides across all 8 topics ARE the practice
+  tasks** (AT decomposed 1:1 onto the website).
+- **Website practice baseline authored** — `delivery/practice-lab-pack/baseline.yaml` (+ README, .cfnlintrc),
+  **modelled on the proven Ledgerline AT3 baseline**, adapted: internet-facing ALB (public site) · Linux +
+  **MySQL** (not Windows/SQL Server) · single-AZ · same subnet/NAT/`!GetAZs`/region-substitution patterns.
+  **cfn-lint clean**; NOT lab-proven (practice artefact — troubleshooting in class is fine). **No `improved.yaml`**
+  — the assessor reference is an assessment-only thing; in practice the student applies **their own** improvement.
+- **The improvement is OPEN.** The Ledgerline "no Multi-AZ DB" rule is a *legacy-SQL-Server* constraint that
+  does NOT apply to the website (MySQL). Reworded the two EX slides that had imported it (topic_02 reliability,
+  topic_07 deploy) so the website practice reaches its **own** data-tier call — using the Ledgerline contrast as
+  a teaching device (same cost-benefit reasoning, potentially opposite answer). Decks 02 + 07 rebuilt, size-gated.
+- **No-leakage:** website practice (reliability/infra improvement, MySQL, open Multi-AZ, +CDN, single-AZ start)
+  is comparable-not-identical to the Ledgerline assessment (4 components, no Multi-AZ DB) — answers don't transpose;
+  and it stays clear of CL2's website-ASSESSED scope (web-scale global-expansion design).
+
+## NEXT — Step 6 (delivery plan) — deferred per-instance
+The only remaining CL3 step; deferred by design (semester-instance artefact, see [[delivery-run-sheet]]).
+**CL3 delivery is now course-complete through Step 5.**
 
 ## Flag (assessment-side, deferred)
 `S1-CL3-.../consolidated_uoc.md` "Topic & assessment structure" narrative still describes the **OLD** AT
