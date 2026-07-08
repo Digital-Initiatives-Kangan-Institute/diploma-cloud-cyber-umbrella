@@ -1,7 +1,7 @@
 # Scenario-plan format — standard
 
 **Audience:** humans and LLM agents authoring a scenario's scenario plan. Paths are relative to the
-`diploma-cloud-cyber-content/` repo root.
+**content repo** root.
 
 A scenario plan (`scenario-plans/<SEMESTER>.md`) is the **seam between the assessment world and the delivered
 world**: the assessment contract flows *in*, the website (and lab-packs, templates) is generated *out*. It is

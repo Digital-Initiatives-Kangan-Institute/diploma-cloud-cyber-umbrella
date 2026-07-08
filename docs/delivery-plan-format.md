@@ -1,8 +1,7 @@
 # Delivery-plan format — standard
 
 **Audience:** humans and LLM agents producing a cluster's **delivery plan outline** — the last step of
-the [delivery run-sheet](process-delivery.md). Paths are relative to the `diploma-cloud-cyber-content/`
-repo root.
+the [delivery run-sheet](process-delivery.md). Paths are relative to the **content repo** root.
 
 A cluster's **delivery plan** lays the Topics, practice and assessments onto a concrete session grid and
 is issued as the institutional `…_Delivery_Plan.docx`. Unlike every earlier delivery artefact, the plan

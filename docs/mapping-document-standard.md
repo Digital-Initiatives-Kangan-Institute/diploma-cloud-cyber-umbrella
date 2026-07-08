@@ -1,7 +1,7 @@
 # Assessment Mapping document — standard
 
 **Audience:** humans and LLM agents authoring or checking a cluster's per-unit Assessment Mapping
-documents. Paths are relative to the `diploma-cloud-cyber-content/` repo root.
+documents. Paths are relative to the **content repo** root.
 
 The **Assessment Mapping document** (`<cluster>/mappings/<UNIT>_Assessment_Mapping.docx`, built on the
 institutional `kangan-templates/Assessment Mapping Tool.docx`) is the RTO-facing evidence that every

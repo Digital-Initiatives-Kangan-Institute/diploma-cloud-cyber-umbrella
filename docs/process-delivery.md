@@ -7,7 +7,7 @@ run-sheet **produces** the cluster's assessment artefacts; this run-sheet **sequ
 them, so it consumes the assessment run-sheet's outputs (the ATs, the assessment plan, the
 scenario/website, the mapping docs).
 
-> **Paths** in this document are relative to the `diploma-cloud-cyber-content/` repo root.
+> **Paths** in this document are relative to the **content repo** root.
 
 ## How this run-sheet works
 

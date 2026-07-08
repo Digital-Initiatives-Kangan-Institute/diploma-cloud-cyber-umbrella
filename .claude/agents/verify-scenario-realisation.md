@@ -30,16 +30,16 @@ plan↔website mapping **live**, from scratch, each run — there is no stored m
 ## Inputs
 
 You will be told the semester (e.g. `S1`). Locate:
-- **Scenario plan** — `diploma-cloud-cyber-content/scenario-plans/<S>.md` (the source of truth for *what must
+- **Scenario plan** — `<content repo>/scenario-plans/<S>.md` (the source of truth for *what must
   exist*; its **Part 2** build checklist lists the `SE-NN` items with their kind, location prose, `Satisfies:`
   SRs, and **keynotes** = what each artefact must contain).
-- **Consolidated assessment plan** — `diploma-cloud-cyber-content/assessment-plans/<S>.md` (SR context, if you
+- **Consolidated assessment plan** — `<content repo>/assessment-plans/<S>.md` (SR context, if you
   need to understand why an item exists).
 - **The built scenario:**
-  - the **website repo** `diploma-cloud-cyber-website/` — in-world content under `src/content/`
+  - the **website repo** `<website repo>/` — in-world content under `src/content/`
     (`policies`, `reference`, `ict`, `projects/<slug>/`), and downloadables under `public/templates/`,
     `public/documents/`, `public/diagrams/`;
-  - the **content repo** `diploma-cloud-cyber-content/` — lab-packs under `<cluster>/assessments/AT*/lab-pack/`
+  - the **content repo** `<content repo>/` — lab-packs under `<cluster>/assessments/AT*/lab-pack/`
     and template generators under `scripts/templates/`.
 
 If the website repo is **absent on this machine**, say so plainly and stop — the scenario hasn't been built
@@ -50,7 +50,7 @@ here, so there is nothing to verify against.
 The Read tool will not parse `.docx`. Extract text with the bundled extractor:
 
 ```bash
-python -c "import sys; sys.path.insert(0,'diploma-cloud-cyber-content/.claude/skills/scripts'); from validate_uoc import docx_to_text; from pathlib import Path; print(docx_to_text(Path(r'<FILE.docx>')))"
+python -c "import sys; sys.path.insert(0,'.claude/skills/scripts'); from validate_uoc import docx_to_text; from pathlib import Path; print(docx_to_text(Path(r'<FILE.docx>')))"
 ```
 
 ## Method

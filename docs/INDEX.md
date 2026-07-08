@@ -1,14 +1,16 @@
 # Docs index
 
-The technical / knowledge wiki for the **Diploma Cloud & Cyber** project — the single documentation
-surface for the umbrella **and** both sub-repos (sub-repos hold no docs of their own). Every document
-below has a one-line description; **read this index at the start of a session and load the relevant
-doc before related work** (the same index-then-load-on-demand pattern as LLM memory). Add a line here
-whenever you add a doc — an un-indexed document is invisible.
+The single documentation surface for the **courseware-development umbrella** — the course-agnostic
+process, conventions and format standards, plus the docs for the course it currently hosts (the Diploma
+Cloud & Cyber). Covers the umbrella **and** the sub-repos (sub-repos hold no docs of their own). Every
+document below has a one-line description; **read this index at the start of a session and load the
+relevant doc before related work** (the same index-then-load-on-demand pattern as LLM memory). Add a
+line here whenever you add a doc — an un-indexed document is invisible.
 
-> **Paths inside these docs:** docs describing assessment/delivery/scenario authoring use paths relative
-> to the `diploma-cloud-cyber-content/` repo root; website docs use paths relative to the
-> `diploma-cloud-cyber-website/` repo root. Each doc notes which where it matters.
+> **Paths inside these docs:** the deterministic tooling (skills + validators) lives in the umbrella's
+> `.claude/skills/`. Docs describing assessment/delivery/scenario authoring use paths relative to the
+> **content repo** root; website docs relative to the **website repo** root. Each doc notes which where
+> it matters.
 
 ## Project orientation
 - [project-overview.md](project-overview.md) — what the project is: context, scope, in/out of scope, operating principles, delivery context, success criteria.

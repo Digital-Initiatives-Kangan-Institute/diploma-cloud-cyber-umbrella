@@ -2,7 +2,7 @@
 
 The **YAT scenario website** (`diploma-cloud-cyber-website`, a sibling repo) is the in-world delivery vehicle and the **single source of truth for scenario content** — the clusters pull from it, and the old `<repo_root>/scenario/` folder is no longer authoritative. It is an Astro static site deployed to Cloudflare Pages, comprising a public marketing site plus an `/intranet/` that the assessments reference. This document describes its durable architecture: the tech stack, the state-folder URL model, content collections and the shared schema, the projects model, state-versioned docs, the year-offset pattern, downloadable documents, the public site and sign-in, the diagram pattern, Astro gotchas, and the standing principles applied.
 
-Paths are relative to the `diploma-cloud-cyber-website/` repo root.
+Paths are relative to the **website repo** root.
 
 ## Tech stack + single-source configs
 - **Astro** static site, **TypeScript strict**; deploys to Cloudflare Pages.

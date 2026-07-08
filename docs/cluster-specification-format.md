@@ -1,8 +1,7 @@
 # Cluster-specification format — standard
 
 **Audience:** humans and LLM agents producing a cluster's **delivery frame** — the first step of the
-[delivery run-sheet](process-delivery.md). Paths are relative to the `diploma-cloud-cyber-content/`
-repo root.
+[delivery run-sheet](process-delivery.md). Paths are relative to the **content repo** root.
 
 A cluster's **specification** (`<cluster>/cluster-specification.md`) is the agreed **delivery frame**:
 how many hours the cluster is funded for, over how many weeks and sessions, the session length that

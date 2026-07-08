@@ -4,7 +4,7 @@ A map of the `diploma-cloud-cyber-content` source materials — what lives in th
 state each piece of source material is in. (Project docs — overview, clusters, the authoring/delivery
 processes — are catalogued in the docs [INDEX.md](INDEX.md).)
 
-> **Paths** are relative to the `diploma-cloud-cyber-content/` repo root.
+> **Paths** are relative to the **content repo** root.
 
 ## Source-material workspace folders
 

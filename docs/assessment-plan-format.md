@@ -1,7 +1,7 @@
 # Assessment-plan format — standard
 
 **Audience:** humans and LLM agents authoring a cluster's assessment plan. Paths are relative to the
-`diploma-cloud-cyber-content/` repo root.
+**content repo** root.
 
 A cluster's assessment plan (`<cluster>/assessments/assessment_plan.md`) is the **authored source of
 truth** for that cluster's assessments: the AT structure, what each AT covers of the UoC, and what each AT

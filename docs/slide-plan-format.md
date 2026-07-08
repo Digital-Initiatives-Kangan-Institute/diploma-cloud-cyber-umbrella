@@ -1,7 +1,7 @@
 # Slide-plan format — standard
 
 **Audience:** humans and LLM agents authoring a Topic's **slide plan** — the gate before the deck is
-built (delivery run-sheet, the deck step). Paths are relative to the `diploma-cloud-cyber-content/` repo
+built (delivery run-sheet, the deck step). Paths are relative to the **content repo**
 root.
 
 A Topic's **slide plan** (`delivery/topic_NN/slide_plan.md`) is the **kept, validated source** the deck

@@ -57,7 +57,7 @@ def find_format_doc(explicit: str | None) -> Path | None:
         Path("..") / "docs" / name,          # cwd = content repo
         Path("..") / ".." / "docs" / name,
     ]
-    # walk up from the script too (umbrella/diploma-cloud-cyber-content/.claude/skills/scripts)
+    # walk up from the script too (umbrella/.claude/skills/scripts)
     for parent in here.parents:
         candidates.append(parent / "docs" / name)
     for c in candidates:

@@ -2,7 +2,7 @@
 
 A branded document-generation system produces the YAT/MTS institutional documents — the Business Case, Solution Design, and Deployment Report (plus the Business Case Presentation deck). Python scripts (`python-docx`, `python-pptx`) generate `.docx`/`.pptx` from the brand pack, and each document type exists in three artefact roles: a generic in-world template, an assessor exemplar, and a finished student model. This document records the build model, the shared helpers, the document set, the three roles, and the conventions that keep templates, exemplars, and models consistent.
 
-Build scripts and assessor exemplars live in the `diploma-cloud-cyber-content/` repo; served templates and student-model PDFs live in the `diploma-cloud-cyber-website/` repo (`public/`).
+Build scripts and assessor exemplars live in the **content repo**; served templates and student-model PDFs live in the **website repo** (`public/`).
 
 ## Build model
 

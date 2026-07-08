@@ -29,7 +29,7 @@ assessment plan and scenario.
 ## Inputs
 
 You will be told the cluster (e.g. `S1-CL2-Cloud-Disaster-Recovery`). Locate:
-- `diploma-cloud-cyber-content/<cluster>/consolidated_uoc.md` — the UoC item set to map candidates against.
+- `<content repo>/<cluster>/consolidated_uoc.md` — the UoC item set to map candidates against.
 - The cluster's source assessments under `original_materials/` (the legacy per-unit ATs). If that folder is
   **absent**, say so plainly and stop — it means the cluster is greenfield, or the source set is not on this
   machine; either way there is nothing to evaluate.
@@ -39,7 +39,7 @@ You will be told the cluster (e.g. `S1-CL2-Cloud-Disaster-Recovery`). Locate:
 The Read tool will not parse `.docx`. Extract text with the bundled extractor:
 
 ```bash
-python -c "import sys; sys.path.insert(0,'diploma-cloud-cyber-content/.claude/skills/scripts'); from validate_uoc import docx_to_text; from pathlib import Path; print(docx_to_text(Path(r'<FILE.docx>')))"
+python -c "import sys; sys.path.insert(0,'.claude/skills/scripts'); from validate_uoc import docx_to_text; from pathlib import Path; print(docx_to_text(Path(r'<FILE.docx>')))"
 ```
 
 ## Method

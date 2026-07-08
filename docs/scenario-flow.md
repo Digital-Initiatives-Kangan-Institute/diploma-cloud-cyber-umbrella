@@ -69,7 +69,7 @@ The YAT College scenario is **one shared world used across all clusters** — ne
 - Reference scenario content **abstractly** — "the YAT intranet's ICT Strategic Plan page", "the LMS application specification", "the ICT manager consultation notes" — and **never by file path**. Students consume the scenario through the website.
 - Distinguish state versions by `appearsIn` (e.g. on-prem early states vs the post-cutover state), not by per-cluster directories.
 
-(Website content lives in the `diploma-cloud-cyber-website/` repo's content collections; cluster authoring artefacts live in the `diploma-cloud-cyber-content/` repo. See [website-architecture.md](website-architecture.md) and [document-template-system.md](document-template-system.md).)
+(Website content lives in the **website repo**'s content collections; cluster authoring artefacts live in the **content repo**. See [website-architecture.md](website-architecture.md) and [document-template-system.md](document-template-system.md).)
 
 ## In-world-only rule
 

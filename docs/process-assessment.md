@@ -5,7 +5,7 @@ project's **two run sheets** — the assessment run-sheet (here) and the
 [delivery run-sheet](process-delivery.md). Both take the same dropped-in cluster inputs and run a fixed
 pipeline of **steps separated by gates**.
 
-> **Paths** in this document are relative to the `diploma-cloud-cyber-content/` repo root.
+> **Paths** in this document are relative to the **content repo** root.
 
 ## How this run-sheet works
 
@@ -59,14 +59,14 @@ traceability/coverage/mapping validators) travel with the repo and lift into fut
 
 **1 · `transcribe-uoc` — Transcribe the units of competency**
 Lift each official UoC `.docx` into a **verbatim** `.md` (Word-XML extraction, never retyped; structure
-rebuilt from document styles). → [transcribe-uoc skill](../diploma-cloud-cyber-content/.claude/skills/transcribe-uoc/SKILL.md) · detail [§1](#1--transcribe). **built**
+rebuilt from document styles). → [transcribe-uoc skill](../.claude/skills/transcribe-uoc/SKILL.md) · detail [§1](#1--transcribe). **built**
 > **⟱ Gate 1→2:** *validator* `validate-uoc-transcription` (`validate_uoc.py`) = **EXACT MATCH** for every
 > `.docx`/`.md` pair (verbatim-after-cosmetic is acceptable but report the diffs) **+ human review**.
 
 **2 · `consolidate-uocs` — Consolidate the cluster's UoCs**
 Extract every PC/FS/PE/KE/AC verbatim and source-tagged `[UNIT SEC num]` into one `consolidated_uoc.md`,
 grouped where assessment overlap is plausible (grouping is the only judgement layer — mark **DRAFT/TBD**).
-→ [consolidate-uocs skill](../diploma-cloud-cyber-content/.claude/skills/consolidate-uocs/SKILL.md) · detail [§2](#2--consolidate). **built**
+→ [consolidate-uocs skill](../.claude/skills/consolidate-uocs/SKILL.md) · detail [§2](#2--consolidate). **built**
 > **⟱ Gate 2→3:** *validator* `validate-uoc-consolidation` (`validate_consolidated.py`) = **PASS** — every
 > item appears exactly once (no MISSING / UNEXPECTED / DUPLICATED) **+ human review**.
 
@@ -150,7 +150,7 @@ from the assessor benchmarks, FS/AC closest-fit). Never hand-edit a mapping docx
 > **+ human review**.
 
 **11 · Cluster coverage** *(capstone)*
-Confirm the cluster's ATs, taken together, evidence **every** consolidated item. → [validate-cluster-coverage skill](../diploma-cloud-cyber-content/.claude/skills/validate-cluster-coverage/SKILL.md) · detail [§11](#11--cluster-coverage).
+Confirm the cluster's ATs, taken together, evidence **every** consolidated item. → [validate-cluster-coverage skill](../.claude/skills/validate-cluster-coverage/SKILL.md) · detail [§11](#11--cluster-coverage).
 > **⟱ Gate 11→12:** *validator* `validate-cluster-coverage` = **100%** (no MISSING required item, no
 > PHANTOM reference; AC environment-satisfied unless `--include-ac`) **+ human review**.
 

@@ -1,6 +1,6 @@
 # Cluster authoring conventions
 
-This document captures the standing conventions for authoring cluster assessment artefacts — briefs, templates, rubrics, and benchmarks — across the project. It exists so that humans and LLM agents apply the same rules for UoC traceability, Knowledge Evidence placement, template choice and workflow, scenario references, cross-AT structure, and the reframing of per-unit assessments into cluster assessments. Each convention states the rule, why it matters, and how to apply it, so any new artefact is consistent with the rest of the project. Paths are relative to the `diploma-cloud-cyber-content/` repo root.
+This document captures the standing conventions for authoring cluster assessment artefacts — briefs, templates, rubrics, and benchmarks — across the project. It exists so that humans and LLM agents apply the same rules for UoC traceability, Knowledge Evidence placement, template choice and workflow, scenario references, cross-AT structure, and the reframing of per-unit assessments into cluster assessments. Each convention states the rule, why it matters, and how to apply it, so any new artefact is consistent with the rest of the project. Paths are relative to the **content repo** root.
 
 ## 1. UoC traceability — bidirectional
 
