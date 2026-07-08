@@ -59,6 +59,13 @@ Public marketing site (homepage, study areas, about, apply, contact, locations, 
 404) on brand pack v1 (Source Sans 3), persistent disclosure banner. Mock SSO at `/sign-in` (GET to
 `/intranet/`, no real auth); the user then picks their state.
 
+## Marketing-site photography
+The public pages carry photographic imagery, served as JPEGs from `public/images/site/` and rendered
+through the `<SiteImage>` component (a real `<img>` in a framed aspect-ratio). Photos are generated with
+the umbrella `image-gen` skill — each image's `alt` doubles as the generation brief. `<SiteImage>`'s stub
+sibling `<PlaceholderImage>` renders a labelled "image needed" frame for any slot not yet imaged; swap
+the two to add or revert an image.
+
 ## Diagram pattern
 Diagrams authored in **draw.io**: export **SVG** for page embed + keep the **`.drawio` XML** for
 download (network diagrams in `public/diagrams/`: on-prem / post-cutover / HA-hardened).
