@@ -324,8 +324,9 @@ the Teacher/Assessor instructions, and the Marking Guide.
 Resources; strip Marking Guide, assessor instructions, benchmark, model KE answers).
 
 ## §10 — Mapping documents
-*(cluster-level.)* The mapping doc is a **derived artefact** — one engine (`scripts/mapping/generate_mapping_doc.py`)
-generates every cluster from a `CLUSTERS` entry; per-cluster `build_s1_clN_mapping_docs.py` are thin
+*(cluster-level.)* The mapping doc is a **derived artefact** — one course-agnostic engine (the umbrella's
+`scripts/mapping/generate_mapping_doc.py`, driven by the content repo's `scripts/mapping_registry.py` via
+`--registry`) generates every cluster from a `CLUSTERS` entry; per-cluster `build_s1_clN_mapping_docs.py` are thin
 wrappers. Run `--check <cluster>` (reproduces committed table content) then `--build`, then the
 `validate-mapping-doc` gate. Full contract + FS/AC closest-fit convention: see the standard doc.
 

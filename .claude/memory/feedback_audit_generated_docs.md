@@ -21,8 +21,10 @@ and reported "done," but the CL2 AT2 `.docx` instruments + a CL1 teaching deck s
 1. `grep` the **`.py` builders** under `scripts/` (you cannot grep `.docx`/`.pptx` directly).
 2. Distinguish **design-layer** copy (solution designs, DR plans — keep real values) from **deploy-layer**
    copy (lab/deploy instructions — the thing being changed). Most builder region text is design-layer.
-3. Edit the builder (or its shared content module), then **regenerate** the artefact with the repo's
-   venv (`scripts/.venv`, has `python-docx`/`python-pptx`; run with `PYTHONPATH=scripts:scripts/<cluster>`).
+3. Edit the builder (or its shared content module), then **regenerate** the artefact with the **umbrella**
+   `scripts/.venv` (has `python-docx`/`python-pptx`). The shared engine helpers live in the umbrella
+   `scripts/helpers/`; the course generators in the content repo `scripts/<cluster>/` (they resolve the
+   umbrella engine + the course `brand.py` on `sys.path` themselves). See [[umbrella-engine-architecture]].
 4. **Verify the regenerated binary** by extracting its text (python-docx / python-pptx) and asserting the
    new string is present and the stale one is gone — don't trust the source edit alone.
 5. `git status` after regenerating: expect only the edited builders + their output artefacts; no phantoms

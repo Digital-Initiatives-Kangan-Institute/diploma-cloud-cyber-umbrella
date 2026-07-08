@@ -36,8 +36,9 @@ Vehicle = **Ledgerline** (assessed); **website = practice vehicle**.
 - **4a:** 8 `slide_plan.md` authored (per-topic sub-agents from each `coverage.md`), **`validate-slide-plan`
   PASS 8/8** (backwards-coverage vs coverage.md). 96 slides; image plan = 6 draw-diagram diagrams + 8 gen
   heroes. Committed `4dbe660`.
-- **4b:** all 8 decks built via `scripts/.venv/bin/python scripts/build_topic_deck.py … --allow-gen`
-  (**note: the deck builder needs `scripts/.venv`, which has python-pptx — NOT system python3**). 6
+- **4b:** all 8 decks built via `build_topic_deck.py … --allow-gen` (the deck engine is now the **umbrella**
+  `scripts/build_topic_deck.py`, run with the **umbrella** `scripts/.venv` which has python-pptx — NOT
+  system python3; see [[umbrella-engine-architecture]]). 6
   diagrams rendered (editable `.drawio` + PNG; the 2 flowcharts + 4 arch/allocation eyeballed clean) + 8
   Nano-Banana heroes (~$0.32, generate-once cached). **Size-gated: `inspect-file-size` all 0.8–0.98 MB**
   (well under 25 MB). Committed `7ed2288` (push 408'd once on the ~7 MB binary payload over a flaky link;

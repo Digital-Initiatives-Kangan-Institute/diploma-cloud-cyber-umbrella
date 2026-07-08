@@ -1,8 +1,10 @@
 ---
 name: mapping-pipeline
-description: Assessment Mapping docs are a derived artefact — one engine generates all clusters, the validate-mapping-doc skill checks them. Built 2026-06-22. CL1 mappings conformant but its instruments still lack machine-readable benchmarks (Route A retrofit open).
-metadata:
+description: "Assessment Mapping docs are a derived artefact — one engine generates all clusters, the validate-mapping-doc skill checks them. Built 2026-06-22. CL1 mappings conformant but its instruments still lack machine-readable benchmarks (Route A retrofit open)."
+metadata: 
+  node_type: memory
   type: project
+  originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
 ---
 
 The Assessment Mapping document pipeline is built and documented in
@@ -10,10 +12,11 @@ The Assessment Mapping document pipeline is built and documented in
 pipeline). Durable points to keep in mind:
 
 - **Derived artefact — never hand-edit a mapping docx.** Change the assessor benchmark (or the UoC) and
-  regenerate. One engine — `scripts/mapping/generate_mapping_doc.py` — generates every cluster (per-cluster
-  `build_s1_clN_mapping_docs.py` are now thin wrappers holding only data + the inversion the validator
-  reads). Use the engine's `--check <cluster>` to prove a regen reproduces committed table content before
-  `--build`; the `validate-mapping-doc` skill checks completeness (vs the unit's own UoC) + accuracy (vs the
+  regenerate. One course-agnostic engine — the **umbrella** `scripts/mapping/generate_mapping_doc.py`,
+  driven by the **content repo's** `scripts/mapping_registry.py` (`--registry <content-repo>/scripts/`) —
+  generates every cluster (per-cluster `build_s1_clN_mapping_docs.py` are thin wrappers holding only data +
+  the inversion the validator reads). Use the engine's `--check <cluster> --registry …` to prove a regen
+  reproduces committed table content before `--build`; the `validate-mapping-doc` skill checks completeness (vs the unit's own UoC) + accuracy (vs the
   benchmark inversion — PC/PE/KE hard, FS/AC advisory closest-fit).
 
 - **CL1 is conformant (2026-06-22).** Mappings engine-generated + validate clean; all three assessor

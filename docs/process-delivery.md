@@ -25,9 +25,18 @@ Step 1 (the cluster specification) is authored **per cluster** but its gate is *
 cluster-definition phase ends only when *every* cluster's frame passes **and** the human agrees to
 proceed. Steps 2–5 loop **per AT / per Topic**; step 6 is **cluster-level** (the capstone schedule).
 
-All validators are **stdlib-only** and live in `.claude/skills/scripts/`; run them with any Python 3
-launcher (`python` / `python3` / `py -3`). The deterministic skills travel with the repo and lift into
-future courses unchanged (the format docs they read travel in the umbrella `docs/` tooling layer).
+All validators are **stdlib-only** and live in the umbrella's `.claude/skills/scripts/`; run them with
+any Python 3 launcher (`python` / `python3` / `py -3`).
+
+**Where the engine lives (course-agnostic).** The shared **deck/doc/mapping engine** —
+`scripts/build_topic_deck.py`, `scripts/helpers/`, `scripts/mapping/` — lives in the **umbrella** (run
+with the umbrella's `scripts/.venv`, which carries python-docx/pptx). It is brand- and registry-agnostic:
+the **course** supplies its own `brand.py` (palette + org identity) and `mapping_registry.py` (clusters +
+qualification + unit prefixes) in **its** `scripts/`, plus the semester-specific generators
+(`scripts/s1_cl*/`, `scenario/`, `templates/`). The engine resolves the course's data automatically —
+`build_topic_deck` walks up from the slide-plan path to the content repo's `brand.py` (or `--brand`);
+`generate_mapping_doc.py` takes `--registry <content-repo>/scripts/`. So the same engine builds any
+course's decks/mapping docs unchanged; only the sub-repo data differs.
 
 **Prerequisites to read before acting:**
 - The umbrella `CLAUDE.md` — working discipline (nothing recorded as decided without explicit approval;

@@ -89,9 +89,10 @@ regenerated — *underlying diagram error*. The imported **`image-gen` skill** i
 Mapping: slide-plan `image: diagram` → draw-diagram, `image: gen` → image-gen (both placed in-pipeline);
 only `image: reuse` needs a human paste.
 
-**Step-4 deck BUILDER built (2026-06-25).** The generic `scripts/build_topic_deck.py` generates a Kangan
-deck **FROM** a Topic's `slide_plan.md` (parser → `[TYPE]`→layout map → each slide's `image:` resolved
-**in-pipeline** by `scripts/helpers/deck_images.py`: diagram→draw-diagram, gen→image-gen/**Nano Banana**
+**Step-4 deck BUILDER built (2026-06-25; relocated to the umbrella 2026-07-08 — see
+[[umbrella-engine-architecture]]).** The generic **umbrella** `scripts/build_topic_deck.py` generates a
+Kangan deck **FROM** a Topic's `slide_plan.md` (parser → `[TYPE]`→layout map → each slide's `image:` resolved
+**in-pipeline** by the umbrella `scripts/helpers/deck_images.py`: diagram→draw-diagram, gen→image-gen/**Nano Banana**
 `google/gemini-2.5-flash-image` ~US$0.04/img, **generate-once cached + cost-gated default-off**,
 reuse/placeholder→placeholder, none→skip). `kangan_deck.place_image()` added — backward-compatible with
 the 14 CL1 per-topic scripts. **One generic builder replaces the per-topic scripts; the slide plan now

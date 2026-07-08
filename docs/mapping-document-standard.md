@@ -67,13 +67,15 @@ review. PC/PE/KE remain hard-checked. (One AC always maps to a `✓` on the rele
 
 ## The pipeline
 
-**Generate.** One engine — `scripts/mapping/generate_mapping_doc.py` — generates every cluster's mapping
-docs: it parses the source UoC for the rows, inverts the assessor benchmarks **per AT** for the column
-codes, applies the FS/AC closest-fit tables, and fills the institutional template. Each cluster is one
-entry in the engine's `CLUSTERS` registry — data (benchmarks, `FS_MAP`/`AC_MAP`, titles) sourced from the
-cluster's modules; policy is just two flags (`n_ats`, and whether FS/AC take benchmark codes before the
-closest-fit map). Run `--check <cluster>` to confirm it reproduces the committed docs, then
-`--build <cluster>`. The per-cluster `scripts/s1_clN/build_s1_clN_mapping_docs.py` files are now **thin
+**Generate.** One **course-agnostic** engine — the umbrella's `scripts/mapping/generate_mapping_doc.py` —
+generates every cluster's mapping docs: it parses the source UoC for the rows, inverts the assessor
+benchmarks **per AT** for the column codes, applies the FS/AC closest-fit tables, and fills the
+institutional template. The course-specific data lives in the **content repo's**
+`scripts/mapping_registry.py`: the `CLUSTERS` registry (each cluster's builder package, `cluster_dir`,
+`n_ats`, FS/AC policy), the `QUALIFICATION` metadata, and the `UNIT_PREFIXES`. The engine loads it via
+`--registry <content-repo>/scripts/` (and derives the content-repo root from the registry's location, so
+it runs from the umbrella). Run `--check <cluster> --registry …` to confirm it reproduces the committed
+docs, then `--build <cluster> --registry …`. The per-cluster `scripts/s1_clN/build_s1_clN_mapping_docs.py` files are now **thin
 wrappers** that delegate to the engine (kept only for their data + the inversion the validator reads); to
 add a new cluster, add a `CLUSTERS` entry — don't copy a per-cluster script. Output:
 `<cluster>/mappings/<UNIT>_Assessment_Mapping.docx`.
