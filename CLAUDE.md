@@ -1,13 +1,26 @@
-# CLAUDE.md — diploma-cloud-cyber-umbrella
+# CLAUDE.md — courseware-development umbrella
 
-**diploma-cloud-cyber-umbrella** is the coordination layer for building the **ICT50220 Diploma of IT
-— Cloud & Cybersecurity** teaching and assessment materials. It holds no deliverables itself; it sits
-above two independent working repos — **`diploma-cloud-cyber-content`** (curriculum, cluster
-assessments, UoC mappings, validators) and **`diploma-cloud-cyber-website`** (the Astro "YAT" scenario
-website the assessments are set in) — and version-controls the tooling they share: cross-repo
-`CLAUDE.md` context, project-wide rules, and a portable, self-healing Claude memory. Its purpose is to
-give one launch point when work spans both repos and to make that tooling travel between machines via
-git.
+This umbrella is a **course-agnostic layer for developing courseware** — the *process*, *tooling*, and
+*conventions* for authoring a qualification's teaching and assessment materials, plus a portable,
+self-healing Claude memory. It holds **no deliverables of its own**: they live in **per-semester working
+sub-repos** cloned inside it (and gitignored here). The umbrella sits above them, giving one launch point
+and a shared toolkit that travels between machines via git.
+
+**Design intent — any course, any qualification.** A Diploma of IT, a Certificate III in IT, a
+Certificate IV in Nursing should each be able to plug their sub-repos into this umbrella and reproduce
+the *same* authoring process. Everything here is **process and concept**; everything course- or
+semester-specific lives in a sub-repo. When adding to the umbrella, keep it generic — if a thing only
+makes sense for one course or one semester, it belongs in that sub-repo.
+
+**Currently hosting:** the **ICT50220 Diploma of IT — Cloud & Cybersecurity**, split by semester into a
+content repo (curriculum/assessment authoring) + a website repo (the Astro in-world scenario site):
+
+| Semester | Content repo | Website repo |
+|---|---|---|
+| S1 — Cloud | `diploma-cloud-cyber-content-s1` | `diploma-cloud-cyber-website-s1` |
+| S2 — Cyber | `diploma-cloud-cyber-content-s2` | `diploma-cloud-cyber-website-s2` |
+
+Each semester's two repos are **self-contained**; semesters do **not** share scenario continuity.
 
 **⭐ The one rule: always launch Claude with the umbrella as the workspace root** — even when editing
 inside a sub-repo. Skills and `CLAUDE.md` cascade down to where you're working; agents, settings,
@@ -15,27 +28,35 @@ rules, and memory load *only* from the launch dir, so launching from a sub-repo 
 shared layer.
 
 ## Read first — REQUIRED
-- **[docs/INDEX.md](docs/INDEX.md) — read this every session.** It is the catalogue of all project
-  documentation (the single docs surface for the umbrella *and* both sub-repos). Knowing what docs
+- **[docs/INDEX.md](docs/INDEX.md) — read this every session.** It is the catalogue of all process +
+  course documentation (the single docs surface for the umbrella *and* the sub-repos). Knowing what docs
   exist is mandatory; **load the relevant doc before doing related work** (assessment authoring,
   delivery planning, scenario/website work, lab-packs). This is the same index-then-load-on-demand
   pattern as MEMORY — but `docs/INDEX.md` is **not** auto-injected, so reading it is on you.
-- [README.md](README.md) — what the project is, the layout, and the new-machine setup flow.
-- [docs/doco-structure.md](docs/doco-structure.md) — the four doc surfaces and the `CLAUDE.md`⇄`MEMORY` split.
+- [README.md](README.md) — what the umbrella is, the layout, and the new-machine setup flow.
+- [docs/doco-structure.md](docs/doco-structure.md) — the doc surfaces and the `CLAUDE.md`⇄`MEMORY` split.
 - [.claude/README.md](.claude/README.md) — reference for what each `.claude/` folder holds.
 
-## Sub-repo context
-Each sub-repo has its own `CLAUDE.md`, **auto-loaded (lazily) when Claude reads a file in that repo**:
-[content](diploma-cloud-cyber-content/CLAUDE.md) · [website](diploma-cloud-cyber-website/CLAUDE.md).
-(Plain links, never `@imports` — the cascade is lazy by design.)
+## The umbrella ⇄ sub-repo boundary
+- **Umbrella = common process + tooling (course-agnostic).** The step→gate run-sheets and format
+  standards (`docs/`); the authoring skills, validators, and shared engine (`.claude/skills/`);
+  institutional templates; project-wide rules; and the portable memory (principles + working state).
+  This is the reproducible machinery — the same for any course plugged in.
+- **Sub-repo = the specifics (this course, this semester).** The units of competency / clusters,
+  assessment instruments, mappings, the scenario website, and any **semester-specific generators**. A
+  content repo authors the curriculum/assessment; its paired website renders the in-world scenario the
+  assessments reference.
+- Scenario / intranet content is **in-world only** — no course/assessment/cluster meta-language (applies
+  wherever a course uses a scenario site; sole exception: the UoC footer on migrated docs).
+- Each sub-repo owns its own history (own remote); the umbrella **gitignores** them
+  (`/diploma-cloud-cyber-content*/`, `/diploma-cloud-cyber-website*/`).
+- Per-semester working state (system↔scenario mappings, delivery state) lives in **MEMORY**, namespaced
+  per semester — not here (it changes).
 
-## Cross-repo conventions
-- The **content** repo authors the curriculum/assessments; the **website** renders the in-world YAT
-  scenario those assessments reference.
-- Scenario / intranet content is **in-world only** — no course/assessment/cluster meta-language (sole
-  exception: the UoC footer on migrated docs).
-- Each sub-repo owns its own history (own remote); the umbrella **gitignores** them entirely.
-- Per-cluster system↔scenario mappings and delivery state live in **MEMORY**, not here (they change).
+## Sub-repo context
+Each sub-repo has its own `CLAUDE.md`, **auto-loaded (lazily) when Claude reads a file in that repo**
+(plain links, never `@imports` — the cascade is lazy by design). Launched from the umbrella, you get the
+shared layer plus whichever semester's context you're currently touching.
 
 ## Working discipline — assumptions & documentation
 
@@ -61,18 +82,20 @@ and any `--no-verify` / `--no-gpg-sign` bypass. Force-pushing a protected branch
 treat it as destructive and ask.
 
 **Non-destructive git too (this project's convention):** do **not** run state-changing git — in *any*
-repo (umbrella or either sub-repo) — on your own. Propose the exact command(s) + rationale and wait
+repo (umbrella or any sub-repo) — on your own. Propose the exact command(s) + rationale and wait
 for explicit approval; "go ahead" approves *that* operation only, not a standing licence. Read-only
 git (`status`, `diff`, `log`, `show`, …) is always fine.
 
 ## Project status
-Current delivery state is **not** recorded here (it goes stale) — see **MEMORY** (the per-cluster
-assessment/delivery entries) and each sub-repo's `CLAUDE.md`.
+Current per-semester delivery state is **not** recorded here (it goes stale) — see **MEMORY** (the
+per-cluster assessment/delivery entries) and each sub-repo's `CLAUDE.md`.
 
 ## Where things live (audience decides)
-- **`docs/`** — knowledge needed by **both humans and agents** (project, processes, conventions,
-  scenario, website, lab-packs). The single docs surface for the umbrella *and* both sub-repos;
-  catalogued in [docs/INDEX.md](docs/INDEX.md) (required reading, above). Sub-repos hold **no** docs.
+- **`docs/`** — knowledge needed by **both humans and agents** (process, conventions, format standards,
+  and course/scenario/website/lab-pack documentation). The single docs surface for the umbrella *and*
+  the sub-repos; catalogued in [docs/INDEX.md](docs/INDEX.md) (required reading, above). Sub-repos hold
+  **no** docs.
 - **MEMORY** (`.claude/memory/`, auto-loaded) — **LLM-only** durable knowledge: how Claude should
-  behave here, and the per-cluster working state. Not for human consumption.
+  behave here (course-agnostic principles), and the per-semester working state (namespaced). Not for
+  human consumption.
 - **README** — user-facing framing + setup. **`.claude/README.md`** — `.claude/` asset reference.
