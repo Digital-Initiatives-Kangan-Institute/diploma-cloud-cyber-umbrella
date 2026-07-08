@@ -19,5 +19,10 @@
 **/.venv/
 __pycache__/
 
+# Raw AWS Academy instructor decks — large (750MB+) source material, instructor-facing
+# (do-not-distribute). Kept local for extracting reuse images into topic folders; never committed.
+/AWS_Cloud_Foundations/
+/AWS_Cloud_Academy/
+
 # macOS
 .DS_Store

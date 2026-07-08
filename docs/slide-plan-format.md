@@ -37,15 +37,19 @@ Two checks run against it (deterministic; no agent — pedagogical quality stays
 - **Image source — every slide carries an `image:` field** (mandatory, no exceptions), so there is never
   ambiguity about whether a slide has an image. Value is exactly one of:
   - `image: none` — the slide has no image. **An explicit, required value, not an omission.**
-  - `image: reuse <deck S#>` — an existing external asset (e.g. an AWS diagram); a **placeholder** with
-    this reference is emitted and a **human pastes** it. *(The peculiar case — vendor-library courses.)*
+  - `image: reuse <file>` — an externally-sourced asset (e.g. an AWS Academy slide) **committed into the
+    topic's `images/` folder** as `<file>` (a filename, extension optional). The builder **places it** like
+    any other image; if the file isn't present yet it falls back to a labelled placeholder. *(A free-text
+    reference that names no committed file stays a placeholder — the pre-asset state.)*
   - `image: diagram <ref>` — a technical diagram authored as an editable **`.drawio`** and rendered to
     PNG **in-pipeline** by the **`draw-diagram` skill** (Pillow; no draw.io app). `<ref>` names the
     diagram. Editable by students; manual draw.io export is the fallback if a render isn't close enough.
   - `image: gen <prompt>` — a non-technical/decorative image from an image model; **generate-once,
     commit, human-check** (non-deterministic).
   - `image: placeholder <note>` — a human supplies it.
-  - **Anything generated (`diagram`/`gen`) is placed straight into the deck; only `reuse` needs a human.**
+  - **Every route resolves from committed source in the topic folder** (`diagrams/<ref>` spec, `images/`
+    gen cache, or `images/<file>` reuse asset), so a deck rebuild always repopulates every slide — no
+    post-build hand-pasting to lose on regen. Only a not-yet-supplied `reuse`/`placeholder` needs a human.
 
 ## Required sections (in order)
 

@@ -9,9 +9,15 @@ declaration into a placement instruction for kangan_deck:
                                                   the draw-diagram skill (editable .drawio + Pillow PNG)
   gen <prompt>      -> placeholder by default     image-gen costs money + needs a key; only run when
                                                   explicitly enabled (allow_gen=True), else placeholder
-  reuse <ref>       -> {"label": <ref>}           human pastes an existing external asset (e.g. AWS)
+  reuse <file>      -> {"path": <img>} if the     an externally-sourced asset (e.g. an AWS Academy slide)
+                       committed file exists in   committed into the topic's images/ folder; placed
+                       <topic>/images/, else      like any other. Falls back to a labelled placeholder
+                       {"label": <file>}          when the file isn't present yet (asset not dropped in).
   placeholder <n>   -> {"label": <n>}             human supplies it
                       -> {"label": ...} is a placeholder; {"path": ...} is a real picture.
+
+Every route resolves from committed source in the topic folder (diagram spec, gen cache, or reuse asset),
+so a deck rebuild always repopulates every slide — no post-build hand-pasting to lose on regen.
 
 Generated diagrams are deterministic + offline (no key); they are placed straight into the deck. The
 .drawio stays beside the PNG as the editable source (student-editable; manual draw.io export is the
@@ -97,6 +103,27 @@ def _gen_image(prompt: str, topic_dir: Path) -> dict:
     return {"path": Path(data["saved"][0]), "label": prompt}
 
 
+def _reuse_asset(ref: str, topic_dir: Path):
+    """Locate a committed reuse asset in <topic_dir>/images/ by filename (any extension if the ref has
+    none). Returns the Path if present, else None (caller falls back to a placeholder). A ref that names
+    no committed file — e.g. a free-text description — simply returns None, so old-style directives still
+    render as placeholders (backward compatible)."""
+    ref = (ref or "").strip()
+    if not ref:
+        return None
+    images = topic_dir / "images"
+    if not images.exists():
+        return None
+    cand = images / ref
+    if cand.is_file():
+        return cand
+    if not Path(ref).suffix:                       # bare stem -> match any extension
+        hits = sorted(images.glob(ref + ".*"))
+        if hits:
+            return hits[0]
+    return None
+
+
 def resolve_image(directive: str, topic_dir: Path, allow_gen: bool = False):
     """Resolve one slide's `image:` directive. Returns None (no image), or a dict that is either a
     placeholder ({"label"}) or a real picture ({"path", "label"})."""
@@ -113,7 +140,12 @@ def resolve_image(directive: str, topic_dir: Path, allow_gen: bool = False):
             # Cost guard: image-gen calls a paid model. Default to a placeholder; enable explicitly.
             return {"label": f"GEN (not run): {rest}"}
         return _gen_image(rest, topic_dir)
-    if kind in ("reuse", "placeholder"):
+    if kind == "reuse":
+        # An externally-sourced asset committed into the topic's images/ folder. Place it if present;
+        # else a labelled placeholder (so the slide still marks what's wanted until the asset lands).
+        img = _reuse_asset(rest, Path(topic_dir))
+        return {"path": img, "label": rest} if img else {"label": rest or kind}
+    if kind == "placeholder":
         return {"label": rest or kind}
     # Unknown keyword -> placeholder naming the raw directive, so nothing is silently dropped.
     return {"label": directive}

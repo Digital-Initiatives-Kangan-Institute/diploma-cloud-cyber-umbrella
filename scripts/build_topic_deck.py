@@ -198,8 +198,15 @@ def build(plan: dict, topic_dir: Path, out: Path, allow_gen: bool = False):
             elif kind == "TABLE":
                 headers = sl["table"][0] if sl["table"] else []
                 rows = sl["table"][1:] if len(sl["table"]) > 1 else []
-                k.table_slide(prs, pg(), sl["title"], sl["kicker"], headers, rows,
-                              accent=accent, note=sl["note"] or None)
+                if not headers:
+                    # No table data authored (e.g. a reconstructed skeleton) — a 0-column table
+                    # crashes python-pptx; fall back to a content slide and warn rather than die.
+                    print(f"  ! [TABLE] '{sl['title']}': no columns in the plan — rendered as a "
+                          f"content slide", file=sys.stderr)
+                    k.content_slide(prs, pg(), sl["title"], sl["kicker"], bullets, accent=accent)
+                else:
+                    k.table_slide(prs, pg(), sl["title"], sl["kicker"], headers, rows,
+                                  accent=accent, note=sl["note"] or None)
             else:   # PRIMER / BESPOKE / AWS / other -> content or visual
                 img = resolve_image(sl["image"], topic_dir, allow_gen=allow_gen)
                 if img is None:
