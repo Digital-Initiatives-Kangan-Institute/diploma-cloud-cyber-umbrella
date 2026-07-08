@@ -1,8 +1,10 @@
 # Memory index
 
-**LLM-only** durable memory for the **Diploma Cloud & Cyber** project — how Claude should behave here,
-and the current standing of each cluster workstream ("principles, not state" — see
-[[memory-principles-not-state]]). One line per memory; topic files hold the detail, loaded on demand.
+**LLM-only** durable memory for the **courseware-development umbrella** — two kinds: the
+**course-agnostic working principles** (how Claude operates here, reusable for any course) and the
+**per-semester working state** (namespaced `s1…` / `s2…`), for the course(s) currently hosted (the
+Diploma Cloud & Cyber: S1 Cloud, S2 Cyber). "Principles, not state" — see
+[[memory-principles-not-state]]. One line per memory; topic files hold the detail, loaded on demand.
 
 > **Both-audience knowledge** (project, processes, conventions, scenario, website, lab-packs) is **not**
 > here — it lives in **`docs/`**, catalogued in [docs/INDEX.md](../../docs/INDEX.md). Read that index
