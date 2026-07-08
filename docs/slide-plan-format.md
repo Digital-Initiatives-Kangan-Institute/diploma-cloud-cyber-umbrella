@@ -51,6 +51,25 @@ Two checks run against it (deterministic; no agent — pedagogical quality stays
     gen cache, or `images/<file>` reuse asset), so a deck rebuild always repopulates every slide — no
     post-build hand-pasting to lose on regen. Only a not-yet-supplied `reuse`/`placeholder` needs a human.
 
+## Per-topic asset folders (the deck's committed source)
+A deck is a **pure function of committed per-topic source** — the `slide_plan.md` + two sibling folders,
+both committed, that the builder reads:
+- **`topic_NN/diagrams/`** — one draw-diagram spec per `diagram <ref>` (`<ref>.json`) plus its rendered
+  `.drawio` + `.png`. The editable `.drawio` is the student-facing source; the `.png` is placed.
+- **`topic_NN/images/`** — the raster assets: `gen` outputs (generate-once, cached by prompt) **and**
+  `reuse` files (`<file>` named to match the slide's `image: reuse <file>`, e.g. an extracted AWS slide).
+
+Assemble these **before** building (run-sheet §4 stage 2). Because the build is idempotent, a regenerated
+deck always repopulates from these — nothing is lost on rebuild, and `review-slides` can re-check freely.
+
+## Auto-layout (the builder does this — not authored in the plan)
+The builder **auto-fits + vertical-centres body text**: it picks the largest size from a **bounded tier
+set ({18, 20, 22, 24}pt)** at which the bullets still fit the content box, then centres the block. A
+**light** slide scales up (fills the page, no top-dumped whitespace); a **dense** slide settles at the
+18pt floor (never smaller than before). Discrete tiers keep type sizes consistent-by-rule across slides,
+so variation reads as intentional. Don't hand-size in the plan; a caller may pass an explicit size only to
+opt out. (Owned by `kangan_deck.py`; checked visually by `review-slides`.)
+
 ## Required sections (in order)
 
 This is the human-readable description; the [skeleton](#skeleton) is the authoritative contract the

@@ -54,6 +54,12 @@ python3 -m venv .claude/skills/review-slides/.venv
    - **Broken / empty layouts** — a blank content area, a table with no rows, a missing hero image.
    - **Garbled AI-gen images** — nonsense text, malformed hands/objects, obvious artefacts.
    - **Off-brand / wrong content** — wrong colours, a stray reconstruction artefact, duplicated text.
+   - **Whitespace / text-fill** — a text-only slide with a few short lines top-dumped and most of the page
+     empty (the builder auto-fits + centres, so this should be rare — flag any that slipped through), or
+     conversely text crammed/overflowing. A quick objective proxy: the **ink ratio** in the content zone
+     (below the title band, above the footer) — very low = too sparse, very high = too dense/overflowing.
+   - **Under-sized images** — a diagram/photo aspect-fit into a tall-narrow or wide-short strip so it
+     renders small with dead space; reshape the diagram spec (e.g. wide 1×N → 2×2 or vertical stack).
 
 3. **Report** per slide: `slide N — <title>: <issue>` (or "clean"). Group by deck when reviewing several.
 

@@ -129,15 +129,18 @@ sets the depth ceiling** — don't teach deeper than the assessment requires. �
 > run-sheet's `validate-cluster-coverage`* (back-tested on CL1, 90/90).
 
 **4 · Slide plan → Topic deck** *(loop per Topic)*
-Author each Topic's `slide_plan.md` — the **kept, validated source** (per-component `Teaches:`, each
-slide's type tag + mandatory `image:` source) — to the format standard, then **generate** the
-Kangan-branded deck from it (primer-first, reuse-first; **generated diagrams placed in-pipeline**,
-AWS-reuse images pasted by a human). The **deck is the artefact of record**; the slide plan is kept and
-validated (**not** disposable). → [slide-plan-format.md](slide-plan-format.md) · [kangan-branding.md](kangan-branding.md) · detail [§4](#4--topic-decks). **generic builder `build_topic_deck.py` + validate-slide-plan + inspect-file-size built** (proven end-to-end on CL2 topic_01)
+Five stages: **author** `slide_plan.md` (the kept, validated source) → **validate** (`validate-slide-plan`)
+→ **assemble** the Topic's committed image assets (`diagrams/` specs + `images/` gen/reuse files) →
+**build** the Kangan deck (images placed + body text auto-fit in-pipeline) → **QA** (`inspect-file-size`
++ `review-slides`). The **deck is a pure function of committed source**, so it rebuilds + re-reviews at
+will. → [slide-plan-format.md](slide-plan-format.md) · [kangan-branding.md](kangan-branding.md) · detail
+[§4](#4--topic-decks). **generic builder `build_topic_deck.py` + validate-slide-plan + inspect-file-size +
+review-slides built.**
 > **⟱ Gate 4→5:** *validator* `validate-slide-plan` = **PASS** (conforms + covers `coverage.md`) **before
-> the deck is built**; then `inspect-file-size` ≤ guideline on the built deck (git-tracked — keep small)
-> **+ human review** — pedagogy sound; student slides **in-world**, **no UoC codes**, no tell of the
-> assessed system; reuse-first respected; depth ceiling not overshot.
+> the deck is built**; then on the built deck `inspect-file-size` ≤ guideline (git-tracked — keep small)
+> **+ `review-slides`** (render → per-slide PNGs): **0 placeholder boxes**, no overflow/overlap, no garbled
+> gen images, acceptable whitespace **+ human review** — pedagogy sound; student slides **in-world**,
+> **no UoC codes**, no tell of the assessed system; reuse-first respected; depth ceiling not overshot.
 
 **5 · Practice tasks** *(loop per AT)*
 Derive the AT-mirroring **practice task** for each AT — re-scenarioed away from the real assessment, split
@@ -212,16 +215,20 @@ the check is deterministic.
 project-wide; `validate-delivery-coverage` **PASSES 90/90**.
 
 ## §4 — Slide plan → Topic deck
-*(loops per Topic.)* Author the Topic's `slide_plan.md` to the [slide-plan format standard](slide-plan-format.md),
-**validate it** (`validate-slide-plan` — conforms + covers `coverage.md`), then **generate** the
-Kangan-branded deck from it. The **deck is the artefact of record**; the slide plan is the **kept,
-validated source** it is built from (no longer disposable). Each slide carries a mandatory `image:`
-source: **generated** images (`diagram` = an editable `.drawio` rendered to PNG by the **`draw-diagram`
-skill** (Pillow), `gen` = the **`image-gen`** skill) go **straight into the deck in-pipeline**; only
-**`reuse`** of an existing external asset (e.g. an AWS
-diagram) is emitted as a labelled placeholder for a **human to paste**. (S1 leans on AWS reuse — the
-exception; most courses generate their diagrams. The draw.io render path + image-gen are delivery-side
-tooling.)
+*(loops per Topic.)* A five-stage pipeline: **author** the Topic's `slide_plan.md` (to the
+[slide-plan format standard](slide-plan-format.md)) → **validate** it (`validate-slide-plan` — conforms +
+covers `coverage.md`) → **assemble** the Topic's committed image assets → **build** the Kangan-branded
+deck → **visually review** it (`inspect-file-size` + `review-slides`).
+
+**The governing invariant: a deck is a pure function of committed per-Topic source** — the `slide_plan.md`
++ the Topic's `diagrams/` specs + `images/` assets. So a rebuild always repopulates every slide, and the
+deck can be re-generated + re-reviewed at will. Each slide's mandatory `image:` source resolves
+**in-pipeline**: `diagram` (an editable `.drawio` → PNG via **draw-diagram**), `gen` (**image-gen**,
+generate-once + committed), and **`reuse`** (an externally-sourced asset — e.g. an extracted AWS slide —
+committed into the Topic's `images/`) are **all placed straight into the deck**; a `reuse`/`placeholder`
+whose file isn't present yet renders as a labelled placeholder until the asset lands. The builder also
+**auto-fits + vertical-centres body text** (a bounded tier set, {18–24}pt) so a light slide fills the page
+and a dense one stays readable — no per-slide hand-tuning, and sizes stay consistent by rule.
 
 **The slide-creation process:**
 1. **`slide_plan.md`** — walk the Topic's components top-to-bottom; for each, **teach then its exercise**,
@@ -231,15 +238,24 @@ tooling.)
    `[EX]` (exercise). The plan **pins up front exactly which AWS slides the Topic needs** (deck + slide
    numbers, via `planning/aws-deck-catalogue-draft.md`) — this pin table drives both the agent's reading
    and the human's image-paste.
-2. **(builder) generate the deck** — the **generic `scripts/build_topic_deck.py`** reads the validated
+2. **assemble the committed image assets** (before building, so the build has everything in place):
+   author each `diagram` spec into `topic_NN/diagrams/<ref>.json`; run `image-gen` for each `gen` slide
+   (generate-once → committed under `topic_NN/images/`); extract/export each `reuse` slide's asset into
+   `topic_NN/images/<file>` (for AWS reuse: pull the pinned slide from the instructor decks). Commit them
+   — they are the deck's source of truth.
+3. **(builder) generate the deck** — the **generic `scripts/build_topic_deck.py`** reads the validated
    `slide_plan.md` and authors **every** slide into the **Kangan brand layouts** (title / divider /
    content / activity / demo / takeaways / table; see [kangan-branding.md](kangan-branding.md)),
-   mapping each slide's `[TYPE]` to a layout and **resolving each `image:` in-pipeline** via
-   `scripts/helpers/deck_images.py` — `diagram`→the draw-diagram skill, `gen`→the image-gen skill
-   (both **placed straight into the deck**); `reuse`/`placeholder`→a labelled placeholder; `none`→none.
-   Output `Topic_NN_Slides.pptx`. *(One generic builder for every Topic — not a per-Topic script.)*
-3. **(human) paste any `reuse` images** — only `image: reuse` slots (e.g. an existing AWS diagram) need
-   a human paste; everything `diagram`/`gen` is already placed in-pipeline.
+   mapping each slide's `[TYPE]` to a layout, **resolving each `image:` in-pipeline** via
+   `scripts/helpers/deck_images.py` — `diagram`→draw-diagram, `gen`→image-gen, `reuse`→the committed
+   `images/<file>` (all **placed straight into the deck**; a not-yet-supplied `reuse`/`placeholder`→a
+   labelled placeholder; `none`→none) — and **auto-fitting + vertical-centring body text**. Output
+   `Topic_NN_Slides.pptx`. *(One generic builder for every Topic. Some legacy CL1 Topics still build from
+   per-Topic scripts under `scripts/s1_cl1/` — same helpers, same behaviour, until migrated.)*
+4. **QA the built deck** — `inspect-file-size` (≤25 MB) **and** `review-slides` (render → per-slide PNGs):
+   confirm **0 leftover placeholder boxes**, no text overflow/clipping, no image↔text overlap, no garbled
+   gen images, and acceptable whitespace/text-fill. Fix (reshape a wide-short diagram, re-extract an asset,
+   supply a missing `reuse` file) and rebuild — the rebuild is idempotent, so re-QA is cheap.
 
 **Marking the AWS source on a slide** (provenance, since there is no `source_slides/` folder):
 - **Slide carries an AWS image/diagram** → render a **labelled image placeholder** naming the diagram

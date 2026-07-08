@@ -21,6 +21,7 @@ Layouts provided:
 Helpers: new_deck(), save(), placeholder(), and primitives (_rgb/_bg/_rect/_box/_run/_para/
 _footer/_bullets).
 """
+import math
 from pathlib import Path
 
 from pptx import Presentation
@@ -136,6 +137,29 @@ def _bullets(tf, items, base_size=18):
              font=FONT_BOLD if opts.get("bold") else FONT_MED)
 
 
+def _fit_base(bullets, box_w_in=11.9, box_h_in=4.9, sizes=(24, 22, 20, 18)):
+    """Pick the largest base font (from `sizes`, high→low) at which `bullets` still fit the content
+    box — so a sparse slide scales UP toward 26pt and fills the space, while a dense one settles at the
+    18pt floor. The tier set is deliberately small + discrete, so sizes never look random (consistency)
+    and never shrink below today's 18pt. Line-wrap is a heuristic estimate; the render (review-slides)
+    is the check. A caller can still pass an explicit `base=` to opt out."""
+    box_w_pt = box_w_in * 72.0
+    box_h_pt = box_h_in * 72.0 - 12.0          # small safety margin
+    for base in sizes:
+        total = 0.0
+        for it in bullets:
+            lvl, text = it[0], it[1]
+            size = base - (3 if lvl >= 1 else 0) - (3 if lvl >= 2 else 0)
+            indent_pt = (0.0 if lvl == 0 else (0.4 if lvl == 1 else 0.8)) * 72.0
+            marker = 2 if lvl == 0 else 3       # rough marker-char allowance
+            cpl = max(8.0, (box_w_pt - indent_pt) / (0.5 * size))   # ~0.5*size pt per glyph
+            lines = max(1, math.ceil((len(text) + marker) / cpl))
+            total += lines * size * 1.32 + (10 if lvl == 0 else 5)  # leading + space_after
+        if total <= box_h_pt:
+            return base
+    return sizes[-1]
+
+
 # ---------- deck + save ----------
 def new_deck():
     prs = Presentation()
@@ -204,10 +228,12 @@ def _title_block(prs, title, kicker, accent):
     return s
 
 
-def content_slide(prs, pageno, title, kicker, bullets, accent=GOLD, base=18):
+def content_slide(prs, pageno, title, kicker, bullets, accent=GOLD, base=None):
     s = _title_block(prs, title, kicker, accent)
-    tb2, tf2 = _box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(4.9))
-    _bullets(tf2, bullets, base_size=base)
+    size = base if base is not None else _fit_base(bullets)
+    # vertical-centre so a light slide's whitespace balances top+bottom (not dumped at the foot)
+    tb2, tf2 = _box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(4.9), anchor=MSO_ANCHOR.MIDDLE)
+    _bullets(tf2, bullets, base_size=size)
     _footer(s, pageno, accent=accent)
     return s
 
@@ -254,8 +280,9 @@ def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD):
     s = _title_block(prs, title, kicker, accent)
     n = len(images)
     if n == 0:
-        tb, tf = _box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(4.9))
-        _bullets(tf, bullets, base_size=18)
+        # no image: fit + vertical-centre the bullets so a light slide fills the space (not top-dumped)
+        tb, tf = _box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(4.9), anchor=MSO_ANCHOR.MIDDLE)
+        _bullets(tf, bullets, base_size=_fit_base(bullets))
     elif n == 1:
         if bullets:
             tb, tf = _box(s, Inches(0.72), Inches(1.9), Inches(6.0), Inches(4.7))

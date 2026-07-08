@@ -100,6 +100,22 @@ holds FINISHED content (read verbatim), not briefs.** Proven end-to-end on CL2 t
 validate-slide-plan PASS → 20-slide deck with the web-scale diagram + 2 gen images placed automatically
 (1.86 MB).
 
+**Step 4 formalised as a 5-stage pipeline (2026-07-08):** author `slide_plan.md` → `validate-slide-plan`
+→ **assemble committed image assets** → **build** → **QA** (`inspect-file-size` + **`review-slides`**).
+Governing **invariant: a deck is a pure function of committed per-topic source** — `slide_plan.md` +
+`topic_NN/diagrams/` (specs) + `topic_NN/images/` (gen + reuse files); a rebuild always repopulates, so
+decks are re-generatable + re-reviewable. Two engine behaviours now make that hold, automatically on every
+build: **`reuse <file>` PLACES a committed asset** from `images/` (was a post-build human paste — the
+"regen loses pasted images" fix), and **body text auto-fits + vertical-centres** to a bounded tier set
+({18,20,22,24}pt — light slides scale up, dense settle at the 18 floor; consistent-by-rule). Also:
+`[TABLE]`-with-no-columns degrades to a content slide (no crash). New **`review-slides` skill** (umbrella
+`.claude/skills/`, LibreOffice→PDF + PyMuPDF→per-slide PNG, own venv) is the visual gate: 0 placeholder
+boxes, no overflow/overlap, no garbled gen, whitespace/text-fill OK, images not under-sized. **S1 rolled
+out across all decks** (CL1/2/3). **CL1 legacy:** its decks still build from per-topic scripts
+(`scripts/s1_cl1/build_*.py`, images placed via an `_img()` helper → committed files), NOT the generic
+builder — the scripts are CL1's content-complete source (its `slide_plan.md` are reconstructed skeletons);
+full migration to the generic builder is deferred. See [[umbrella-engine-architecture]].
+
 **Step 6 — the DELIVERY-PLAN gate — BUILT 2026-07-02.** The delivery plan is a **semester-INSTANCE
 artefact, not a course artefact** (Tim's reframe): the course is fully developable (assessment, decks,
 practice) with **no** delivery plan, because the plan needs facts that don't exist until an intake is
