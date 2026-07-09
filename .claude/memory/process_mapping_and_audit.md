@@ -26,6 +26,12 @@ derived artefacts — regenerate, never hand-edit.** Registered in [docs/INDEX.m
   a real stale marker — delivery Gate 6 said "to build" though `validate-delivery-plan` was built
   2026-07-02 (fixed; both maps now 0-flag).
 
+**First downstream use (2026-07-09):** the map's amber "candidate for tooling" flags (human-only gates)
+were reviewed for automation potential; the top candidate — **delivery Gate 2→3** — was built as
+`validate-topic-breakdown` (every AT has ≥1 Topic; every Topic declares a valid AT; count fits the
+frame). See [[delivery-run-sheet]]. Remaining human-only candidates: delivery Gate 5→6 (practice
+coverage + no-leakage) and assessment Gate 9→10 (student-instrument leak-lint + in-world agent).
+
 **Decided-not-built (follow-on):** the **process-audit** capability itself — a separate skill/agent that
 reads the `<slug>.json` model + flag set and reasons about deeper problems (orphan tools referenced by no
 step, ordering/dependency issues, gates with no definition-of-done). `map-process` is its deterministic

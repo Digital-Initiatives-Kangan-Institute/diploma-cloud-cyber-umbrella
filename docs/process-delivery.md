@@ -115,9 +115,11 @@ sub-agent). → [cluster-specification-format.md](cluster-specification-format.m
 From each AT, identify the conceptual **Topics** — coherent teaching units anchored to the AT's own
 structure (deliverable sections, appendix/KE questions, marking criteria), placed into the cluster's
 session sequence against the frame's bookends; create a `topic_NN/` folder each. → detail [§2](#2--topic-breakdown).
-> **⟱ Gate 2→3:** *human review* — every AT is broken into Topics that cover it, sized sanely against the
-> frame's available sessions. *(No script yet; a light structural lint — every AT → ≥1 Topic, every Topic
-> names its AT — is candidate tooling.)*
+> **⟱ Gate 2→3:** *validator* `validate-topic-breakdown` = every AT (`assessments/AT<n>/`) has **≥1
+> Topic**; every Topic declares a valid AT via its `coverage.md` **`**AT<n> content Topic**`** marker (no
+> phantom AT; any alignment heading agrees); the Topic count **fits the frame** (≤ sessions available —
+> nominal-count divergence is reported, not failed) **+ human review** — the Topics are the *right* ones,
+> sized sanely against the frame. **built** — *structure only; the UoC-coverage depth is Gate 3→4.*
 
 **3 · Topic spec (`coverage.md`)** *(loop per Topic)*
 State what each Topic must cover, in **UoC** and **AT** terms — components C1..Cn from the AT; per
@@ -191,6 +193,12 @@ you build materials for and schedule into sessions; aligns with the Delivery Pla
 description" field). A Topic's **components** (C1, C2, …) are defined *inside* its `coverage.md` (step 3),
 derived straight from the AT — there is no separate decomposition document. Assessments are **not Topics**
 — they are lettered non-Topic sessions in the spine, with no `topic_NN/` folder.
+
+**Each Topic names its AT** in its `coverage.md` intro, via the canonical marker
+**`**AT<n> content Topic**`** (e.g. *"…· **AT1 content Topic** ·…"*) — the machine-readable source of the
+Topic→AT assignment, corroborated by the `## N. AT<n> equivalence / alignment` section. The
+**`validate-topic-breakdown`** gate reads that marker to prove every AT has ≥1 Topic, every Topic names a
+real AT, and the Topic count fits the frame.
 
 **Result (S1-CL1):** 14 content Topics across AT1 (1–5) / AT2 (6–10) / AT3 (11–14); assessments are
 separate lettered non-Topic sessions; + onboarding (S1) + spare/catch-up (S31–32).

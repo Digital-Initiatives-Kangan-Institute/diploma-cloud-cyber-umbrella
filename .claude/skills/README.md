@@ -43,6 +43,7 @@ The step→gate skills of the two run-sheets ([docs/process-assessment.md](../..
 |---|---|---|
 | [setup-cluster-spec](setup-cluster-spec/) | 1.0.0 | Run the guided elicitation that produces a cluster's **delivery frame** (`cluster-specification.md`) — frame questions, arithmetic, over-nominal authorisation — then runs `validate-cluster-spec`. Interactive main-session; Step 1. |
 | [validate-cluster-spec](validate-cluster-spec/) | 1.0.0 | Prove a `cluster-specification.md` conforms to the format skeleton and the frame + topic-budget arithmetic reconciles (over-nominal hours carry a recorded authorisation). Gate for Step 1. |
+| [validate-topic-breakdown](validate-topic-breakdown/) | 1.0.0 | Prove the AT→Topic breakdown is structurally sound — every AT has ≥1 Topic, every Topic declares a valid AT (`**AT<n> content Topic**` marker), Topic count fits the frame. Gate for Step 2. |
 | [validate-slide-plan](validate-slide-plan/) | 1.0.0 | Prove a Topic's `slide_plan.md` conforms (every component `Teaches:`; every slide a `[TYPE]` + `image:`) and backwards-covers its sibling `coverage.md`. Gate before deck build (Step 4). |
 | [validate-delivery-plan](validate-delivery-plan/) | 1.0.0 | Prove a `delivery-plan.md` outline is complete-for-generation — conforms, grid internally consistent, every Topic + assessment placed, reconciles with the frame. Gate for Step 6. |
 
@@ -50,7 +51,8 @@ The step→gate skills of the two run-sheets ([docs/process-assessment.md](../..
 `validate_consolidated.py` · `validate_assessment_plan.py` · `generate_consolidated_plan.py` ·
 `validate_consolidated_plan.py` · `validate_scenario_plan.py` · `validate_at_traceability.py` ·
 `validate_mapping_doc.py` · `validate_cluster_coverage.py` · `validate_cluster_spec.py` ·
-`validate_slide_plan.py` · `validate_delivery_coverage.py` · `validate_delivery_plan.py`.
+`validate_topic_breakdown.py` · `validate_slide_plan.py` · `validate_delivery_coverage.py` ·
+`validate_delivery_plan.py`.
 *(`validate_delivery_coverage.py` is the delivery spine engine — invoked at delivery Gate 3→4; it has
 no dedicated skill-folder wrapper yet.)*
 

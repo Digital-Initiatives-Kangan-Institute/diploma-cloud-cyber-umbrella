@@ -182,16 +182,27 @@
       "from": "2",
       "to": "3",
       "label": null,
-      "kind": "human",
-      "names": [],
-      "human": true,
-      "status": null,
-      "resolved": [],
-      "implemented": false,
-      "flags": [
-        "human-only gate \u2014 candidate for tooling"
+      "kind": "validator",
+      "names": [
+        "validate-topic-breakdown",
+        "assessments/AT<n>/",
+        "coverage.md",
+        "**AT<n> content Topic**"
       ],
-      "cls": "human"
+      "human": true,
+      "status": "built",
+      "resolved": [
+        {
+          "name": "validate-topic-breakdown",
+          "resolves": [
+            "skill",
+            "validate-topic-breakdown"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
     },
     {
       "from": "3",
@@ -293,13 +304,6 @@
       "human": true,
       "status": "built",
       "resolved": [
-        {
-          "name": "validate-delivery-plan",
-          "resolves": [
-            "skill",
-            "validate-delivery-plan"
-          ]
-        },
         {
           "name": "validate-delivery-plan",
           "resolves": [

@@ -169,8 +169,11 @@ def resolve(name: str, inv: dict) -> tuple[str, str] | None:
 
 def audit_gate(g: dict, inv: dict) -> dict:
     """Attach resolution + flags to a gate. Returns the enriched gate."""
-    resolved = []
+    resolved, seen_names = [], set()
     for nm in g["names"]:
+        if nm in seen_names:      # a validator mentioned twice in the gate prose renders once
+            continue
+        seen_names.add(nm)
         # skip incidental backticked data files (coverage.md, consolidated_uoc.md, …) —
         # only a bare identifier or an explicit *.py can name a validator.
         if "." in nm and not nm.endswith(".py"):

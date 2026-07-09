@@ -45,6 +45,16 @@ the **format document is the single source of truth** — it both *informs the p
   `validate-cluster-spec` **+ human agreement to proceed**. **MET on S1** — CL1 (8h under), CL2 (+6h
   over, authorised), CL3 (+4h over, authorised) all PASS; Tim signed off the overages 2026-06-23.
 
+**Step 2 — the TOPIC-BREAKDOWN gate (`validate-topic-breakdown`) — BUILT 2026-07-09.** The last
+human-only *delivery* gate to get tooling (flagged as the top candidate by the process map —
+[[process-mapping-and-audit]]). Deterministic, stdlib, `validate_topic_breakdown.py` + skill: every AT
+(`assessments/AT<n>/`) has **≥1 Topic**; every Topic declares a valid AT via its `coverage.md` intro
+marker **`**AT<n> content Topic**`** (no phantom AT; any `## N. AT<n> equivalence/alignment` heading must
+agree); Topic count **≤ `Teaching/practice sessions available`** (nominal-topic-count divergence is
+*reported, not failed* — it's a Step-1 estimate). **Structure only** — the UoC-coverage depth is the
+Step-3 spine below. Negative-tested (missing-AT, phantom-AT, intro/section mismatch, over-capacity);
+**PASS across CL1 (14 Topics) / CL2 (10) / CL3 (8)**. Convention now documented in process-delivery.md §2.
+
 **Step 3 — the coverage SPINE (`validate-delivery-coverage`) — BUILT + back-tested on CL1 (2026-06-24):
 90/90 PASS.** Imports the SAME tag machinery the assessment validators use, scans each Topic's
 "taught/developed" table, unions, diffs against the consolidated assessed set (PC/PE/KE) — teaching-side
