@@ -153,7 +153,7 @@ Lay the Topics + assessment sessions onto the session grid from the frame, and g
 **Delivery Plan** docx (`templates/Delivery_Plan_Template_v0.1.docx`). → detail [§6](#6--delivery-plan).
 > **⟱ Gate 6→done:** *validator* `validate-delivery-plan` = every Topic + every assessment is placed in a
 > session; the sessions reconcile with the cluster-specification frame; the docx conforms to the template
-> **+ human review.** **to build.** The cluster's delivery is complete.
+> **+ human review.** **built** (`validate-delivery-plan`, 2026-07-02). The cluster's delivery is complete.
 
 ---
 

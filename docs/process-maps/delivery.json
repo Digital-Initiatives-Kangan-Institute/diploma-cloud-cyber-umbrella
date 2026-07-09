@@ -1,0 +1,316 @@
+{
+  "name": "Cluster delivery run-sheet",
+  "source": "docs/process-delivery.md",
+  "steps": [
+    {
+      "num": "1",
+      "title": "Cluster specification (delivery frame)",
+      "skill": "setup-cluster-spec",
+      "scope": "per cluster; gate is semester-level",
+      "status": "built",
+      "tools": [],
+      "data": [
+        {
+          "name": "cluster-specification.md",
+          "path": "<cluster>/cluster-specification.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "2",
+      "title": "Topic breakdown",
+      "skill": null,
+      "scope": "loop per AT",
+      "status": null,
+      "tools": [],
+      "data": [
+        {
+          "name": "coverage.md",
+          "path": "coverage.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "3",
+      "title": "Topic spec (`coverage.md`)",
+      "skill": null,
+      "scope": "loop per Topic",
+      "status": null,
+      "tools": [],
+      "data": [
+        {
+          "name": "coverage.md",
+          "path": "coverage.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "consolidated_uoc.md",
+          "path": "consolidated_uoc.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "4",
+      "title": "Slide plan \u2192 Topic deck",
+      "skill": null,
+      "scope": "loop per Topic",
+      "status": "built",
+      "tools": [
+        {
+          "name": "draw-diagram",
+          "kind": "skill"
+        },
+        {
+          "name": "image-gen",
+          "kind": "skill"
+        },
+        {
+          "name": "build_topic_deck",
+          "kind": "engine"
+        },
+        {
+          "name": "deck_images",
+          "kind": "engine"
+        },
+        {
+          "name": "kangan_deck",
+          "kind": "engine"
+        }
+      ],
+      "data": [
+        {
+          "name": "slide_plan.md",
+          "path": "slide_plan.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "coverage.md",
+          "path": "coverage.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "aws-recorded-demos-catalogue.md",
+          "path": "planning/aws-recorded-demos-catalogue.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "aws-deck-catalogue-draft.md",
+          "path": "planning/aws-deck-catalogue-draft.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "Topic_NN_Slides.pptx",
+          "path": "Topic_NN_Slides.pptx",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "5",
+      "title": "Practice tasks",
+      "skill": null,
+      "scope": "loop per AT",
+      "status": null,
+      "tools": [],
+      "data": [
+        {
+          "name": "states.ts",
+          "path": "states.ts",
+          "locus": "website"
+        }
+      ]
+    },
+    {
+      "num": "6",
+      "title": "Delivery plan",
+      "skill": null,
+      "scope": "cluster-level \u2014 capstone",
+      "status": null,
+      "tools": [],
+      "data": [
+        {
+          "name": "Delivery_Plan_Template_v0.1.docx",
+          "path": "templates/Delivery_Plan_Template_v0.1.docx",
+          "locus": "subrepo"
+        },
+        {
+          "name": "delivery-plan.md",
+          "path": "<cluster>/delivery/delivery-plan.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "S1_CL1_Delivery_Plan.docx",
+          "path": "delivery/S1_CL1_Delivery_Plan.docx",
+          "locus": "subrepo"
+        },
+        {
+          "name": "cl1-delivery-sessions-draft.md",
+          "path": "delivery/planning/cl1-delivery-sessions-draft.md",
+          "locus": "subrepo"
+        }
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "from": "1",
+      "to": "2",
+      "label": "definition phase",
+      "kind": "validator",
+      "names": [
+        "validate-cluster-spec"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-cluster-spec",
+          "resolves": [
+            "skill",
+            "validate-cluster-spec"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "2",
+      "to": "3",
+      "label": null,
+      "kind": "human",
+      "names": [],
+      "human": true,
+      "status": null,
+      "resolved": [],
+      "implemented": false,
+      "flags": [
+        "human-only gate \u2014 candidate for tooling"
+      ],
+      "cls": "human"
+    },
+    {
+      "from": "3",
+      "to": "4",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-delivery-coverage",
+        "coverage.md",
+        "consolidated_uoc.md",
+        "validate-cluster-coverage"
+      ],
+      "human": true,
+      "status": "built",
+      "resolved": [
+        {
+          "name": "validate-delivery-coverage",
+          "resolves": [
+            "script",
+            "validate_delivery_coverage"
+          ]
+        },
+        {
+          "name": "validate-cluster-coverage",
+          "resolves": [
+            "skill",
+            "validate-cluster-coverage"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "4",
+      "to": "5",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-slide-plan",
+        "coverage.md",
+        "inspect-file-size",
+        "review-slides"
+      ],
+      "human": true,
+      "status": "built",
+      "resolved": [
+        {
+          "name": "validate-slide-plan",
+          "resolves": [
+            "skill",
+            "validate-slide-plan"
+          ]
+        },
+        {
+          "name": "inspect-file-size",
+          "resolves": [
+            "skill",
+            "inspect-file-size"
+          ]
+        },
+        {
+          "name": "review-slides",
+          "resolves": [
+            "skill",
+            "review-slides"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "5",
+      "to": "6",
+      "label": null,
+      "kind": "human",
+      "names": [],
+      "human": true,
+      "status": null,
+      "resolved": [],
+      "implemented": false,
+      "flags": [
+        "human-only gate \u2014 candidate for tooling"
+      ],
+      "cls": "human"
+    },
+    {
+      "from": "6",
+      "to": "done",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-delivery-plan",
+        "validate-delivery-plan"
+      ],
+      "human": true,
+      "status": "built",
+      "resolved": [
+        {
+          "name": "validate-delivery-plan",
+          "resolves": [
+            "skill",
+            "validate-delivery-plan"
+          ]
+        },
+        {
+          "name": "validate-delivery-plan",
+          "resolves": [
+            "skill",
+            "validate-delivery-plan"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    }
+  ]
+}

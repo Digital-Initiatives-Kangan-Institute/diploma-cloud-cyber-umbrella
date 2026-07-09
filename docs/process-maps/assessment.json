@@ -1,0 +1,453 @@
+{
+  "name": "Cluster assessment run-sheet",
+  "source": "docs/process-assessment.md",
+  "steps": [
+    {
+      "num": "1",
+      "title": "Transcribe the units of competency",
+      "skill": "transcribe-uoc",
+      "scope": null,
+      "status": "built",
+      "tools": [],
+      "data": []
+    },
+    {
+      "num": "2",
+      "title": "Consolidate the cluster's UoCs",
+      "skill": "consolidate-uocs",
+      "scope": null,
+      "status": "built",
+      "tools": [
+        {
+          "name": "inventory_uoc",
+          "kind": "script"
+        }
+      ],
+      "data": [
+        {
+          "name": "consolidated_uoc.md",
+          "path": "consolidated_uoc.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "3",
+      "title": "Audit source assessments",
+      "skill": null,
+      "scope": "brownfield only \u2014 optional; skip if greenfield",
+      "status": null,
+      "tools": [],
+      "data": [
+        {
+          "name": "consolidated_uoc.md",
+          "path": "consolidated_uoc.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "4",
+      "title": "Assessment plan",
+      "skill": null,
+      "scope": "per cluster",
+      "status": null,
+      "tools": [],
+      "data": [
+        {
+          "name": "assessment_plan.md",
+          "path": "assessments/assessment_plan.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "assessment-plan-format.md",
+          "path": "docs/assessment-plan-format.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "5",
+      "title": "Consolidate the assessment plans",
+      "skill": null,
+      "scope": "per scenario \u2014 after every cluster's step 4",
+      "status": null,
+      "tools": [
+        {
+          "name": "generate-consolidated-plan",
+          "kind": "skill"
+        }
+      ],
+      "data": [
+        {
+          "name": "assessment_plan.md",
+          "path": "assessment_plan.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "6",
+      "title": "Scenario plan",
+      "skill": null,
+      "scope": "per scenario \u2014 developed from the completed contract",
+      "status": "planned",
+      "tools": [],
+      "data": []
+    },
+    {
+      "num": "7",
+      "title": "Scenario materials",
+      "skill": null,
+      "scope": "per scenario \u2014 built from the scenario plan; timing flexible",
+      "status": "built",
+      "tools": [],
+      "data": []
+    },
+    {
+      "num": "8",
+      "title": "Assessor instruments",
+      "skill": null,
+      "scope": "loop per AT",
+      "status": null,
+      "tools": [],
+      "data": []
+    },
+    {
+      "num": "9",
+      "title": "Student instruments",
+      "skill": null,
+      "scope": "loop per AT",
+      "status": null,
+      "tools": [],
+      "data": []
+    },
+    {
+      "num": "10",
+      "title": "Mapping documents",
+      "skill": null,
+      "scope": "cluster-level",
+      "status": null,
+      "tools": [
+        {
+          "name": "generate_mapping_doc",
+          "kind": "engine"
+        }
+      ],
+      "data": []
+    },
+    {
+      "num": "11",
+      "title": "Cluster coverage",
+      "skill": null,
+      "scope": "capstone",
+      "status": null,
+      "tools": [],
+      "data": [
+        {
+          "name": "consolidated_uoc.md",
+          "path": "consolidated_uoc.md",
+          "locus": "subrepo"
+        }
+      ]
+    },
+    {
+      "num": "12",
+      "title": "Institutional pre-validation",
+      "skill": null,
+      "scope": null,
+      "status": null,
+      "tools": [],
+      "data": []
+    }
+  ],
+  "gates": [
+    {
+      "from": "1",
+      "to": "2",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-uoc-transcription",
+        "validate_uoc.py",
+        ".docx",
+        ".md"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-uoc-transcription",
+          "resolves": [
+            "skill",
+            "validate-uoc-transcription"
+          ]
+        },
+        {
+          "name": "validate_uoc.py",
+          "resolves": [
+            "script",
+            "validate_uoc"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "2",
+      "to": "3",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-uoc-consolidation",
+        "validate_consolidated.py"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-uoc-consolidation",
+          "resolves": [
+            "skill",
+            "validate-uoc-consolidation"
+          ]
+        },
+        {
+          "name": "validate_consolidated.py",
+          "resolves": [
+            "script",
+            "validate_consolidated"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "3",
+      "to": "4",
+      "label": null,
+      "kind": "other",
+      "names": [
+        "evaluate-legacy-materials"
+      ],
+      "human": false,
+      "status": null,
+      "resolved": [
+        {
+          "name": "evaluate-legacy-materials",
+          "resolves": [
+            "agent",
+            "evaluate-legacy-materials"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "4",
+      "to": "5",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-assessment-plan",
+        "SR-*",
+        "SR-*"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-assessment-plan",
+          "resolves": [
+            "skill",
+            "validate-assessment-plan"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "5",
+      "to": "6",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-consolidated-plan",
+        "SR-*"
+      ],
+      "human": false,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-consolidated-plan",
+          "resolves": [
+            "skill",
+            "validate-consolidated-plan"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "6",
+      "to": "7",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-scenario-plan",
+        "SR-*",
+        "SR-*"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-scenario-plan",
+          "resolves": [
+            "skill",
+            "validate-scenario-plan"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "7",
+      "to": "8",
+      "label": null,
+      "kind": "human",
+      "names": [
+        "verify-scenario-realisation",
+        "partial",
+        "mismatch"
+      ],
+      "human": true,
+      "status": "built",
+      "resolved": [
+        {
+          "name": "verify-scenario-realisation",
+          "resolves": [
+            "agent",
+            "verify-scenario-realisation"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "8",
+      "to": "9",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-at-traceability",
+        "--expect"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-at-traceability",
+          "resolves": [
+            "skill",
+            "validate-at-traceability"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "9",
+      "to": "10",
+      "label": null,
+      "kind": "human",
+      "names": [],
+      "human": true,
+      "status": null,
+      "resolved": [],
+      "implemented": false,
+      "flags": [
+        "human-only gate \u2014 candidate for tooling"
+      ],
+      "cls": "human"
+    },
+    {
+      "from": "10",
+      "to": "11",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-mapping-doc"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-mapping-doc",
+          "resolves": [
+            "skill",
+            "validate-mapping-doc"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "11",
+      "to": "12",
+      "label": null,
+      "kind": "validator",
+      "names": [
+        "validate-cluster-coverage",
+        "--include-ac"
+      ],
+      "human": true,
+      "status": null,
+      "resolved": [
+        {
+          "name": "validate-cluster-coverage",
+          "resolves": [
+            "skill",
+            "validate-cluster-coverage"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
+    },
+    {
+      "from": "12",
+      "to": "done",
+      "label": null,
+      "kind": "human",
+      "names": [],
+      "human": true,
+      "status": null,
+      "resolved": [],
+      "implemented": false,
+      "flags": [
+        "human-only gate \u2014 candidate for tooling"
+      ],
+      "cls": "human"
+    }
+  ]
+}
