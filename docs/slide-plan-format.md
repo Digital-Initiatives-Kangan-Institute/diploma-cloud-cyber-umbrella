@@ -70,6 +70,35 @@ set ({18, 20, 22, 24}pt)** at which the bullets still fit the content box, then 
 so variation reads as intentional. Don't hand-size in the plan; a caller may pass an explicit size only to
 opt out. (Owned by `kangan_deck.py`; checked visually by `review-slides`.)
 
+## Teacher speaker notes (per slide)
+Every teaching/activity/demo slide carries **teacher speaker notes** — written into the PowerPoint **notes
+pane** (Presenter View / printable notes pages), **never** on the projected slide. Because they are
+**teacher-facing**, they are the one place **meta-language is allowed** — UoC codes, the assessment tie,
+AWS source refs — none of which may appear on a student slide. They make a deck **teachable cold**.
+
+**Type-aware content** (each slide type gets a different kind of note):
+- **Teaching** (`content`/`visual` / `[PRIMER]`/`[BESPOKE]`/`[AWS]`) — frame the slide, walk each point
+  (what to *say*, not restate), the *why*, a **misconception to pre-empt**, a **question to pose**, the
+  UoC/assessment tie.
+- **Demo** (`[DEMO]`) — what to demonstrate, what to **emphasise**, prep + timing, **and exactly where to
+  find the AWS recorded demo** (deck · module · slide, from `planning/aws-recorded-demos-catalogue.md`).
+- **Activity** (`[EX]`) — a **facilitation script**: the exact words to tell students, numbered steps, what
+  they must produce, timing + where they get stuck, a share-back prompt, the no-leakage reminder.
+- **Skip** title / divider / takeaways / table — self-explanatory.
+
+**How notes are authored + attached (source-level — never post-build; a rebuild must repopulate them):**
+- **Generic builder (CL2/CL3):** a per-slide **`notes:`** block in `slide_plan.md` (multi-line). The
+  builder reads them and `register_notes()`s the `{title: notes}` map before building.
+- **Legacy per-topic scripts (CL1):** a sibling **`topicNN_notes.py`** holding `NOTES = {title: notes}`;
+  the script calls `kangan_deck.register_notes(NOTES)` at the top of `build()`. Any slide whose title is a
+  key gets its notes automatically — no per-slide wiring. (A call may also pass `notes=` explicitly.)
+- **Drafting:** the **`draft-slide-notes`** step — an agent reads the slide content + the topic's
+  `coverage.md` (UoC context) and drafts the type-aware notes; human reviews. Co-drafted with the slides
+  for new work; a source-level retrofit pass for existing decks.
+
+Engine: `register_notes()` + `notes=` on the content/visual/activity/demo layouts write `slide.notes_slide`
+(owned by `kangan_deck.py`). Notes are committed source, regenerated into the deck on every build.
+
 ## Required sections (in order)
 
 This is the human-readable description; the [skeleton](#skeleton) is the authoritative contract the

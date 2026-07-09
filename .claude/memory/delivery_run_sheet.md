@@ -116,6 +116,18 @@ out across all decks** (CL1/2/3). **CL1 legacy:** its decks still build from per
 builder — the scripts are CL1's content-complete source (its `slide_plan.md` are reconstructed skeletons);
 full migration to the generic builder is deferred. See [[umbrella-engine-architecture]].
 
+**Teacher speaker-notes layer (2026-07-09).** Every teaching/activity/demo slide carries **teacher notes
+in the PowerPoint notes pane** (Presenter View — never on the student slide), making decks **teachable
+cold**. Teacher-facing → **meta-language allowed** (UoC codes, AT ties, AWS source). **Type-aware:**
+teaching = walk-points + misconception + question + UoC tie; **demo = what to demonstrate/emphasise + WHERE
+TO FIND the AWS recorded demo** (deck·module·slide from `planning/aws-recorded-demos-catalogue.md`);
+activity = a facilitation script (tell-students words, steps, must-produce, timing, share-back,
+no-leakage). **Engine:** `kangan_deck.register_notes({title: notes})` + `notes=` on the 4 layouts write
+`slide.notes_slide`. **Source-level, never post-build** (a rebuild must repopulate) — CL1 scripts use a
+sibling `topicNN_notes.py` + `register_notes()`; CL2/CL3 use a `notes:` block in `slide_plan.md`. Drafted
+by the **`draft-slide-notes`** agent pass (slide content + `coverage.md` UoC context), human-reviewed.
+**Proven on CL1 Topic 01 (34 slides) + Topic 06 IAM trio.** Format: docs/slide-plan-format.md.
+
 **Step 6 — the DELIVERY-PLAN gate — BUILT 2026-07-02.** The delivery plan is a **semester-INSTANCE
 artefact, not a course artefact** (Tim's reframe): the course is fully developable (assessment, decks,
 practice) with **no** delivery plan, because the plan needs facts that don't exist until an intake is

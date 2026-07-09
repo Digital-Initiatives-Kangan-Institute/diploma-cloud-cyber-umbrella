@@ -230,6 +230,14 @@ whose file isn't present yet renders as a labelled placeholder until the asset l
 **auto-fits + vertical-centres body text** (a bounded tier set, {18–24}pt) so a light slide fills the page
 and a dense one stays readable — no per-slide hand-tuning, and sizes stay consistent by rule.
 
+Each teaching/activity/demo slide also carries **teacher speaker notes** (the notes pane — Presenter View,
+never on the student slide), authored **with** the slide content (co-drafted, or a source-level
+`draft-slide-notes` pass) so a teacher can run the deck cold. Type-aware: teaching = walk-the-points +
+misconception + question + UoC tie; demo = what to demonstrate/emphasise **+ where to find the AWS
+recorded demo** (from `planning/aws-recorded-demos-catalogue.md`); activity = a facilitation script. See
+[slide-plan-format.md](slide-plan-format.md) — notes are committed source (`notes:` in the plan, or a
+`topicNN_notes.py` for CL1 scripts), written to the deck on every build.
+
 **The slide-creation process:**
 1. **`slide_plan.md`** — walk the Topic's components top-to-bottom; for each, **teach then its exercise**,
    in deck order. **For a hands-on AWS practical, insert a `[DEMO]` between them — the flow is `teach →
