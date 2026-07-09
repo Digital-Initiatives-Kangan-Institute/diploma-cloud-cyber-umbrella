@@ -56,6 +56,23 @@ validator where one exists; at a gateless gate, build a tool/agent for it.
   warn); assessor copies FAIL hard (calibration proof). *Completeness / in-world tone* stays the human part.
   **Gate 12 institutional pre-validation** — human; the **only fully-human gate now outstanding** for S1.
 
+**Instruments unified to ONE generator process (2026-07-09).** CL1's AT1/AT2/AT3 assessor+student
+instruments were **hand-authored Word docs** (docx metadata: App=Word, creator="Academic Governance &
+Quality"); CL2/CL3 were already script-generated. Retro-fitted CL1 to the same process — per-AT
+`scripts/s1_cl1/build_s1_cl1_atM_{assessor,student}.py` fill the Kangan template via the shared umbrella
+`helpers.docx_tables` engine (student single-sources shared content from the assessor). Proven faithful by
+the new **`validate-instrument-reproduction`** skill (umbrella `.claude/skills/scripts/`): body text +
+order equivalence vs the committed doc, a deliberate change absorbed via `--sub` (applied post-normalise so
+a plain-space rule matches an NBSP). Each regenerated instrument was verified **content+order identical to
+the git-HEAD original except the deliberate change**, all 6 PASS, students still leak-clean. Made
+**EVERGREEN**: the embedded intranet URL (`https://www.placeholder.com.au`) was DROPPED (name the site, not
+the URL — students told the live URL out-of-band), so docs never go stale on a URL change. The **6 committed
+.docx were regenerated in place = canonical**. Net: **no second authoring path — every cluster's instruments
+are edit-the-builder-and-regenerate.** (`brand.WEBSITE_URL` was tried then reverted — evergreen needs no URL
+constant.) **Still on the placeholder-URL list (separate):** the website's own `astro.config.mjs` `site:`
+(`yat-college.example`) + a few website pages + `scenario/website.md` — the deployed site's real canonical
+URL, not an evergreen-doc concern.
+
 **Architecture (decided):** per-cluster `assessment_plan.md` = **authored source of truth**; the
 **consolidated plan = derived** (generated, never hand-edited); the **scenario plan** (next) validates
 against the consolidated **SR-*** register. `SR-*` ids are **cluster-scoped** (`SR-CL3-01`) so registers

@@ -323,6 +323,17 @@ the Teacher/Assessor instructions, and the Marking Guide.
   and why", not "explain the difference".
 - **Project template fits multi-part** better than Written (native Part A/B + observation accommodation).
 
+**Instruments are generated — one process, every cluster.** Each AT's assessor + student instrument is
+produced by a per-AT builder (`scripts/sX_clY/build_..._atM_{assessor,student}.py`) that fills the
+institutional Kangan template from Python-data content via the shared `helpers.docx_tables` engine; the
+**student single-sources shared content from the assessor** (no drift), keeping only student-facing
+material (§9). CL1's originally hand-authored instruments were **retro-fitted to this same process
+(2026-07-09)**, so there is no longer a second authoring path — edit the builder, regenerate. A
+regenerated instrument is proven faithful by **`validate-instrument-reproduction`** (content + order
+equivalence vs the committed doc; a deliberate edit — e.g. the evergreen URL removal — is absorbed with an
+auditable `--sub`, so the check still proves "identical except the intended change"). Instruments name the
+scenario site, **never a URL** (evergreen — see [cluster-authoring-conventions.md](cluster-authoring-conventions.md)).
+
 ## §9 — Student instruments
 *(loops per AT.)* Copy the institutional Student template; derive content from the assessor companion (shared Details/Task/
 Resources; strip Marking Guide, assessor instructions, benchmark, model KE answers). The **`validate-student-instrument`**

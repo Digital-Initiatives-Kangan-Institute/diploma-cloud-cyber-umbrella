@@ -48,7 +48,7 @@ For the full template system, see [document-template-system.md](document-templat
 **How to apply:**
 - **Student-facing artefacts** reference scenario content **abstractly** — "the YAT intranet", "the LMS application spec page", "the ICT manager consultation notes" — not by file path.
 - **Author / assessor-facing artefacts** that need to point at a specific scenario file use explicit repo-root paths: `<repo_root>/scenario/internal-X.md`.
-- The intranet has a placeholder URL `https://www.placeholder.com.au` used throughout — assessments refer students to this URL.
+- **Instruments name the scenario site, never its URL** ("the YAT scenario site / intranet") — so the documents stay **evergreen** when the deployed URL changes. Students are told the current live URL out-of-band (LMS / at delivery), not in the instrument.
 
 For how the scenario threads through assessments, see [scenario-flow.md](scenario-flow.md).
 
