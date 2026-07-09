@@ -72,7 +72,8 @@ are edit-the-builder-and-regenerate.** (`brand.WEBSITE_URL` was tried then rever
 constant.) **Website base URL set to the deployed domain (2026-07-09):** `astro.config.mjs` `site:` +
 `robots.txt` sitemap + the sign-in/contact/README pages + `scenario/website.md` now use
 `https://yat.timbaird.com` (the real canonical URL — infra config for sitemap/canonical/OG, *not* an
-evergreen-doc concern; instruments stay URL-free). A website rebuild/redeploy applies it.
+evergreen-doc concern; instruments stay URL-free). The website **auto-deploys on push to `main`**, so the
+change goes live on commit (no manual redeploy).
 
 **Architecture (decided):** per-cluster `assessment_plan.md` = **authored source of truth**; the
 **consolidated plan = derived** (generated, never hand-edited); the **scenario plan** (next) validates
