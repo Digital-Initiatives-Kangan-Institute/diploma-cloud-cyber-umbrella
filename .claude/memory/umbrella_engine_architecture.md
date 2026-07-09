@@ -13,7 +13,9 @@ differs. Where things live now:
 
 - **Umbrella `.claude/skills/`** — all the process skills + validators (`validate-*`, `consolidate-uocs`,
   `generate-consolidated-plan`, `setup-cluster-spec`, `transcribe-uoc`, `inspect-file-size`) +
-  `.claude/skills/scripts/` (the validator engines) + `draw-diagram`/`image-gen`.
+  `.claude/skills/scripts/` (the validator engines) + `draw-diagram`/`image-gen` + **`review-slides`**
+  (render a `.pptx` → per-slide PNGs via LibreOffice + PyMuPDF for visual QA; own venv; LibreOffice is a
+  system dep — `brew install --cask libreoffice`).
 - **Umbrella `scripts/`** — the **deck/doc/mapping engine**: `build_topic_deck.py`, `helpers/`
   (brand-agnostic docx/pptx + `scenario_document`), `mapping/generate_mapping_doc.py`, `tests/` (self-test
   via a neutral `tests/_fixtures/brand.py` + `conftest.py`), `requirements.txt`. Run with the umbrella's
@@ -36,6 +38,14 @@ differs. Where things live now:
 - Deck: `scripts/.venv/bin/python scripts/build_topic_deck.py <content-repo>/…/topic_NN/slide_plan.md [out] [--allow-gen]`
 - Mapping: `scripts/.venv/bin/python scripts/mapping/generate_mapping_doc.py --check|--build all --registry <content-repo>/scripts/`
 - Generators (content-repo scripts): run with the **umbrella** `scripts/.venv/bin/python`.
+
+**Deck-engine capabilities (added 2026-07-08/09; in `kangan_deck.py` + `deck_images.py`, so every deck
+build — generic builder AND the CL1 per-topic scripts — gets them):** `deck_images.resolve_image` PLACES a
+committed `reuse <file>` from `topic_NN/images/` (deck = pure function of committed source; a rebuild
+repopulates); body text **auto-fits + vertical-centres** (bounded tiers {18–24}); `[TABLE]`-with-no-columns
+degrades to a content slide (no crash); **teacher speaker notes** via `notes=` on content/visual/activity/
+demo layouts + `register_notes({title: notes})` → the notes pane. See [[delivery-run-sheet]] for the Step-4
+pipeline that uses these + docs/slide-plan-format.md for the authoring contract.
 
 **Retest proven (2026-07-08):** 35 engine tests pass (fixture brand); `mapping --check all` reproduces
 every committed docx; deck build works — all from the new layout. Related: [[mapping-pipeline]],
