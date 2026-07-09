@@ -111,6 +111,38 @@ def _footer(slide, pageno, accent=GOLD):
     _run(p2, str(pageno), 11, GREY2, font=FONT_MED)
 
 
+_NOTES = {}
+
+
+def register_notes(mapping):
+    """Register a {slide-title: notes} map for this deck. Any content/visual/activity/demo slide whose
+    title is a key gets those notes automatically (unless the call passes notes= explicitly). Lets a
+    per-topic script (or the generic builder) attach all its teacher notes in one call, keyed by title —
+    no per-slide wiring. Per-process (one deck per build), so no cross-deck leakage."""
+    _NOTES.clear()
+    _NOTES.update(mapping or {})
+
+
+def _set_notes(slide, notes, title=None):
+    """Write teacher speaker notes into the slide's notes pane (shows in Presenter View + printable
+    notes pages; never on the projected slide). Teacher-facing, so meta-language is fine here — UoC
+    codes, assessment ties, AWS source refs. `notes` is a string (newline = new paragraph) or a list;
+    falls back to the registered notes for `title` when notes is None."""
+    if notes is None and title is not None:
+        notes = _NOTES.get(title)
+    if not notes:
+        return
+    if isinstance(notes, str):
+        import textwrap
+        lines = textwrap.dedent(notes).strip("\n").split("\n")   # tolerate indented triple-quoted strings
+    else:
+        lines = list(notes)
+    tf = slide.notes_slide.notes_text_frame
+    tf.text = lines[0]
+    for ln in lines[1:]:
+        tf.add_paragraph().text = ln
+
+
 def _bullets(tf, items, base_size=18):
     """items: list of (level, text[, opts]). opts: bold/color/italic/marker/mark_color."""
     for i, it in enumerate(items):
@@ -139,7 +171,7 @@ def _bullets(tf, items, base_size=18):
 
 def _fit_base(bullets, box_w_in=11.9, box_h_in=4.9, sizes=(24, 22, 20, 18)):
     """Pick the largest base font (from `sizes`, high→low) at which `bullets` still fit the content
-    box — so a sparse slide scales UP toward 26pt and fills the space, while a dense one settles at the
+    box — so a sparse slide scales UP toward 24pt and fills the space, while a dense one settles at the
     18pt floor. The tier set is deliberately small + discrete, so sizes never look random (consistency)
     and never shrink below today's 18pt. Line-wrap is a heuristic estimate; the render (review-slides)
     is the check. A caller can still pass an explicit `base=` to opt out."""
@@ -228,13 +260,14 @@ def _title_block(prs, title, kicker, accent):
     return s
 
 
-def content_slide(prs, pageno, title, kicker, bullets, accent=GOLD, base=None):
+def content_slide(prs, pageno, title, kicker, bullets, accent=GOLD, base=None, notes=None):
     s = _title_block(prs, title, kicker, accent)
     size = base if base is not None else _fit_base(bullets)
     # vertical-centre so a light slide's whitespace balances top+bottom (not dumped at the foot)
     tb2, tf2 = _box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(4.9), anchor=MSO_ANCHOR.MIDDLE)
     _bullets(tf2, bullets, base_size=size)
     _footer(s, pageno, accent=accent)
+    _set_notes(s, notes, title)
     return s
 
 
@@ -274,7 +307,7 @@ def _image(s, l, t, w, h, img, accent):
     return placeholder(s, l, t, w, h, label, accent)
 
 
-def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD):
+def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD, notes=None):
     """Content slide with 0..3 images + bullets. Each image is a label string (-> placeholder) or a
     dict {"path","label"} (-> the real picture placed in-pipeline, else placeholder)."""
     s = _title_block(prs, title, kicker, accent)
@@ -309,10 +342,11 @@ def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD):
         for x, img in zip([Inches(0.72), Inches(4.42), Inches(8.12)], images):
             _image(s, x, ytop, Inches(3.6), Inches(3.4), img, accent)
     _footer(s, pageno, accent=accent)
+    _set_notes(s, notes, title)
     return s
 
 
-def activity_slide(prs, pageno, title, bullets, timer, accent=GOLD):
+def activity_slide(prs, pageno, title, bullets, timer, accent=GOLD, notes=None):
     s = _blank(prs)
     _bg(s, WHITE)
     _rect(s, Inches(0), Inches(0), Inches(13.333), Inches(1.35), fill=accent)
@@ -329,10 +363,11 @@ def activity_slide(prs, pageno, title, bullets, timer, accent=GOLD):
     tbt, tft = _box(s, Inches(0.9), Inches(6.5), Inches(4.0), Inches(0.4), anchor=MSO_ANCHOR.MIDDLE)
     _run(_para(tft, True), "⏱  " + timer, 15, CHAR, bold=True, font=FONT_BOLD)
     _footer(s, pageno, accent=accent)
+    _set_notes(s, notes, title)
     return s
 
 
-def demo_slide(prs, pageno, title, bullets, accent=GOLD, source=None):
+def demo_slide(prs, pageno, title, bullets, accent=GOLD, source=None, notes=None):
     """Demo of an AWS task — sits right before the matching activity.
     The AWS-practical flow is teach → DEMONSTRATE → practice (activity). Charcoal header
     band (vs the activity's accent band) so 'watch' vs 'do' read differently at a glance.
@@ -362,6 +397,7 @@ def demo_slide(prs, pageno, title, bullets, accent=GOLD, source=None):
                     anchor=MSO_ANCHOR.MIDDLE)
     _run(_para(tft, True), chip, 14, CHAR, bold=True, font=FONT_BOLD)
     _footer(s, pageno, accent=accent)
+    _set_notes(s, notes, title)
     return s
 
 
