@@ -42,11 +42,13 @@ differs. Where things live now:
 - Generators (content-repo scripts): run with the **umbrella** `scripts/.venv/bin/python`.
 
 **Deck-engine capabilities (added 2026-07-08/09; in `kangan_deck.py` + `deck_images.py`, so every deck
-build — generic builder AND the CL1 per-topic scripts — gets them):** `deck_images.resolve_image` PLACES a
-committed `reuse <file>` from `topic_NN/images/` (deck = pure function of committed source; a rebuild
-repopulates); body text **auto-fits + vertical-centres** (bounded tiers {18–24}); `[TABLE]`-with-no-columns
-degrades to a content slide (no crash); **teacher speaker notes** via `notes=` on content/visual/activity/
-demo layouts + `register_notes({title: notes})` → the notes pane. See [[delivery-run-sheet]] for the Step-4
+build gets them — the generic `build_topic_deck.py` is the ONE builder for every cluster now, CL1 migrated
+2026-07-09):** `deck_images.resolve_image` PLACES a committed `reuse <file>` from `topic_NN/images/` AND a
+committed generate-once `gen` cache (`images/gen-<hash>.*`) on every rebuild (`--allow-gen` only gates
+generating a cache MISS) — deck = pure function of committed source, a rebuild repopulates; body text
+**auto-fits + vertical-centres** (bounded tiers {18–24}); `[TABLE]`-with-no-columns degrades to a content
+slide (no crash); **teacher speaker notes** via a per-slide `notes:` block in `slide_plan.md` → the generic
+builder `register_notes({title: notes})` → the notes pane. See [[delivery-run-sheet]] for the Step-4
 pipeline that uses these + docs/slide-plan-format.md for the authoring contract.
 
 **Retest proven (2026-07-08):** 35 engine tests pass (fixture brand); `mapping --check all` reproduces

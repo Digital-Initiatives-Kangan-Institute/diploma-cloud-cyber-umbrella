@@ -52,7 +52,7 @@ The step→gate skills of the two run-sheets ([docs/process-assessment.md](../..
 **Shared engine — `scripts/`:** `inventory_uoc.py` · `transcribe_uoc.py` · `validate_uoc.py` ·
 `validate_consolidated.py` · `validate_assessment_plan.py` · `generate_consolidated_plan.py` ·
 `validate_consolidated_plan.py` · `validate_scenario_plan.py` · `validate_at_traceability.py` ·
-`validate_student_instrument.py` · `validate_instrument_reproduction.py` ·
+`validate_student_instrument.py` · `validate_instrument_reproduction.py` · `validate_deck_reproduction.py` (regenerated `.pptx` == committed: body+notes+image count — the deck-migration gate) ·
 `validate_mapping_doc.py` · `validate_cluster_coverage.py` · `validate_cluster_spec.py` ·
 `validate_topic_breakdown.py` · `validate_slide_plan.py` · `validate_delivery_coverage.py` ·
 `validate_delivery_plan.py`.
