@@ -11,6 +11,7 @@ Diploma Cloud & Cyber: S1 Cloud, S2 Cyber). "Principles, not state" — see
 > every session and load the relevant doc before related work (see the umbrella `CLAUDE.md`).
 
 ## Working principles (how Claude operates here)
+- [one course-agnostic mechanism](one_course_agnostic_mechanism.md) — **the single most important factor:** exactly ONE mechanism per artefact type across all clusters + future courses (one source of truth, one engine, one process); unify first-built/legacy paths onto it, never fork; a capability gap becomes a feature of the one engine; reproduce→validate→adopt before retiring the old path.
 - [memory = principles not state](memory_principles_not_state.md) — record durable decisions/rationale (the non-derivable WHY); never repo-derivable ephemeral state (paths, commits, "what's built") — it goes stale on creation.
 - [record current-state only](feedback_process_docs_current_only.md) — record things as they ARE, not how they used to be, in everything (docs, memory, status notes): current method only, no abandoned-path archaeology; git holds it.
 - [write deliverables at final confidence](feedback_deliverables_final_confidence.md) — author docs as if open dependencies were done; track the dependency in MEMORY, never as an in-text "draft pending X" hedge (avoids redoing the doc just to strip caveats).

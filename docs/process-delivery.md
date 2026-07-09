@@ -38,6 +38,15 @@ qualification + unit prefixes) in **its** `scripts/`, plus the semester-specific
 `generate_mapping_doc.py` takes `--registry <content-repo>/scripts/`. So the same engine builds any
 course's decks/mapping docs unchanged; only the sub-repo data differs.
 
+> **Principle — one course-agnostic mechanism (no forks).** Every artefact type is produced by exactly
+> **one** mechanism, shared across all clusters and reusable for any future course: for teaching decks that
+> is the generic `build_topic_deck.py` reading a **content-complete `slide_plan.md`** (content *and*
+> `notes:` in the one validated source) — not per-topic build scripts or sidecar notes modules. A
+> first-built cluster on an older path is **retrofitted onto the canonical mechanism**, not kept as a
+> second path; a capability the old path had becomes a **feature of the one engine**, proven by
+> reproduction-validation before the old path is retired. The visual/layout pack (`kangan_deck.py`) is the
+> one brand seam — swapped per institution, never forked.
+
 **Prerequisites to read before acting:**
 - The umbrella `CLAUDE.md` — working discipline (nothing recorded as decided without explicit approval;
   mark proposals/produced docs **DRAFT/TBD**) + git-safety rules.
