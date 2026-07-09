@@ -13,9 +13,11 @@ differs. Where things live now:
 
 - **Umbrella `.claude/skills/`** — all the process skills + validators (`validate-*`, `consolidate-uocs`,
   `generate-consolidated-plan`, `setup-cluster-spec`, `transcribe-uoc`, `inspect-file-size`) +
-  `.claude/skills/scripts/` (the validator engines) + `draw-diagram`/`image-gen` + **`review-slides`**
-  (render a `.pptx` → per-slide PNGs via LibreOffice + PyMuPDF for visual QA; own venv; LibreOffice is a
-  system dep — `brew install --cask libreoffice`).
+  `.claude/skills/scripts/` (the validator engines) + `draw-diagram`/`image-gen`/`upscale-image` +
+  **`review-slides`** (render a `.pptx` → per-slide PNGs via LibreOffice + PyMuPDF for visual QA; own
+  venv; LibreOffice is a system dep — `brew install --cask libreoffice`) + **`map-process`** (see
+  [[process-mapping-and-audit]]). **The `.claude/skills/README.md` catalogue is kept current** (refreshed
+  2026-07-09): process skills grouped by run-sheet (shared `scripts/` engine) + self-contained tooling.
 - **Umbrella `scripts/`** — the **deck/doc/mapping engine**: `build_topic_deck.py`, `helpers/`
   (brand-agnostic docx/pptx + `scenario_document`), `mapping/generate_mapping_doc.py`, `tests/` (self-test
   via a neutral `tests/_fixtures/brand.py` + `conftest.py`), `requirements.txt`. Run with the umbrella's
