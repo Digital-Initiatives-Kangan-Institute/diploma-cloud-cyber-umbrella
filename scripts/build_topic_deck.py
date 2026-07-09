@@ -31,7 +31,17 @@ Slide-plan content the builder reads (an extension of the format's skeleton — 
     image: none
 
 Per-slide fields: `image:` (required by the format), and optional `kicker:` / `timer:` (EX) /
-`source:` (DEMO recorded-demo ref) / `note:` (TABLE). A TABLE slide carries markdown `| a | b |` rows.
+`source:` (DEMO recorded-demo ref) / `note:` (TABLE) / `notes:` (multi-line teacher speaker notes for a
+teaching/demo/activity slide — written to the .pptx notes pane, never the projected slide). A TABLE slide
+carries markdown `| a | b |` rows.
+
+  - [BESPOKE] Confirm the scaling needs
+    - read the engagement brief …
+    image: none
+    notes:
+      Frame: this is where the student turns requirements into scale decisions.
+      Misconception to pre-empt: "web-scale" is not just "a bigger server".
+      Ask: which of network / compute / storage does the expansion stress most? [ICTCLD503 PC 1.1]
 
 Usage:  python scripts/build_topic_deck.py <slide_plan.md> [out.pptx] [--allow-gen]
 """
@@ -93,6 +103,7 @@ def parse_slide_plan(text: str) -> dict:
     body = lines[start + 1:end]
 
     components, comp, slide = [], None, None
+    notes_indent = None   # while capturing a multi-line `notes:` block, the indent of its `notes:` line
 
     def close_slide():
         nonlocal slide
@@ -101,6 +112,12 @@ def parse_slide_plan(text: str) -> dict:
             slide = None
 
     for raw in body:
+        if notes_indent is not None:   # inside a notes: block — capture blank + deeper-indented lines
+            indent = len(raw) - len(raw.lstrip())
+            if raw.strip() == "" or indent > notes_indent:
+                slide["notes"] += "\n" + raw.strip()
+                continue
+            notes_indent = None        # dedent — the notes block ended; fall through to process this line
         cm = COMP_RE.match(raw)
         if cm:
             close_slide()
@@ -129,7 +146,7 @@ def parse_slide_plan(text: str) -> dict:
                 continue
             close_slide()
             slide = {"types": types, "title": rest, "bullets": [], "image": "none",
-                     "kicker": "", "timer": "", "source": "", "note": "", "table": []}
+                     "kicker": "", "timer": "", "source": "", "note": "", "notes": "", "table": []}
             continue
         # a "- Teaches:" / "- Kicker:" component line (no [TYPE])
         meta = re.match(r"^-\s+(Teaches|Kicker):\s*(.*)$", raw, re.IGNORECASE)
@@ -139,7 +156,12 @@ def parse_slide_plan(text: str) -> dict:
             continue
         if slide is None:
             continue
-        # within a slide: fields, table rows, or bullets
+        # within a slide: a multi-line notes: block, single-line fields, table rows, or bullets
+        nm = re.match(r"^(\s*)notes:\s*(.*)$", raw, re.IGNORECASE)
+        if nm:
+            notes_indent = len(nm.group(1))
+            slide["notes"] = nm.group(2).rstrip()
+            continue
         fm = FIELD_RE.match(raw)
         if fm:
             slide[fm.group(1).lower()] = fm.group(2).strip()
@@ -168,6 +190,10 @@ def _primary(types):
 
 def build(plan: dict, topic_dir: Path, out: Path, allow_gen: bool = False):
     prs = k.new_deck()
+    # teacher speaker notes (each slide's notes: block) attach by slide title via the shared engine
+    k.register_notes({sl["title"]: sl["notes"].strip()
+                      for comp in plan["components"] for sl in comp["slides"]
+                      if sl.get("notes", "").strip()})
     page = [0]
 
     def pg():
