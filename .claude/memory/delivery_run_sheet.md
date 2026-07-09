@@ -170,6 +170,16 @@ coverage specs still **DRAFT — human review pending**.
 
 **Run-sheet status: all 6 step-gates now BUILT.** **NEXT forward work = apply the run-sheet to CL3
 delivery** (not started — cluster-spec exists from the Step-1 phase gate; next CL3 step is topic
-breakdown → coverage → slide plans → decks → practice; see [[s1cl3-delivery]]). **STILL decided-not-built
-(project-wide refinements):** steps 2+3 merge into one "Topic plan" step; `coverage.md` format standard +
-skill; the Step-6 docx generator (instance-time). Related: [[assessment-run-sheet]], [[scenario-plan-model]].
+breakdown → coverage → slide plans → decks → practice; see [[s1cl3-delivery]]).
+
+**Teacher notes now COMPLETE across all S1 (2026-07-09):** CL2 (10 topics) + CL3 (8) authored as `notes:`
+blocks in each `slide_plan.md` (186 notes; CL1 already done) — type-aware, CL1-consistent; CL2/CL3 demo
+slides are **bespoke live-demonstration scripts** (no AWS recorded-demos catalogue — CL2/CL3 demonstrate
+the course's own template/microservice/change-set, unlike CL1's AWS-service demos). Decks rebuilt so notes
+populate the panes. **Engine fix (2026-07-09):** `deck_images.resolve_image` now places a committed
+generate-once **`gen` cache** (`images/gen-<hash>.*`) on EVERY rebuild — `--allow-gen` only gates
+generating a cache MISS (previously a plain rebuild silently placeholdered committed gen images).
+
+**STILL decided-not-built (project-wide refinements):** steps 2+3 merge into one "Topic plan" step;
+`coverage.md` format standard + skill; the Step-6 docx generator (instance-time). Related:
+[[assessment-run-sheet]], [[scenario-plan-model]].

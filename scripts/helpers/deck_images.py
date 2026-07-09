@@ -82,15 +82,25 @@ def _render_diagram(ref: str, topic_dir: Path) -> dict:
     return {"path": out_png, "drawio": out_drawio, "label": ref}
 
 
+def _gen_cached(prompt: str, topic_dir: Path):
+    """The committed generate-once cache file for this prompt (`images/gen-<hash>.*`), or None. Consulted
+    on EVERY rebuild — a committed gen image is placed without needing `--allow-gen`; that flag only gates
+    the paid *generation* of a cache MISS."""
+    out_dir = Path(topic_dir) / "images"
+    name = "gen-" + hashlib.md5(prompt.encode("utf-8")).hexdigest()[:8]
+    hits = sorted(out_dir.glob(name + ".*")) if out_dir.exists() else []
+    return hits[0] if hits else None
+
+
 def _gen_image(prompt: str, topic_dir: Path) -> dict:
     """Generate a decorative image via the image-gen skill (Nano Banana). Generate-once: a committed
     image for this prompt is reused, so rebuilds cost nothing. Returns {"path", "label"}."""
     topic_dir = Path(topic_dir)
     out_dir = topic_dir / "images"
+    cached = _gen_cached(prompt, topic_dir)
+    if cached:
+        return {"path": cached, "label": prompt}      # cached — no API call, no cost
     name = "gen-" + hashlib.md5(prompt.encode("utf-8")).hexdigest()[:8]
-    existing = sorted(out_dir.glob(name + ".*")) if out_dir.exists() else []
-    if existing:
-        return {"path": existing[0], "label": prompt}      # cached — no API call, no cost
     umbrella = _umbrella_root(topic_dir)
     gen = umbrella / ".claude" / "skills" / "image-gen" / "generate.py"
     cmd = [sys.executable, str(gen), "--model", GEN_MODEL, "--prompt", prompt,
@@ -136,8 +146,11 @@ def resolve_image(directive: str, topic_dir: Path, allow_gen: bool = False):
     if kind == "diagram":
         return _render_diagram(rest, Path(topic_dir))
     if kind == "gen":
+        cached = _gen_cached(rest, Path(topic_dir))
+        if cached:
+            return {"path": cached, "label": rest}   # committed generate-once cache — always placed
         if not allow_gen:
-            # Cost guard: image-gen calls a paid model. Default to a placeholder; enable explicitly.
+            # Cost guard: GENERATING a missing image calls a paid model. Placeholder until enabled.
             return {"label": f"GEN (not run): {rest}"}
         return _gen_image(rest, topic_dir)
     if kind == "reuse":
