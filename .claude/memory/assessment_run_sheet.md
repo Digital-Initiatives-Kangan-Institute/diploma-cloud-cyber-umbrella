@@ -69,9 +69,10 @@ the git-HEAD original except the deliberate change**, all 6 PASS, students still
 the URL — students told the live URL out-of-band), so docs never go stale on a URL change. The **6 committed
 .docx were regenerated in place = canonical**. Net: **no second authoring path — every cluster's instruments
 are edit-the-builder-and-regenerate.** (`brand.WEBSITE_URL` was tried then reverted — evergreen needs no URL
-constant.) **Still on the placeholder-URL list (separate):** the website's own `astro.config.mjs` `site:`
-(`yat-college.example`) + a few website pages + `scenario/website.md` — the deployed site's real canonical
-URL, not an evergreen-doc concern.
+constant.) **Website base URL set to the deployed domain (2026-07-09):** `astro.config.mjs` `site:` +
+`robots.txt` sitemap + the sign-in/contact/README pages + `scenario/website.md` now use
+`https://yat.timbaird.com` (the real canonical URL — infra config for sitemap/canonical/OG, *not* an
+evergreen-doc concern; instruments stay URL-free). A website rebuild/redeploy applies it.
 
 **Architecture (decided):** per-cluster `assessment_plan.md` = **authored source of truth**; the
 **consolidated plan = derived** (generated, never hand-edited); the **scenario plan** (next) validates
