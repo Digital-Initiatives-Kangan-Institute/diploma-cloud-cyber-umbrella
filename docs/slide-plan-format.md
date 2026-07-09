@@ -87,11 +87,10 @@ AWS source refs — none of which may appear on a student slide. They make a dec
 - **Skip** title / divider / takeaways / table — self-explanatory.
 
 **How notes are authored + attached (source-level — never post-build; a rebuild must repopulate them):**
-- **Generic builder (CL2/CL3):** a per-slide **`notes:`** block in `slide_plan.md` (multi-line). The
-  builder reads them and `register_notes()`s the `{title: notes}` map before building.
-- **Legacy per-topic scripts (CL1):** a sibling **`topicNN_notes.py`** holding `NOTES = {title: notes}`;
-  the script calls `kangan_deck.register_notes(NOTES)` at the top of `build()`. Any slide whose title is a
-  key gets its notes automatically — no per-slide wiring. (A call may also pass `notes=` explicitly.)
+- A per-slide **`notes:`** block in `slide_plan.md` (multi-line, indented under the slide, placed last).
+  The generic `build_topic_deck.py` reads them and `register_notes()`s the `{title: notes}` map before
+  building — one mechanism for **every** cluster (CL1 was migrated onto it 2026-07-09; there is no longer a
+  per-topic `topicNN_notes.py` sidecar).
 - **Drafting:** the **`draft-slide-notes`** step — an agent reads the slide content + the topic's
   `coverage.md` (UoC context) and drafts the type-aware notes; human reviews. Co-drafted with the slides
   for new work; a source-level retrofit pass for existing decks.
@@ -105,14 +104,18 @@ This is the human-readable description; the [skeleton](#skeleton) is the authori
 linter parses.
 
 1. **Header banner** — title `# Topic <NN> <Title> — Slide plan`; a `> **Covers:** …` line naming the
-   Topic and (for humans) linking its `coverage.md`; a `> **STATUS:** …` line.
+   Topic and (for humans) linking its `coverage.md`; a `> **STATUS:** …` line. **Split topic** (one Topic
+   delivered as two decks for sizing, e.g. `slide_plan_08a.md` / `slide_plan_08b.md`): each half-plan adds a
+   `> **Covers-components: C1, C2**` line naming the `coverage.md` components it owns — the linter then
+   checks that half against just those components (the halves partition the Topic's components).
 2. **`## Depth ceiling`** — the level the slides teach to (the AT level) and what is out of scope.
 3. **`## Teaching source`** — bespoke / AWS-sourced / generated; which source modules where relevant.
 4. **`## AWS pin table`** *(reuse courses)* — the exact source deck + slides to reuse, or `None`.
 5. **`## Slides`** — `### Opener`, then `### C<n> — <title>` per component (each with a `Teaches:` line
    and its slides), then `### Close`. Each slide is a `- [<TYPE>] <title>` line with its content bullets
    beneath (markdown `- ` items, indent = level) and a mandatory `image:` field; optional `kicker:` /
-   `timer:` (EX) / `source:` (DEMO) / `note:` (TABLE) fields, and `| … |` rows for a TABLE.
+   `timer:` (EX) / `source:` (DEMO) / `note:` (TABLE) / `notes:` (multi-line teacher speaker notes, placed
+   last) fields, and `| … |` rows for a TABLE.
 6. **`## Build notes`** — slide count, exercise summary, inputs.
 7. **`## Changelog`** — dated entries.
 

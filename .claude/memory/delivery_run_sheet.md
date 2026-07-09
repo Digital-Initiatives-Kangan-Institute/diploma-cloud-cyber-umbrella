@@ -121,10 +121,12 @@ build: **`reuse <file>` PLACES a committed asset** from `images/` (was a post-bu
 `[TABLE]`-with-no-columns degrades to a content slide (no crash). New **`review-slides` skill** (umbrella
 `.claude/skills/`, LibreOffice→PDF + PyMuPDF→per-slide PNG, own venv) is the visual gate: 0 placeholder
 boxes, no overflow/overlap, no garbled gen, whitespace/text-fill OK, images not under-sized. **S1 rolled
-out across all decks** (CL1/2/3). **CL1 legacy:** its decks still build from per-topic scripts
-(`scripts/s1_cl1/build_*.py`, images placed via an `_img()` helper → committed files), NOT the generic
-builder — the scripts are CL1's content-complete source (its `slide_plan.md` are reconstructed skeletons);
-full migration to the generic builder is deferred. See [[umbrella-engine-architecture]].
+out across all decks** (CL1/2/3). **CL1 MIGRATED to the generic builder 2026-07-09** — all 14 topics now
+build from a content-complete `slide_plan.md` via `build_topic_deck.py` (notes as `notes:` blocks); the
+per-topic `build_s1_cl1_topic*_deck.py` + `topicNN_notes.py` are **deleted**. Proven faithful by the new
+**`validate-deck-reproduction`** gate (regenerated == committed: body + notes + image count); split topic
+`topic_08` → two half-plans with `> **Covers-components:**` (validate-slide-plan gained subset support).
+**One builder, every cluster — no legacy path remains** (see [[one-course-agnostic-mechanism]], [[s1cl1-delivery]]).
 
 **Teacher speaker-notes layer (2026-07-09).** Every teaching/activity/demo slide carries **teacher notes
 in the PowerPoint notes pane** (Presenter View — never on the student slide), making decks **teachable
@@ -133,8 +135,9 @@ teaching = walk-points + misconception + question + UoC tie; **demo = what to de
 TO FIND the AWS recorded demo** (deck·module·slide from `planning/aws-recorded-demos-catalogue.md`);
 activity = a facilitation script (tell-students words, steps, must-produce, timing, share-back,
 no-leakage). **Engine:** `kangan_deck.register_notes({title: notes})` + `notes=` on the 4 layouts write
-`slide.notes_slide`. **Source-level, never post-build** (a rebuild must repopulate) — CL1 scripts use a
-sibling `topicNN_notes.py` + `register_notes()`; CL2/CL3 use a `notes:` block in `slide_plan.md`. Drafted
+`slide.notes_slide`. **Source-level, never post-build** (a rebuild must repopulate) — **every cluster now
+uses a `notes:` block in `slide_plan.md`**; the generic `build_topic_deck.py` parses it → `register_notes`
+(the old CL1 `topicNN_notes.py` sidecar was retired 2026-07-09). Drafted
 by the **`draft-slide-notes`** agent pass (slide content + `coverage.md` UoC context), human-reviewed.
 **Proven on CL1 Topic 01 (34 slides) + Topic 06 IAM trio.** Format: docs/slide-plan-format.md.
 

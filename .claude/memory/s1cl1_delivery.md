@@ -37,18 +37,21 @@ Server, internal ALB over campus VPN, 99.5%; AT3 needs a parallel HA design). We
 pattern, so a bespoke finished Accounting HA design would be redundant.
 
 ## Status — COMPLETE (2026-06-15); decks image- + notes-complete (2026-07-09)
-- **14 topic decks** built (`delivery/topic_*/Topic_*_Slides.pptx`) from the per-topic generators
-  (`scripts/s1_cl1/build_s1_cl1_topic*_deck.py`) — **CL1 builds from these scripts, NOT the generic
-  `build_topic_deck.py`** (its `slide_plan.md` are reconstructed skeletons; the scripts are the
-  content-complete source). Run each **from the content-repo root** (`OUT_DEFAULT` is content-repo-relative
-  — running from elsewhere writes a phantom deck tree; bitten + fixed 2026-07-09).
+- **14 topic decks** (`delivery/topic_*/Topic_*_Slides.pptx`). **MIGRATED to the generic builder 2026-07-09**
+  — CL1 now builds from a **content-complete `slide_plan.md`** via `build_topic_deck.py`, exactly like
+  CL2/CL3; the per-topic `build_s1_cl1_topic*_deck.py` + sidecar `topicNN_notes.py` are **retired/deleted**
+  (no second path — see [[one-course-agnostic-mechanism]]). Proven faithful by the new
+  **`validate-deck-reproduction`** gate (regenerated == committed: body + notes + image count) — every topic
+  reproduced except two accepted *standardisations*: topic_01 gained its missing section-1 divider, and
+  topic_08b's dividers renumbered 01/02→03/04. **topic_08 is a split topic** (1 `coverage.md` ↔ 2 decks) →
+  two half-plans `slide_plan_08a.md` (`Covers-components: C1,C2`) / `slide_plan_08b.md` (`C3,C4`).
 - **Images filled 31/31 (2026-07-09):** every flagged image gap placed — 10 draw-diagram diagrams
   (`topic_NN/diagrams/`), 7 gen images + 14 AWS-reuse extracts (`topic_NN/images/`), placed via an `_img()`
   helper → committed files (survey: `delivery/planning/image-gap-survey.md`; AWS source = the local
   gitignored instructor decks). Text auto-fits/centres; visual-reviewed via **`review-slides`**.
-- **Teacher speaker notes across all 14 topics — 232 notes (2026-07-09):** per topic a sibling
-  `scripts/s1_cl1/topicNN_notes.py` (`{title: notes}`) + `register_notes()`; teaching / demo (with WHERE TO
-  FIND the recorded demo) / activity. See [[delivery-run-sheet]] for the notes layer.
+- **Teacher speaker notes across all 14 topics — 232 notes (2026-07-09):** now committed as **`notes:`
+  blocks in each `slide_plan.md`** (migrated off the old `topicNN_notes.py` sidecar); teaching / demo (with
+  WHERE TO FIND the recorded demo) / activity. See [[delivery-run-sheet]] for the notes layer.
 - **Session sizing** (`S1_CL1_Delivery_Plan.docx`) — **adequate for now** (per Tim); refine from live
   delivery experience if needed. **Parked confirms** satisfied by the finalised assessor instruments
   ([[s1cl1-assessment]]).

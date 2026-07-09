@@ -252,8 +252,8 @@ never on the student slide), authored **with** the slide content (co-drafted, or
 `draft-slide-notes` pass) so a teacher can run the deck cold. Type-aware: teaching = walk-the-points +
 misconception + question + UoC tie; demo = what to demonstrate/emphasise **+ where to find the AWS
 recorded demo** (from `planning/aws-recorded-demos-catalogue.md`); activity = a facilitation script. See
-[slide-plan-format.md](slide-plan-format.md) — notes are committed source (`notes:` in the plan, or a
-`topicNN_notes.py` for CL1 scripts), written to the deck on every build.
+[slide-plan-format.md](slide-plan-format.md) — notes are committed source (a `notes:` block in the plan),
+written to the deck on every build.
 
 **The slide-creation process:**
 1. **`slide_plan.md`** — walk the Topic's components top-to-bottom; for each, **teach then its exercise**,
@@ -275,8 +275,10 @@ recorded demo** (from `planning/aws-recorded-demos-catalogue.md`); activity = a 
    `scripts/helpers/deck_images.py` — `diagram`→draw-diagram, `gen`→image-gen, `reuse`→the committed
    `images/<file>` (all **placed straight into the deck**; a not-yet-supplied `reuse`/`placeholder`→a
    labelled placeholder; `none`→none) — and **auto-fitting + vertical-centring body text**. Output
-   `Topic_NN_Slides.pptx`. *(One generic builder for every Topic. Some legacy CL1 Topics still build from
-   per-Topic scripts under `scripts/s1_cl1/` — same helpers, same behaviour, until migrated.)*
+   `Topic_NN_Slides.pptx`. *(**One generic builder for every Topic in every cluster** — CL1 was migrated
+   off its per-Topic scripts onto `slide_plan.md` + `build_topic_deck.py` on 2026-07-09; no per-topic build
+   scripts remain. A Topic delivered as two decks for sizing — e.g. topic_08 → `slide_plan_08a.md` /
+   `slide_plan_08b.md`, each declaring `> **Covers-components: …**` — builds each half the same way.)*
 4. **QA the built deck** — `inspect-file-size` (≤25 MB) **and** `review-slides` (render → per-slide PNGs):
    confirm **0 leftover placeholder boxes**, no text overflow/clipping, no image↔text overlap, no garbled
    gen images, and acceptable whitespace/text-fill. Fix (reshape a wide-short diagram, re-extract an asset,

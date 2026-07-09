@@ -57,6 +57,29 @@ def coverage_components(text: str):
     return comps
 
 
+def _cell_components(cell: str) -> set:
+    """The C-ids a taught-table component cell names, expanding a 'C1–C4' range."""
+    comps = set()
+    for a, b in re.findall(r"C(\d+)\s*[–-]\s*C?(\d+)", cell):     # ranges: C1–C4
+        comps |= {f"C{n}" for n in range(int(a), int(b) + 1)}
+    comps |= set(re.findall(r"C\d+", cell))                       # singletons: C1 · C3
+    return comps
+
+
+def taught_rows(text: str):
+    """From coverage.md's taught block, each table row as (tag_set, component_set) — so a slide plan
+    that owns only a subset of the topic's components (a split topic) can be scoped to its slice."""
+    rows = []
+    for ln in taught_block(text).splitlines():
+        if not ln.lstrip().startswith("|"):
+            continue
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if len(cells) < 2 or all(set(c) <= set("-: ") for c in cells):   # header separator
+            continue
+        rows.append((tags_from(" ".join(cells[:-1])), _cell_components(cells[-1])))
+    return rows
+
+
 def main():
     for s in (sys.stdout, sys.stderr):
         try:
@@ -147,13 +170,21 @@ def main():
             elif img not in IMG_KEYWORDS:
                 errors.append(f"{heading}: slide '[{tag}] {title}' image: '{img}' not a valid keyword")
 
-    # --- backwards coverage vs coverage.md ---
+    # --- backwards coverage vs coverage.md (scoped to a declared subset for a split-deck topic) ---
     cov_components = coverage_components(cov_text)
-    missing_comp = [c for c in cov_components if c not in plan_components]
+    cc_m = re.search(r"^>.*Covers-components:(.+)$", text, re.MULTILINE)   # C-ids anywhere after the label
+    declared = set(re.findall(r"C\d+", cc_m.group(1).upper())) if cc_m else None
+    if declared is not None:
+        missing_comp = [c for c in sorted(declared) if c not in plan_components]
+        cov_taught = set().union(*[tags for tags, comps in taught_rows(cov_text) if comps & declared]) \
+            if taught_rows(cov_text) else set()
+        scope_note = f" (Covers-components: {', '.join(sorted(declared))})"
+    else:
+        missing_comp = [c for c in cov_components if c not in plan_components]
+        cov_taught = tags_from(taught_block(cov_text))
+        scope_note = ""
     if missing_comp:
-        errors.append(f"components in coverage.md with no slide-plan section: {', '.join(missing_comp)}")
-
-    cov_taught = tags_from(taught_block(cov_text))
+        errors.append(f"components with no slide-plan section: {', '.join(missing_comp)}")
     missing_tags = sorted(cov_taught - teaches_tags)
     phantom = sorted(t for t in teaches_tags if valid and t not in valid)
     extra = sorted(t for t in teaches_tags if t in valid and t not in cov_taught)
@@ -180,7 +211,7 @@ def main():
             print(f"FAIL: {e}")
         print(f"\nRESULT: FAIL - {len(errors)} issue(s) in {plan}")
         return 1
-    print(f"RESULT: PASS - slide plan conforms and covers coverage.md.")
+    print(f"RESULT: PASS - slide plan conforms and covers coverage.md{scope_note}.")
     return 0
 
 
