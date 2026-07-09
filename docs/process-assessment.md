@@ -138,8 +138,12 @@ map closes the loop). → [cluster-authoring-conventions.md](cluster-authoring-c
 **9 · Student instruments** *(loop per AT)*
 Derive the student-facing instrument from the assessor version (shared Details/Task/Resources; strip the
 Marking Guide, benchmark, and model answers). → detail [§9](#9--student-instruments).
-> **⟱ Gate 9→10:** *human review* — student copy carries everything the student needs and nothing
-> assessor-only. *(No script.)*
+> **⟱ Gate 9→10:** *validator* `validate-student-instrument` = the student copy carries **no
+> assessor-only material** — no UoC mapping tags `[UNIT SEC num]`, no Marking-Guide benchmark /
+> model-answer / assessor-instruction labels (softer VET vocabulary is surfaced as WARNs; the UoC
+> footer, "Knowledge Evidence" deliverable names, and criterion codes are legitimate) **+ human review**
+> — it carries everything the student needs, is self-contained + in-world. **built** — *mechanical
+> leak-check; the completeness/tone judgement stays human.*
 
 **10 · Mapping documents** *(cluster-level)*
 Generate the per-unit Assessment Mapping docs from the engine (rows from the source UoC, AT-column codes
@@ -321,7 +325,10 @@ the Teacher/Assessor instructions, and the Marking Guide.
 
 ## §9 — Student instruments
 *(loops per AT.)* Copy the institutional Student template; derive content from the assessor companion (shared Details/Task/
-Resources; strip Marking Guide, assessor instructions, benchmark, model KE answers).
+Resources; strip Marking Guide, assessor instructions, benchmark, model KE answers). The **`validate-student-instrument`**
+gate then proves the strip is clean — no UoC mapping tags or assessor-only labels leaked into the
+`*-Student.docx` (the sanctioned UoC footer, "Knowledge Evidence" deliverable names, and criterion codes
+are legitimate and pass). Completeness + in-world tone remain the human review.
 
 ## §10 — Mapping documents
 *(cluster-level.)* The mapping doc is a **derived artefact** — one course-agnostic engine (the umbrella's

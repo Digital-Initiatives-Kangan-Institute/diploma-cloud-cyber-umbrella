@@ -1,8 +1,10 @@
 ---
 name: assessment-run-sheet
-description: The assessment process is a formalised step→gate run-sheet (docs/process-assessment.md), now validated END-TO-END on S1 — every deterministic gate (1–8, 10, 11) PASSES; only the human gates (9 student-instrument quality, 12 institutional pre-validation) remain. NEXT workstream is giving process-delivery.md the same run-sheet treatment.
-metadata:
+description: "The assessment process is a formalised step→gate run-sheet (docs/process-assessment.md), validated END-TO-END on S1 — every deterministic gate (1–8, 9 leak-lint, 10, 11) PASSES; Gate 9 now has a mechanical leak-lint (validate-student-instrument, 2026-07-09), leaving only its residual quality/tone review + Gate 12 institutional pre-validation as human."
+metadata: 
+  node_type: memory
   type: project
+  originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
 ---
 
 The cluster **assessment process is a formalised step→gate run-sheet** —
@@ -46,18 +48,24 @@ validator where one exists; at a gateless gate, build a tool/agent for it.
   satisfied by assessment *setup*, but flag it at Gate 12.
 - **Gate 11 cluster-coverage (`validate-cluster-coverage --cluster <C>`)** — **PASS 3/3**: every consolidated
   UoC item evidenced by ≥1 AT in every cluster.
-- **Gate 9 student instruments** — all **8 present** (1:1 with assessors); *quality* review is the human part.
-  **Gate 12 institutional pre-validation** — human; the **only gate now outstanding** for S1.
+- **Gate 9 student instruments** — all **8 present** (1:1 with assessors). **Mechanical leak-lint now built
+  (2026-07-09): `validate-student-instrument`** — HARD-fails a `*-Student.docx` that leaks assessor-only
+  material (UoC mapping tags `[UNIT SEC num]`; Benchmark / Model Answer / Assessor Instructions / Marking
+  Criteria labels), WARNs on softer VET vocabulary; the UoC footer, "Knowledge Evidence" deliverable names
+  + criterion codes are legitimate and pass. **PASS all approved S1 student copies** (CL3-AT2 one advisory
+  warn); assessor copies FAIL hard (calibration proof). *Completeness / in-world tone* stays the human part.
+  **Gate 12 institutional pre-validation** — human; the **only fully-human gate now outstanding** for S1.
 
 **Architecture (decided):** per-cluster `assessment_plan.md` = **authored source of truth**; the
 **consolidated plan = derived** (generated, never hand-edited); the **scenario plan** (next) validates
 against the consolidated **SR-*** register. `SR-*` ids are **cluster-scoped** (`SR-CL3-01`) so registers
 union without collision. AC items are discharged via the SR register's **AC-link** column.
 
-**STATUS — assessment run-sheet PROVEN END-TO-END on S1 (2026-06-23).** All deterministic gates (1–8, 10,
-11) PASS; the run-sheet takes S1 to **"everything placed, only human pre-validation remaining."** The only
-outstanding gates are human-owned: **Gate 9** (student-instrument *quality* review) and **Gate 12**
-(institutional pre-validation).
+**STATUS — assessment run-sheet PROVEN END-TO-END on S1 (2026-06-23).** All deterministic gates (1–8, **9
+leak-lint**, 10, 11) PASS; the run-sheet takes S1 to **"everything placed, only human pre-validation
+remaining."** Gate 9's mechanical half is now automated (`validate-student-instrument`, 2026-07-09); its
+residual *quality/completeness/tone* review + **Gate 12** (institutional pre-validation) are the only
+human-owned checks. Gate 12 is the single fully-human gate.
 
 **The delivery run-sheet is now underway** — see [[delivery-run-sheet]] (process-delivery.md restructured
 to step→gate; Step 1 built + back-tested on S1). **Deferred follow-up (non-blocking):** generate the

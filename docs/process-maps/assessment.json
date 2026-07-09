@@ -376,16 +376,25 @@
       "from": "9",
       "to": "10",
       "label": null,
-      "kind": "human",
-      "names": [],
-      "human": true,
-      "status": null,
-      "resolved": [],
-      "implemented": false,
-      "flags": [
-        "human-only gate \u2014 candidate for tooling"
+      "kind": "validator",
+      "names": [
+        "validate-student-instrument",
+        "[UNIT SEC num]"
       ],
-      "cls": "human"
+      "human": true,
+      "status": "built",
+      "resolved": [
+        {
+          "name": "validate-student-instrument",
+          "resolves": [
+            "skill",
+            "validate-student-instrument"
+          ]
+        }
+      ],
+      "implemented": true,
+      "flags": [],
+      "cls": "built"
     },
     {
       "from": "10",
