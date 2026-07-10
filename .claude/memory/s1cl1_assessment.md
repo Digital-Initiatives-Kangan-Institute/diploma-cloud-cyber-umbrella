@@ -1,14 +1,20 @@
 ---
 name: s1cl1-assessment
-description: S1-CL1 (Cloud Design and Build) pilot cluster, assessment workstream — COMPLETE (2026-06-15): AT shape, settled cross-AT design decisions, and the now-closed pre-delivery items.
-metadata:
+description: "S1-CL1 (Cloud Design and Build) pilot cluster, assessment workstream — FINALISED (institutional review PASSED 2026-07-10): AT shape, settled cross-AT design decisions; instruments approved + FROZEN (change-control: warn + new versioned file only)."
+metadata: 
   node_type: memory
   type: project
+  originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
 ---
 
-> **STATUS: COMPLETE (2026-06-15).** The CL1 assessment workstream is done — all instruments
-> finalised, the Multi-AZ risk resolved, the Records Management Policy authored. See **Status** at the
-> foot of this entry. Don't reopen unless something material changes.
+> **STATUS: FINALISED (2026-07-10).** The CL1 assessment workstream is done AND the **institutional
+> review / pre-validation gate has now PASSED** — the last gate. CL1's assessments are formally
+> **approved for delivery and frozen**. See **Status** at the foot of this entry.
+>
+> **⚠ CHANGE-CONTROL — CL1 assessments are FINALISED.** Do **not** edit any CL1 instrument in place.
+> Any change requires: (1) **warn the user first** + explicit go-ahead; (2) make it on a **new file**
+> with the new version in the filename (`…v1.2…` / `…v2.0…`); (3) **bump the footer version**; the
+> current approved file is never changed again. Full rule: [[feedback-finalised-assessments-change-control]].
 
 S1-CL1 (Cloud Design and Build) is the **pilot cluster**, developed end-to-end. This entry holds the
 **assessment workstream**: the cluster's **AT shape**, its **settled design decisions**, and its
@@ -53,15 +59,25 @@ longer the source of truth.
   (C1 names AWS Academy Cloud Architecting [172221] + Cloud Foundations [104469] and RDS access). The
   design+simulated-failover fallback is NOT needed.
 
-## Status — COMPLETE (2026-06-15)
+## Status — FINALISED (institutional review PASSED 2026-07-10)
 
-The CL1 assessment workstream is complete. Nothing outstanding blocks live delivery:
+The CL1 assessment workstream is complete and has now **passed institutional review — the terminal
+gate**. The instruments are approved for delivery and **frozen** (see the change-control banner at the
+top). Nothing outstanding blocks live delivery:
 
-- **9 instruments** (AT1/AT2/AT3 × assessor / student / exemplar) are final. The assessor + student
-  instruments are **hand-authored, version-controlled `.docx`** — no generators (the CL1 assessors'
-  richer marking benchmark — per-section Satisfactory/NYS guidance + worked CBA examples + tables —
-  doesn't fit the CL2/CL3 generated structure); **edit the `.docx` directly**. The **exemplars** have
-  generators (`scripts/s1_cl1/build_s1_cl1_at*_*_exemplar.py`).
+- **9 instruments** (AT1/AT2/AT3 × assessor / student / exemplar) are final and approved. All six
+  assessor + student instruments now **have generators** (`scripts/s1_cl1/build_s1_cl1_at*_{assessor,student}.py`,
+  retrofitted 2026-07-09 → one generator process across all clusters, [[one-course-agnostic-mechanism]]);
+  the exemplars too (`…_exemplar.py`).
+- **BUT the approved copies are frozen and were hand-finished:** the institutional-review edits +
+  the KE/reflection presentation tidy (2026-07-10) were applied to the **`.docx` directly**, so the
+  approved `.docx` are **ahead of their generators** — a regenerate would clobber the approved copy and
+  fail `validate-instrument-reproduction`. Do **not** regenerate a finalised CL1 instrument. Per the
+  change-control rule, changes go to a **new versioned file**, never in place. `[TBD — needs discussion:
+  whether/when to reconcile the generators back up to the approved v1.0 baseline, so future versioned
+  revisions can be generator-sourced again.]`
+- **Version:** the approved baseline is **v1.0** (version shown in the document footer). `[TBD — confirm
+  the footer version field is present/reads v1.0 on all six approved instruments.]`
 - **AT3 uses a real live Multi-AZ failover demo** (proven in the Cloud Architecting Sandbox); the AT2
   baseline CloudFormation + AT3 lab-pack deploy there.
 - The **Records Management Policy** is authored on the website (`src/content/policies/records-management.md`).
