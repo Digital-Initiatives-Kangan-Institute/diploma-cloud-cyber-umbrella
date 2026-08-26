@@ -24,16 +24,20 @@ MUTED = RGBColor(0x59, 0x59, 0x59)
 LINK_BLUE = "0563C1"
 
 
-def add_hyperlink(paragraph, text, url):
+def add_hyperlink(paragraph, text, url, colour=LINK_BLUE, size_pt=None):
     """Append a clickable hyperlink run to ``paragraph``."""
     r_id = paragraph.part.relate_to(url, RT.HYPERLINK, is_external=True)
     link = OxmlElement("w:hyperlink")
     link.set(qn("r:id"), r_id)
     run = OxmlElement("w:r")
     props = OxmlElement("w:rPr")
-    colour = OxmlElement("w:color")
-    colour.set(qn("w:val"), LINK_BLUE)
-    props.append(colour)
+    if size_pt is not None:
+        sz = OxmlElement("w:sz")
+        sz.set(qn("w:val"), str(int(size_pt * 2)))
+        props.append(sz)
+    colour_el = OxmlElement("w:color")
+    colour_el.set(qn("w:val"), colour)
+    props.append(colour_el)
     underline = OxmlElement("w:u")
     underline.set(qn("w:val"), "single")
     props.append(underline)
