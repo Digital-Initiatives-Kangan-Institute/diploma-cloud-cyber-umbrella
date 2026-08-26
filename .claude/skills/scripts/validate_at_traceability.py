@@ -118,6 +118,23 @@ def resolve_tags(line: str):
             # other parts (placeholders, prose) are ignored
 
 
+def criteria_table_tags(pre_benchmark: str) -> set:
+    """Resolved UoC tags carried by the Assessment Criteria table — the tick-list the assessor
+    actually marks against, which sits ABOVE the benchmark in the document.
+
+    Everything before the benchmark heading is scanned: the criteria table is the only thing in that
+    region that carries UoC tags. Returns an EMPTY set for instruments whose criteria and benchmark
+    are one combined traceability table (S1-CL2 / S1-CL3), which is the caller's signal that there is
+    no separate tick-list to check.
+    """
+    tags = set()
+    for line in pre_benchmark.splitlines():
+        for tag, form in resolve_tags(line):
+            if form != "unresolved":
+                tags.add(tag)
+    return tags
+
+
 def split_benchmark(text: str):
     """Return (pre_benchmark_text, benchmark_text). The benchmark section starts at the FIRST
     heading-like line mentioning 'benchmark' or 'traceability', so a multi-part AT with more than one
@@ -216,6 +233,34 @@ def main():
             advisories.append(f"{len(missing)} marking-guide criterion(s) not found in the benchmark "
                               f"(possible free-floating — verify): " + ", ".join(missing))
 
+    # ---- Additive check: the Assessment Criteria table (the tick-list) ----
+    # The checks above read the BENCHMARK. This reads the criteria table above it — the rows the
+    # assessor ticks, which decide the student's result. Findings are advisory: nothing here changes
+    # the verdict of the benchmark checks.
+    crit_tags = criteria_table_tags(pre)
+    if not crit_tags:
+        criteria_note = ("no separate Assessment Criteria table carrying UoC tags — criteria and "
+                         "benchmark are one combined table in this instrument; check not applicable")
+    else:
+        criteria_note = f"{len(crit_tags)} unique tag(s)"
+        crit_phantom = sorted(t for t in crit_tags if t not in valid)
+        if crit_phantom:
+            advisories.append(
+                f"{len(crit_phantom)} reference(s) in the ASSESSMENT CRITERIA TABLE not found in the "
+                f"consolidated UoC (phantom or mistyped):\n    " + "\n    ".join(crit_phantom))
+        only_criteria = sorted((crit_tags & valid) - covered)
+        if only_criteria:
+            advisories.append(
+                f"{len(only_criteria)} item(s) tagged in the ASSESSMENT CRITERIA TABLE but absent from "
+                f"the benchmark — the assessor marks them with no guidance on what satisfactory looks "
+                f"like, and cluster coverage cannot see them:\n    " + "\n    ".join(only_criteria))
+        only_benchmark = sorted((covered & valid) - crit_tags)
+        if only_benchmark:
+            advisories.append(
+                f"{len(only_benchmark)} item(s) claimed in the BENCHMARK but absent from the assessment "
+                f"criteria table — nothing on the tick-list marks them, so the claim of coverage has no "
+                f"criterion behind it:\n    " + "\n    ".join(only_benchmark))
+
     # ---- Optional reverse coverage vs an expected allocation ----
     if args.expect:
         expected = {e.strip() for e in args.expect}
@@ -228,6 +273,7 @@ def main():
     print(f"AT:           {args.at.name}")
     print(f"Consolidated: {args.consolidated}")
     print(f"Tags found:   {len(covered)} unique  |  benchmark criteria: {len(bench_criteria)}")
+    print(f"Criteria tbl: {criteria_note}")
     if args.expect:
         print(f"Expected:     {len(args.expect)} item(s) to cover")
     print()

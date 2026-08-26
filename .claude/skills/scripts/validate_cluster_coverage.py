@@ -30,7 +30,8 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from validate_at_traceability import load_text, resolve_tags, valid_tag_set, split_benchmark
+from validate_at_traceability import (criteria_table_tags, load_text, resolve_tags, split_benchmark,
+                                      valid_tag_set)
 
 
 def at_items(path: Path) -> set:
@@ -44,6 +45,16 @@ def at_items(path: Path) -> set:
             if not tag.startswith("?? "):
                 items.add(tag)
     return items
+
+
+def at_criteria_items(path: Path) -> set:
+    """Resolved UoC item tags carried by an AT's Assessment Criteria table (the tick-list).
+
+    Empty for instruments whose criteria and benchmark are one combined table — the signal that
+    there is no separate tick-list to check.
+    """
+    pre, _bench = split_benchmark(load_text(path))
+    return criteria_table_tags(pre)
 
 
 def by_section(tags):
@@ -120,10 +131,38 @@ def main():
         print()
 
     if missing:
-        print(f"MISSING ({len(missing)}) — consolidated items no AT evidences:")
+        print(f"MISSING ({len(missing)}) — consolidated items no AT's BENCHMARK evidences:")
         for sec, tags in by_section(missing).items():
             print(f"  {sec}:")
             for t in tags:
+                print(f"    - {t}")
+        print()
+
+    # ---- Additive check: the Assessment Criteria tables (the tick-lists) ----
+    # The verdict above is computed from the benchmarks and is unchanged. This reports the same
+    # coverage question asked of the tables the assessors actually tick. Advisory only.
+    per_at_criteria = {at.name: at_criteria_items(at) for at in ats}
+    checkable = {n: t for n, t in per_at_criteria.items() if t}
+    if not checkable:
+        print("Criteria tables: none of these instruments carry a separate Assessment Criteria "
+              "table with UoC tags (criteria and benchmark are combined) — check not applicable.")
+        print()
+    else:
+        crit_covered = set().union(*checkable.values())
+        crit_missing = sorted(required - crit_covered)
+        crit_phantom = sorted(crit_covered - expected)
+        skipped = [n for n in per_at_criteria if n not in checkable]
+        print(f"Criteria tables: {len(checkable)} of {len(ats)} instrument(s) carry one"
+              + (f" (combined-table, not checked: {', '.join(skipped)})" if skipped else ""))
+        print(f"  covered by a tick-list criterion: {len(crit_covered & required)} / {len(required)}")
+        if crit_phantom:
+            print(f"  WARNING — {len(crit_phantom)} tick-list reference(s) not in the consolidated UoC:")
+            for t in crit_phantom:
+                print(f"    - {t}")
+        if crit_missing:
+            print(f"  WARNING — {len(crit_missing)} item(s) evidenced in a benchmark but on no "
+                  f"tick-list, so nothing marks them:")
+            for t in crit_missing:
                 print(f"    - {t}")
         print()
 
