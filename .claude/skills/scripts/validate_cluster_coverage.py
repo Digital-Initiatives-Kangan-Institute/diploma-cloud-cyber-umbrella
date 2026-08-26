@@ -84,7 +84,8 @@ def main():
     ats = list(args.at)
     if not ats:
         found = glob.glob(str(args.cluster / "assessments" / "**" / "*Assessor*.docx"), recursive=True)
-        ats = sorted(Path(p) for p in found)
+        # skip Word's open-file lock copies (~$name.docx) — they are not real documents
+        ats = sorted(Path(p) for p in found if not Path(p).name.startswith("~$"))
     if not ats:
         print(f"No AT assessor files found under {args.cluster}/assessments/. "
               f"Pass them with --at.", file=sys.stderr)

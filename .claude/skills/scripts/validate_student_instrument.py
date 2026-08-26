@@ -117,7 +117,8 @@ def main() -> int:
         files = [args.file]
     elif args.cluster:
         files = sorted(Path(p) for p in glob.glob(str(args.cluster / "assessments" / "AT*" / "*.docx"))
-                       if "student" in Path(p).name.lower())
+                       if "student" in Path(p).name.lower()
+                       and not Path(p).name.startswith("~$"))
     else:
         ap.error("give --cluster or --file")
 
