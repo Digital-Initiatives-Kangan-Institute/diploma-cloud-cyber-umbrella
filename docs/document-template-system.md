@@ -105,6 +105,16 @@ own assessments are reviewed.
     the section's own grey guidance doesn't already make the source obvious.
   - *Supplied-section markers* — a single line above a pre-written section, saying the text below is
     part of the report, is not theirs to write, and should be left as it is.
+- **Evidence goes where it is evidence of something — not in an appendix.** Where a screenshot or
+  capture is required, the template puts the drop-zone in the section that section evidences, right
+  under the step that produces it. Appendices of collected screenshots are what the deliverable used
+  to do; they cost the student a filing decision for every capture, invite the same image being filed
+  twice, and separate the evidence from the claim it supports.
+- **Instrumented steps.** Where a template asks for a test or a capture, it also gives the steps to
+  produce it — numbered, specific, followable without prior knowledge — and states what the capture
+  must show. This is a deliberate trade of realism for clarity: a real deployment report would never
+  tell its reader how to open a console. The report is also an assessment instrument, and where those
+  two purposes conflict, the student not having to guess wins.
 - **Supplied sections.** Where a section's content is the same for every student — fixed engagement
   context, a scope dictated by an approved design — it is pre-written into the template behind a
   supplied-section marker, in normal body styling so it reads as report content. It is not marked, and

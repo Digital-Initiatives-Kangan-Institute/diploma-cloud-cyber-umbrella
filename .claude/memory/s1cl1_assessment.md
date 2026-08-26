@@ -1,20 +1,13 @@
 ---
 name: s1cl1-assessment
-description: "S1-CL1 (Cloud Design and Build) pilot cluster, assessment workstream — FINALISED (institutional review PASSED 2026-07-10): AT shape, settled cross-AT design decisions; instruments approved + FROZEN (change-control: warn + new versioned file only)."
+description: "S1-CL1 (Cloud Design and Build) pilot cluster, assessment workstream — DELIVERED, now in a feedback-driven improvement pass: AT shape, settled cross-AT design decisions; instruments passed institutional review 2026-07-10 and are now OPEN for in-place edits via their generators."
 metadata: 
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
+  modified: 2026-08-26T18:16:09.670Z
 ---
 
-> **STATUS: FINALISED (2026-07-10).** The CL1 assessment workstream is done AND the **institutional
-> review / pre-validation gate has now PASSED** — the last gate. CL1's assessments are formally
-> **approved for delivery and frozen**. See **Status** at the foot of this entry.
->
-> **⚠ CHANGE-CONTROL — CL1 assessments are FINALISED.** Do **not** edit any CL1 instrument in place.
-> Any change requires: (1) **warn the user first** + explicit go-ahead; (2) make it on a **new file**
-> with the new version in the filename (`…v1.2…` / `…v2.0…`); (3) **bump the footer version**; the
-> current approved file is never changed again. Full rule: [[feedback-finalised-assessments-change-control]].
 
 S1-CL1 (Cloud Design and Build) is the **pilot cluster**, developed end-to-end. This entry holds the
 **assessment workstream**: the cluster's **AT shape**, its **settled design decisions**, and its
@@ -59,26 +52,127 @@ longer the source of truth.
   (C1 names AWS Academy Cloud Architecting [172221] + Cloud Foundations [104469] and RDS access). The
   design+simulated-failover fallback is NOT needed.
 
-## Status — FINALISED (institutional review PASSED 2026-07-10)
+## Status — DELIVERED; improvement pass OPEN
 
-The CL1 assessment workstream is complete and has now **passed institutional review — the terminal
-gate**. The instruments are approved for delivery and **frozen** (see the change-control banner at the
-top). Nothing outstanding blocks live delivery:
+The CL1 assessment workstream passed institutional review (2026-07-10) and has since been **delivered to
+a live intake**. That approval is spent: the instruments are now **open for a feedback-driven
+improvement pass**, edited in place via their generators, to be re-frozen at the next human review
+before the following intake — see [[feedback-finalised-assessments-change-control]].
 
-- **9 instruments** (AT1/AT2/AT3 × assessor / student / exemplar) are final and approved. All six
-  assessor + student instruments now **have generators** (`scripts/s1_cl1/build_s1_cl1_at*_{assessor,student}.py`,
+- **9 instruments** (AT1/AT2/AT3 × assessor / student / exemplar) approved + delivered. All six
+  assessor + student instruments **have generators** (`scripts/s1_cl1/build_s1_cl1_at*_{assessor,student}.py`,
   retrofitted 2026-07-09 → one generator process across all clusters, [[one-course-agnostic-mechanism]]);
   the exemplars too (`…_exemplar.py`).
-- **BUT the approved copies are frozen and were hand-finished:** the institutional-review edits +
-  the KE/reflection presentation tidy (2026-07-10) were applied to the **`.docx` directly**, so the
-  approved `.docx` are **ahead of their generators** — a regenerate would clobber the approved copy and
-  fail `validate-instrument-reproduction`. Do **not** regenerate a finalised CL1 instrument. Per the
-  change-control rule, changes go to a **new versioned file**, never in place. `[TBD — needs discussion:
-  whether/when to reconcile the generators back up to the approved v1.0 baseline, so future versioned
-  revisions can be generator-sourced again.]`
-- **Version:** the approved baseline is **v1.0** (version shown in the document footer). `[TBD — confirm
-  the footer version field is present/reads v1.0 on all six approved instruments.]`
+- **Generator drift to check before regenerating:** the institutional-review edits + the KE/reflection
+  presentation tidy (2026-07-10) were applied to the **`.docx` directly**, so those approved `.docx` went
+  **ahead of their generators**. Before regenerating any CL1 instrument, run
+  `validate-instrument-reproduction` against the committed copy — a mismatch means real content lives only
+  in the `.docx` and must be lifted into the generator first, or the regenerate silently drops it.
+  `[TBD — needs discussion: whether AT1's improvement pass already reconciled its generators, and whether
+  to reconcile AT2/AT3 up front.]`
+- **Version:** the delivered baseline is **v1.0** (version shown in the document footer). `[TBD — confirm
+  the footer version field is present/reads v1.0 on all six instruments.]`
 - **AT3 uses a real live Multi-AZ failover demo** (proven in the Cloud Architecting Sandbox); the AT2
   baseline CloudFormation + AT3 lab-pack deploy there.
 - The **Records Management Policy** is authored on the website (`src/content/policies/records-management.md`).
+- **YAT Feedback Record template built (2026-08-03):** AT1 Appendix 4 (criterion A13) names a
+  standalone "YAT Feedback Record template" download that never existed on the website — a gap between
+  the frozen instrument and the documented in-deliverable-feedback decision
+  (docs/document-template-system.md). Resolved by adding the template
+  (`diploma-cloud-cyber-website-s1/public/templates/YAT-Feedback-Record-Template.docx`, generator
+  `diploma-cloud-cyber-content-s1/scripts/templates/build_feedback_record_template.py`), wired to
+  s1-cl1* states only. The instrument itself was not touched (it was frozen at the time).
 - Delivery workstream: see [[s1cl1-delivery]].
+
+## AT2 improvement pass — carried forward to the AT3 review
+
+AT2 has been through the redundancy pass of the AT-review process (`scratch/at-review-process.md`).
+Three things it uncovered are **AT3's to resolve when AT3 goes through the same review** — they were
+deliberately not fixed from the AT2 side.
+
+- **`[ICTCLD401 FS Planning and organising]` is mis-attributed on AT3's B15.** The item's words are
+  *"…making limited decisions on sequencing, timing and collaboration…"*; B15 is the reflections
+  appendix, written after the work. AT2 carried the identical mis-attribution on its A12 and it has
+  been dropped there. **Remap it onto AT3's implementation-sequencing criteria (A4/A5)** — the HA
+  Design requires *"an implementation sequencing plan (the order you'll apply the changes during the
+  maintenance window)"*, which is the item demonstrated rather than recalled. AT3's coverage line
+  already carries the FS, so no assessment-plan change is needed.
+- **AT3's reflections are now the cluster's only ones.** AT2's Appendix D was removed as a
+  consolidation: its three tags were a strict subset of B15's five, so nothing orphaned. AT2's R1
+  prompt — *"lessons applicable beyond this build"* — has **no AT3 equivalent** and is the prompt that
+  genuinely carries `FS Learning`; fold it into AT3's set. AT3's R1 (*decisions in hindsight*) was
+  already a duplicate of AT2's R2.
+- **The same mis-attribution is likely elsewhere in AT3's B15** — it also carries `502 FS Problem
+  solving` and `502 FS Self-management`, which may or may not survive the same wording test.
+
+Also carried forward from AT2, for AT2's own later passes (not AT3's):
+
+- **The benchmark's §4 sub-sections name the wrong criterion — all seven.** 5.1/5.2/5.6 say A4 (should
+  be A2), 5.3/5.4/5.5 say A5 (should be A3), 5.7 says A6 (should be A4). Deferred: the benchmark gets
+  one rewrite pass once the assessment content stops moving, so it reads as an example of a good one.
+- **The Appendix A / C evidence lists.** The criteria name counts (17 screenshots, 6 test-evidence
+  items) that no artefact has ever enumerated — not the template in any of its five historical
+  versions, not the exemplar, not the delivery materials. **The 17 is scratched**; the lists get built
+  from what the finished assessment actually asks the student to do.
+- **Criterion numbering and appendix letters have deliberate gaps** (A1, A10, A12 removed; Appendix B
+  and D removed). One renumbering pass at the end, not per finding.
+- **`assessment_plan.md` needs two AT2 edits** once the other session is out of it: AT2's coverage line
+  should drop `401 FS Learning`, `401 FS Planning and organising` and `401 FS Self-management skills`
+  (they left with Appendix D), and the AT roster table still describes AT2 as having *"direct
+  observation"*, which it has never had.
+
+## AT2 supplied design — the review it now needs
+
+Pass B kept running into the **supplied baseline design** (`scripts/scenario/build_at2_baseline_solution_design.py`)
+as the thing making the assessment harder than its UoC items require. A design review is the next
+substantial piece of work. What it has to settle:
+
+- **Access to the application instance.** §6.1 asks the student to connect to it and run the other
+  tests from there. Today that is impossible without a bastion or VPN: the instance is Windows Server
+  2016 (no SSH server by default) in a private subnet. Either enable SSH properly — security group,
+  key pair, a route in — or accept Session Manager. **Tim's direction is SSH.** Note that SSH points
+  toward making the application tier Amazon Linux rather than Windows, which would also shorten the
+  test commands; the "DOODLE on Windows Server 2016, no re-platforming" constraint is one we wrote
+  ourselves, not a UoC requirement.
+- **Something for the load balancer to serve.** The design stops at "infrastructure ready for
+  application deployment" with no web server, so the ALB health check fails and the target group shows
+  unhealthy. Specify a web server via launch-template user data so the health check passes on its own.
+  `SR-CL1-05` assumes a placeholder page exists but assigns it to the **AT3** lab-pack, so AT2 students
+  are currently expected to invent it with no instruction anywhere.
+- **TLS cannot be built in the lab.** §4.4 mandates an HTTPS:443 listener with an ACM certificate for
+  the LMS DNS name, and `sg-alb` allows 443 only. ACM will not issue against a domain the student
+  cannot validate, so the listener can never be completed and there is no HTTP fallback. The in-world
+  story already resolves this: the hostname and certificate are **issued by YAT ICT**, and cutover is
+  outside MTS scope — so the MTS build legitimately ends before TLS. Move to HTTP:80 for the build.
+- **`sg-app` still says `RDP:3389 from MTS bastion`**, which contradicts §4.16 (updated to Session
+  Manager, no bastion) and is the jump-box requirement that cost a live cohort its lab time.
+- **Scaling policy timing.** §6.5 tests autoscaling by lowering the policy target until it scales out,
+  then raising it until it scales in — a good test that avoids load generation. Default target-tracking
+  scale-in uses a 15-minute alarm window, so specify a cooldown and evaluation period that round-trips
+  inside a session.
+- **The design `.docx` is ahead of its generator** (two embedded images, a 432 KB PNG and a 903 KB SVG,
+  that the generator does not emit). Reconcile before regenerating, or they are lost.
+
+Already changed in the generator, awaiting that regeneration: §4.10 monitoring cut from five alarms to
+two; §4.16 configuration decisions cut from eight to two with the other five now specified by the design.
+
+Queued for the **downstream sweep** (§13 of `scratch/at-review-process.md`), once the assessment side
+of the AT2 review is signed off — deliberately not chased during the instrument pass:
+
+- **Topic 09's slide plan and built deck teach the old five-alarm set**, including an ALB
+  `HTTPCode_Target_5XX_Count` alarm at "> 5/min" that the supplied design never asked for. The design
+  now specifies two alarms (ALB target health status; RDS free storage low).
+- **The AT3 lab-pack `baseline.yaml` creates `AlarmAlb5xx`** — same drift, and it is the environment
+  AT3 students start from.
+- **The supplied design `.docx` cannot be regenerated yet.** The monitoring change is in
+  `scripts/scenario/build_at2_baseline_solution_design.py` and verified in a scratch build, but the
+  committed `YAT-LMS-Baseline-Solution-Design.docx` is **ahead of its generator**: it carries two
+  embedded images (a 432 KB PNG + a 903 KB SVG) the generator does not emit, so regenerating drops
+  them. Same class of problem as the CL1 instruments' generator drift. Reconcile the images into the
+  generator first, then regenerate. Until then the monitoring reduction has not reached students.
+
+**Validator gotcha worth remembering:** `validate_cluster_coverage` collects tags from the **benchmark
+section**, not from the marking-guide criterion rows — while `validate_at_traceability` reads the
+criterion rows. A tag therefore has to appear in **both** places. Deleting a stray benchmark prose line
+during the AT2 pass silently uncovered `[ICTCLD401 FS Reading]` even though A13's criterion still
+carried it. Fixed properly by giving the benchmark the A13 Document quality block it had never had.
