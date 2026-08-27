@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
-  modified: 2026-08-27T00:31:45.299Z
+  modified: 2026-08-27T15:31:26.177Z
 ---
 
 
@@ -97,9 +97,12 @@ authored, in place, and passes traceability + 106/106 coverage.
 - **Performance criteria are framed as tasks; knowledge criteria as questions.** Tim's rule.
 - **The copy-forward is what keeps `PE 1`/`PE 2` alive** — each build task names the Part A task
   whose answer it implements, so the same candidate designs *and* implements the same infrastructure.
-  A supplied exemplar design would break both items; corrections to the student's own design do not.
-- **Part A is marked before Part B is built.** Load-bearing, not sequencing preference — it is what
-  stops a student spending the window faithfully building an unworkable design.
+  A supplied exemplar design would break both items — and so would an assessor-corrected one.
+- **No marking checkpoint between the parts** — it is one continuous worksheet. An assessor who
+  corrects a design before the student builds it has made the build an implementation of the
+  *assessor's* design, breaking `PE 1`/`PE 2` the same way a supplied exemplar would, only smaller.
+  A design that would not deliver HA fails at its design task and again at the build task that
+  implements it; the standard is stated at both.
 - **The starting state is the AT2 run sheet's end state**, not the old supplied baseline design.
   The lab-pack is rebuilt to reproduce it (another session); the assessor distributes it, channel
   their choice, and deploying it is task 19.
