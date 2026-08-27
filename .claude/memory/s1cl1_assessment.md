@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
-  modified: 2026-08-26T18:16:09.670Z
+  modified: 2026-08-27T00:31:45.299Z
 ---
 
 
@@ -83,6 +83,38 @@ before the following intake — see [[feedback-finalised-assessments-change-cont
   `diploma-cloud-cyber-content-s1/scripts/templates/build_feedback_record_template.py`), wired to
   s1-cl1* states only. The instrument itself was not touched (it was frozen at the time).
 - Delivery workstream: see [[s1cl1-delivery]].
+
+## AT3 — reframed as a guided workbook (2026-08-26)
+
+AT3 is no longer two written reports. It is **one guided design-and-build workbook**, the same form
+AT2 took, and the run-sheet chain has been re-walked to match: assessment plan **Gate 4 PASS**,
+consolidated plan **Gate 5 PASS**, scenario plan **Gate 6 PASS**. The assessor instrument is
+authored, in place, and passes traceability + 106/106 coverage.
+
+- **Part A tasks 1–18** (design) → **Part B tasks 19–24** (build) → **T1–T4** → **tasks 25–29**
+  (closing) → **knowledge questions 1–6** → **reflections 1–3**. Numbering is continuous because
+  every Part B task cites the Part A task it builds.
+- **Performance criteria are framed as tasks; knowledge criteria as questions.** Tim's rule.
+- **The copy-forward is what keeps `PE 1`/`PE 2` alive** — each build task names the Part A task
+  whose answer it implements, so the same candidate designs *and* implements the same infrastructure.
+  A supplied exemplar design would break both items; corrections to the student's own design do not.
+- **Part A is marked before Part B is built.** Load-bearing, not sequencing preference — it is what
+  stops a student spending the window faithfully building an unworkable design.
+- **The starting state is the AT2 run sheet's end state**, not the old supplied baseline design.
+  The lab-pack is rebuilt to reproduce it (another session); the assessor distributes it, channel
+  their choice, and deploying it is task 19.
+- Marking model: see [[feedback-mark-uoc-intent-not-invented-settings]].
+- Files: `at3_run_sheet.py` (content, one definition rendered two ways), `run_sheet_render.py`
+  (shared primitives — AT2 keeps its own copies until that session lands, then switches),
+  `build_s1_cl1_at3_assessor.py`. The old report-based assessor generator is deleted.
+- **`[ICTCLD401 PC 4.1]` dropped from AT3** — AT1 evidences it properly (presentation event + its
+  sign-off). Removing it exposed that AT1 carried it on criteria but **not in its benchmark**, so
+  coverage had been passing only because AT3 mentioned it. Fixed in AT1's benchmark block 13.
+
+**Next:** Tim walks the assessor document through the console himself to prove it is achievable,
+then the assessor version locks. Only then the student copy (`render(..., mode="student")`) and the
+downstream dependencies. `build_s1_cl1_at3_student.py` and the HA-deployment-report exemplar both
+still describe the retired two-report shape.
 
 ## AT2 improvement pass — carried forward to the AT3 review
 
