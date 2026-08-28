@@ -144,10 +144,22 @@ Marking Guide, benchmark, and model answers). → detail [§9](#9--student-instr
 > footer, "Knowledge Evidence" deliverable names, and criterion codes are legitimate) **+ human review**
 > — it carries everything the student needs, is self-contained + in-world. **built** — *mechanical
 > leak-check; the completeness/tone judgement stays human.*
+>
+> **Also at this gate — the committed `.docx` must still be what its generator emits.** With the tree
+> otherwise clean, rebuild every instrument in the cluster and confirm `git diff` reports nothing:
+> ```
+> for g in scripts/s1_clN/build_s1_clN_at*_{assessor,student}.py; do ../scripts/.venv/bin/python $g; done
+> git diff --stat -- '*/assessments/*.docx'      # must be empty
+> ```
+> A generator can be corrected and its built artefact left behind — that is how an AT3 instrument kept
+> a link to a page the split had retired, on a green board (2026-08-28). `validate-instrument-reproduction`
+> remains the tool for the harder case: proving a *newly written* generator reproduces an instrument
+> that was authored by hand.
 
 **10 · Mapping documents** *(cluster-level)*
 Generate the per-unit Assessment Mapping docs from the engine (rows from the source UoC, AT-column codes
-from the assessor benchmarks, FS/AC closest-fit). Never hand-edit a mapping docx — it is derived. →
+from the assessor benchmarks — inverted for CL2/CL3, read from the assessors' reverse-map tables for
+CL1 — FS/AC closest-fit). Never hand-edit a mapping docx — it is derived. →
 [mapping-document-standard.md](mapping-document-standard.md) · detail [§10](#10--mapping-documents).
 > **⟱ Gate 10→11:** *validator* `validate-mapping-doc` = **PASS** for every unit — complete vs the unit's
 > own UoC (every item present + mapped) and accurate vs the benchmarks (PC/PE/KE hard; FS/AC advisory)

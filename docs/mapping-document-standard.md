@@ -121,11 +121,16 @@ skill name); PE/KE/AC are positional, so their row counts must equal the UoC's i
   tag-notation defects — the section repeated inside compound tags, e.g. `[… PE 1, PE 2]` / `[… FS a, FS b]`,
   and abbreviated `[KE n]` lacking the unit — fixed 2026-06-22). Regenerating the mappings also fixed the
   structural artefacts (the 401 AC block-row, the 517 PE split) and several verbatim defects (a PC typo, a
-  truncation, a bloated FS table). The engine drives CL1's mapping from its hand-authored `DATA_*` (the
-  `source: "data"` path in `CLUSTERS`), which is faithful to those benchmarks. The only structural
-  difference from CL2/CL3 is that CL1 has no single Python `BENCHMARK` constant that *both* builds the
-  assessor docx and drives the mapping (CL1's docx were authored directly) — unifying that is optional, not
+  truncation, a bloated FS table). The engine drives CL1's mapping from its `DATA_*` dicts (the
+  `source: "data"` path in `CLUSTERS`). Those cells are **derived, not authored**: each is the
+  "Evidenced by criterion(ia)" value from the matching row of the relevant assessor's own reverse-map
+  table. The only structural difference from CL2/CL3 is that CL1 has no single Python `BENCHMARK`
+  constant that *both* builds the assessor docx and drives the mapping — unifying that is optional, not
   a conformance requirement.
+- **The Gate 10 oracle is independent of the generator in every cluster.** CL2/CL3 invert their
+  assessors' `BENCHMARK`; CL1 reads the three assessors' reverse-map tables, filtered to codes their
+  marking guides actually define. Checking a mapping docx against the `DATA_*` that produced it would
+  only ever agree with itself, so `DATA_*` is never the oracle.
 
 ## See also
 

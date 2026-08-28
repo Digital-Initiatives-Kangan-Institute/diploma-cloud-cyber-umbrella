@@ -299,41 +299,111 @@ def build_oracle(cluster_dir: Path, unit_code: str):
                 put(sec, item, "AT2", at2)
         return oracle, "invert_benchmarks()"
 
-    # CL1-style: hand-authored DATA_* dicts (no benchmark to invert).
-    data = None
-    for attr in dir(mod):
-        if attr.startswith("DATA_") and isinstance(getattr(mod, attr), dict):
-            d = getattr(mod, attr)
-            # match the unit by the docx filename recorded in UNIT_DATA
-            for key, (fname, dd) in getattr(mod, "UNIT_DATA", {}).items():
-                if dd is d and unit_code in fname:
-                    data = d
-                    break
-        if data is not None:
-            break
-    if data is None:
-        return None, f"{build.name} exposes neither invert_benchmarks() nor a DATA_* for {unit_code}"
+    # CL1-style: no invertible benchmark. The oracle is the assessors' own reverse-map tables — the
+    # "UoC coverage verification" table each assessor carries, authored beside its marking guide.
+    # It must NOT be the mapping module's DATA_* dicts: those are the generator's input, so an
+    # oracle built from them can only ever agree with the document it produced.
+    rev = _assessor_reverse_maps(build.parent, n, unit_code)
+    if rev is None:
+        return None, (f"{build.name} exposes no invert_benchmarks(), and no assessor reverse-map "
+                      f"tables were found beside it for {unit_code}")
+    for (sec, item), by_at in rev.items():
+        for at, codes in by_at.items():
+            put(sec, item, at, codes)
+    return oracle, "assessor reverse maps"
 
-    for num, ats in data.get("pcs", {}).items():
-        for at in ("AT1", "AT2", "AT3"):
-            if ats.get(at):
-                put("PC", num, at, ats[at])
-    for sec, keys in (("PE", ("pes", "pes_split")), ("KE", ("kes",))):
-        entries = next((data[k] for k in keys if data.get(k)), [])
-        for i, entry in enumerate(entries, 1):
-            ats = entry[1] if isinstance(entry, tuple) else entry  # pes_split is (label, {AT})
-            for at in ("AT1", "AT2", "AT3"):
-                if ats.get(at):
-                    put(sec, i, at, ats[at])
-    for skill, ats in data.get("fss", {}).items():
-        for at in ("AT1", "AT2", "AT3"):
-            if ats.get(at):
-                put("FS", skill, at, ats[at])
-    for i, (_label, ats) in enumerate(data.get("acs", []), 1):
-        for at in ("AT1", "AT2", "AT3"):
-            if ats.get(at):
-                put("AC", i, at, ats[at])
-    return oracle, "DATA_* (hand-authored)"
+
+# The reverse-map rows an assessor carries, in either of the two shapes in use:
+#   ['[ICTCLD401 PC 1.1] Provision cloud services', 'A6']     <- unit named inline
+#   ['PC 1.1 - Provision cloud services', 'A6']               <- unit from the preceding heading
+_REV_BRACKET = re.compile(r"^\[(\w+)\s+((?:PC|PE|KE|FS|AC)\s.+?)\]")
+_REV_UNIT_HEADING = re.compile(r"^(\w+)\s+[-–—]")
+_REV_PLAIN = re.compile(r"^((?:PC|PE|KE|FS|AC)\s[^–—-]*)")
+
+
+def _criterion_codes_in(assessor_mod):
+    """Every criterion code the assessor's marking guide and conditions actually define."""
+    found = set()
+    for name in ("MARKING", "MARKING_A", "MARKING_B", "CONDITIONS"):
+        for row in getattr(assessor_mod, name, None) or []:
+            first = row[0] if isinstance(row, (list, tuple)) else row
+            m = re.match(r"^([ABC]\d{1,2})\b", str(first).strip())
+            if m:
+                found.add(m.group(1))
+    return found
+
+
+def _rev_item_key(item):
+    """Normalise a reverse-map item to the key _item_key() derives from the docx row."""
+    item = re.sub(r"\s+", " ", item.split("—")[0].split("–")[0]).strip()
+    sec, _, rest = item.partition(" ")
+    rest = rest.strip(" -")
+    if sec == "PC":
+        m = re.match(r"^(\d+\.\d+)", rest)
+        return ("PC", m.group(1)) if m else None
+    if sec == "FS":
+        return ("FS", rest) if rest else None
+    if sec in ("PE", "KE", "AC"):
+        m = re.match(r"^(\d+)", rest)
+        return (sec, m.group(1)) if m else None
+    return None
+
+
+def _assessor_reverse_maps(scripts_dir: Path, cluster_n: str, unit_code: str):
+    """{(section, item): {AT: codes}} read from each assessor's reverse-map table.
+
+    Codes are filtered to those the same assessor's marking guide defines, so a criterion that
+    does not exist cannot enter the oracle. Returns None if no assessor exposes a reverse map.
+    """
+    out, seen_any = {}, False
+    for path in sorted(scripts_dir.glob(f"build_s1_cl{cluster_n}_at*_assessor.py")):
+        m = re.search(r"_at(\d+)_assessor", path.name)
+        if not m:
+            continue
+        at_label = f"AT{m.group(1)}"
+        if at_label not in ("AT1", "AT2", "AT3"):
+            continue
+        amod = _load_module(path)
+        body = getattr(amod, "ASSESSOR_BODY", None)
+        if not body:
+            continue
+        defined = _criterion_codes_in(amod)
+        unit, rows = None, 0
+        for entry in body:
+            if not (isinstance(entry, tuple) and len(entry) == 2):
+                continue
+            kind, payload = entry
+            if kind == "p" and isinstance(payload, str):
+                h = _REV_UNIT_HEADING.match(payload.strip())
+                if h:
+                    unit = h.group(1)
+            elif kind == "tbl" and isinstance(payload, list) and payload:
+                if payload[0][:1] != ["UoC item"]:
+                    continue
+                for row in payload[1:]:
+                    if len(row) < 2:
+                        continue
+                    cell, this_unit = row[0].strip(), unit
+                    mb = _REV_BRACKET.match(cell)
+                    if mb:
+                        this_unit, item = mb.group(1), mb.group(2)
+                    else:
+                        mp = _REV_PLAIN.match(cell)
+                        if not (mp and this_unit):
+                            continue
+                        item = mp.group(1)
+                    rows += 1
+                    if this_unit != unit_code:
+                        continue
+                    key = _rev_item_key(item)
+                    if key is None:
+                        continue
+                    codes = {c for c in _norm(re.findall(r"\b[ABC]\d{1,2}\b", row[1]))
+                             if c in defined}
+                    if codes:
+                        out.setdefault(key, {}).setdefault(at_label, set()).update(codes)
+        seen_any = seen_any or rows > 0
+    return out if seen_any else None
 
 
 def _item_key(sec, i, label):
