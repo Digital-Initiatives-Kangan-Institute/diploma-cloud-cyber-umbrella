@@ -46,8 +46,17 @@ def docx_to_text(docx_path: Path) -> str:
                 parts.append(node.text or "")
             elif tag == f"{W_NS}tab":
                 parts.append("\t")
-            elif tag == f"{W_NS}br":
+            elif tag in (f"{W_NS}br", f"{W_NS}cr"):
                 parts.append("\n")
+            elif tag == f"{W_NS}sym":
+                # A symbol run carries its character in an attribute, not in w:t. Dropping it
+                # would lose real content silently, so render the codepoint and let the diff
+                # decide — the .md either carries it or the gate fails.
+                code = node.get(f"{W_NS}char")
+                if code:
+                    parts.append(chr(int(code, 16)))
+            elif tag == f"{W_NS}noBreakHyphen":
+                parts.append("‑")  # normalised to a plain hyphen by the cosmetic tier
         return "".join(parts)
 
     def walk(elem):
@@ -124,7 +133,7 @@ def normalise_cosmetic(text: str) -> str:
     replacements = {
         "‘": "'", "’": "'", "‚": "'", "‛": "'",
         "“": '"', "”": '"', "„": '"', "‟": '"',
-        "–": "-", "—": "-", "−": "-",  # en/em/minus → hyphen
+        "–": "-", "—": "-", "−": "-", "‑": "-",  # en/em/minus/non-breaking → hyphen
         " ": " ",  # non-breaking space
         "…": "...",  # horizontal ellipsis
         "­": "",   # soft hyphen
@@ -165,7 +174,15 @@ def diff_report(label: str, docx_text: str, md_text: str) -> dict:
         "cosmetic_match": cosmetic_match,
         "substantive_diff": [],
         "cosmetic_diff": [],
+        "empty_source": not docx_words,
     }
+
+    if not docx_words:
+        # Nothing extracted from the .docx — an empty/unreadable body would otherwise agree with
+        # an empty .md and report a verbatim match over zero content. Never a pass.
+        findings["exact_match"] = False
+        findings["cosmetic_match"] = False
+        return findings
 
     if not cosmetic_match:
         # Substantive differences (after cosmetic normalisation)
@@ -201,6 +218,9 @@ def print_findings(f: dict) -> None:
     print(f"  {f['label']}")
     print(f"{'=' * 70}")
     print(f"  docx words: {f['docx_word_count']}    md words: {f['md_word_count']}")
+    if f["empty_source"]:
+        print("  RESULT: FAIL — no extractable text in the .docx (nothing to validate against)")
+        return
     if f["exact_match"]:
         print("  RESULT: EXACT MATCH (byte-equivalent at word level)")
         return
