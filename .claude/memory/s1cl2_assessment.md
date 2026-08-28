@@ -82,3 +82,25 @@ label may broaden to "Design & DR Plan"; per-AT time/location conditions sit wit
 CERT-In, the Companies Act analogue) is LLM-grounded and accepted as-is: this is an imaginary
 pre-university case study, not a real compliance deliverable, so no legal review is engaged. Applies
 across clusters (CL2 + CL3). Don't reopen it as a `[VERIFY]`.
+
+
+## Planned rework to the CL1 run-sheet style (intent, 2026-08-28)
+
+**Intent, not yet decided in detail:** CL2 and CL3 assessments are to be reworked to the same shape
+CL1's AT2 and AT3 now take — a **guided run sheet / workbook the student fills in and submits as one
+document**, rather than a separate templated deliverable. Discussed while cleaning up CL1's supporting
+material; no work started, no plan authored.
+
+Two consequences to expect when it happens, both already visible in CL1:
+
+- **The Deployment Report and Solution Design templates retire.** They exist today only because CL2 and
+  CL3 still ask for them (CL2 AT1 → Solution Design + DR Plan; CL2 AT2 → Deployment Report Serverless;
+  CL3 AT1 → Solution Design; CL3 AT3 → Deployment Report). CL1's equivalents are already retired.
+- **The intranet template library is gated meanwhile, not resolved.** Solution Design and Deployment
+  Report are withheld from the `s1-cl1-*` states so an AT3 student cannot download a document that maps
+  onto their Part A or Part B, while staying available to CL2/CL3. See the comment in
+  `website-s1/src/pages/intranet/[state]/templates/index.astro`. When the rework lands, both come out
+  altogether and the gate goes with them.
+
+Do **not** audit CL2/CL3 assessments against their current shape and record them as settled — the shape
+is expected to change. See [[s1cl1-assessment]] for the CL1 form they are moving toward.

@@ -60,6 +60,17 @@ shared layer plus whichever semester's context you're currently touching.
 
 ## Working discipline — assumptions & documentation
 
+**Everything we write here is the current working approach, not law.** Docs, standards, conventions and
+memory record what we do *now* and why; they stay open to change the moment a better path shows up. Write
+them that way — *"the current approach"*, *"what we do now"*, *"the ambition is…"* — not *"the rule"*,
+*"never"*, *"must"*, *"invariant"*. Where something is worth protecting, state it as an **ambition** (we
+prefer X wherever it's free) rather than a prohibition, and don't contort the work to defend it. The one
+thing to state firmly is a constraint we have **no capability to change if we needed to** — the Learner Lab
+refusing IAM creation, CloudFormation rejecting a non-ASCII description — because softening a wall just
+misleads. Externally imposed is not enough on its own: an outside constraint we could negotiate or work
+around is still a working approach. See [docs/doco-structure.md](docs/doco-structure.md). *(This principle
+is itself a current working approach, not law.)*
+
 Never record anything as *decided / agreed / canonical* unless it was actively discussed **and**
 explicitly approved. Flag anything not yet agreed with `[TBD — needs discussion: <what is open>]`
 rather than writing it as settled.

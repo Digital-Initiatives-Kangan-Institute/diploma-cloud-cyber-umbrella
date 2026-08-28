@@ -1,38 +1,41 @@
 ---
 name: feedback-finalised-assessments-change-control
-description: "Once a cluster's assessments pass institutional review they are FINALISED/frozen — never edit the approved file again; any change goes to a NEW file with the new version (v1.2/v2.0) in its name, version shown in the document footer. Warn the user first."
+description: "Assessment instruments freeze per delivery cycle, not forever: institutional review PASS freezes them FOR that delivery; once delivered they REOPEN for a feedback-driven improvement pass (edit the generators in place); the next human review re-freezes them for the next intake."
 metadata: 
   node_type: memory
   type: feedback
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
+  modified: 2026-08-26T14:47:54.725Z
 ---
 
-Once a cluster's assessments have **passed the institutional review / pre-validation** step (the
-terminal human gate of the assessment run-sheet — see [[assessment-run-sheet]]), those instruments are
-**FINALISED and frozen**. They have been formally approved for delivery; the approved file is the
-baseline of record and must not be altered.
+A cluster's assessment instruments are frozen **per delivery cycle**, not permanently. The freeze is
+what institutional review buys: approval to deliver *that exact copy* to *that intake*. Delivering it
+spends the approval.
 
-**The change-control model (as set by the user):**
-- **The version number lives in the document footer.** The approved baseline is its current version
-  (e.g. v1.0).
-- **The current/approved file is never changed again.** Do not edit it in place.
-- **Any change is made on a SEPARATE, NEW file** whose **filename carries the new version** — `…v1.2…`
-  for a minor change, `…v2.0…` for a major one — and whose **footer version is bumped to match**. The
-  old approved file stays exactly as it was, so the approved baseline and every superseding revision are
-  all distinguishable and retained.
-- **Warn the user first.** Before creating a revision, stop and tell them the artefact is
-  finalised/approved, name the change and why, and get explicit go-ahead. Never revise as a matter of
-  course — not even a "quick fix".
+**The cycle:**
 
-**Why:** institutional review is the last gate; passing it means "approved, deliver this exact copy."
-Superseding via a new versioned file (rather than editing in place) keeps the approved baseline intact
-and makes every revision auditable at a glance.
+1. **Authored** — instruments live; the generators are the edit locus ([[one-course-agnostic-mechanism]]).
+2. **Institutional review / pre-validation PASS** — the terminal human gate of the assessment run-sheet
+   ([[assessment-run-sheet]]). Instruments are **frozen for that delivery**: don't edit them in the
+   run-up to or during the intake they were approved for.
+3. **Delivered** — the approval has served its purpose. Student and staff feedback now exists.
+4. **Improvement pass — instruments are OPEN.** Feedback drives an iterative-improvement review; changes
+   are made **in place, in the generators**, and regenerated. No new versioned file, no fork.
+5. **Human review again** before the next intake uses them → back to frozen for that delivery.
 
-**How to apply:** treat a cluster's `[[s1cl1-assessment]]`-style entry as the source of truth for
-whether it's finalised. If it is, any request that would touch its instruments triggers the warn →
-new-versioned-file → footer-bump flow above. First instance: **S1-CL1 (finalised 2026-07-10)**.
+**How to tell which phase you're in:** the cluster's `[[s1cl1-assessment]]`-style entry. "Review PASSED,
+not yet delivered" = frozen, warn before touching. "Delivered, improvement pass under way" = open, edit
+the generators normally.
 
-Related: [[one-course-agnostic-mechanism]] (generators are the intended edit locus for LIVE artefacts —
-but a finalised, approved copy is frozen; a superseding revision is a new file, and its generator/source
-relationship is a deliberate decision, never a silent regenerate over an approved copy),
-[[feedback-suggest-commits]].
+**Why in-place rather than a versioned fork:** the generator is the single source of truth for the
+instrument, and forking generators forks the mechanism — the thing we most want to avoid
+([[one-course-agnostic-mechanism]]). Git holds every superseded version, so the audit trail is intact
+without parallel `…v1.2…` files.
+
+**How to apply:** when a request would change a frozen (approved-but-not-yet-delivered) instrument, stop
+and say so before doing anything — name the change and get explicit go-ahead. When the cluster is in an
+improvement pass, that warning is noise; just do the work. Either way, never regenerate an instrument
+silently as a side effect of other work ([[feedback-verify-change-impact]], [[feedback-suggest-commits]]).
+
+**Current state:** S1-CL1 reviewed 2026-07-10, **delivered**, and now in a feedback-driven improvement
+pass — **open**.

@@ -7,6 +7,39 @@ it (or miss it), it goes stale, or it crowds out what the surface is actually fo
 This document explains what belongs where, when to update each, and the conventions that keep them
 coherent.
 
+## Everything we write is the current working approach, not law
+
+This governs **all four surfaces** below, and it is the frame everything else in this document sits in.
+
+What we record is *what we do now, and why* — the best approach we have at the time of writing. It is not
+a constitution, and nothing here is settled beyond revision. A standard that stops serving the work gets
+changed; that is the system working, not the system failing.
+
+**So write it that way.** Reach for *"the current approach"*, *"what we do now"*, *"the working
+assumption"*, *"the ambition is…"*. Avoid *"the rule"*, *"never"*, *"must"*, *"invariant"*,
+*"non-negotiable"* — absolutist framing reads as a prohibition, and a prohibition invites contorting real
+work to defend a line that was only ever a preference.
+
+**Prefer an ambition to a prohibition.** Where something genuinely is worth protecting, name it as
+something we aim at rather than something we forbid — *"the evergreen ambition: instruments avoid a
+hard-coded URL wherever that costs nothing"*, not *"instruments must never carry a URL"*. The ambition
+tells you what good looks like **and** leaves room to not force the point when the cost lands on the
+student or the work. A prohibition only does the first.
+
+**The exception — constraints we have no capability to change.** Some limits shouldn't be softened: the
+AWS Academy lab refuses IAM creation; CloudFormation rejects a non-ASCII resource description; the training
+package requires every PC/PE/KE/FS/AC to be assessed somewhere. State those firmly and plainly — hedging a
+hard external fact just misleads the next reader into wasting a day on it.
+
+**The test is two questions, and a hard constraint has to pass both.** Is this someone else's constraint
+rather than a position we hold? **And — if we needed it changed, could we change it?** Only a *no* to the
+second makes it hard. Externally imposed is not the same as immovable: an outside constraint we could
+negotiate, swap out, or work around is still a working approach. The institutional template being the
+format-of-record is Kangan's call, but it is a call that could be revisited — so it is written as what we
+currently do. The lab refusing IAM creation is not revisitable by us, so it is written as a wall.
+
+**This principle is itself a current working approach, not law.**
+
 ## The four surfaces
 
 ### 1. `/README.md` — for humans landing on the repo

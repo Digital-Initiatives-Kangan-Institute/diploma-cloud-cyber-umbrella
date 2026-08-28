@@ -303,10 +303,6 @@ reserved for genuine gaps (VET evidence discipline, scenario-specific framing, s
 specifics). The long-path trick for the ACA decks: `cp` to a short Windows-addressable temp dir, then
 open with python-pptx.
 
-**Open thread — reuse vs rewrite.** Authoring AWS content *fresh into Kangan slides* edges toward
-rewriting rather than reusing. The resolution so far is human **consolidation** of the drafted Kangan
-slides with the actual AWS reference slides into the final deck. The pure model is **not yet settled** —
-revisit.
 
 **Demos — recorded first.** **Always use an AWS recorded demo where a suitable one exists** (catalogued
 in `planning/aws-recorded-demos-catalogue.md`); a **live instructor demo is the fallback only when none

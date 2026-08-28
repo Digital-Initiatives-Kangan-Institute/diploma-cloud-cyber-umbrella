@@ -1,6 +1,3 @@
-# Source-material reuse permissions
-
-The diploma's source materials in `original_materials/` came out of a multi-TAFE collaboration in which Kangan (Tim's employer) was a participant, and the working assumption is that Kangan's participation grants reuse rights over all of that content — including units authored by other TAFEs. That assumption is still being confirmed with Kangan's legal team, so this document records the assumption, why we hold it, how to apply it day-to-day, and the fallback plan if legal denies reuse. Paths are relative to the **content repo** root.
 
 ## Origin: a multi-TAFE collaboration
 
