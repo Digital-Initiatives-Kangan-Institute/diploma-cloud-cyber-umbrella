@@ -43,7 +43,17 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from xml.sax.saxutils import escape
+from xml.sax.saxutils import escape as _escape
+
+
+def escape(s, extra=None):
+    """XML-escape for use inside a double-quoted attribute.
+
+    saxutils.escape leaves `"` alone, which is fine for element text but breaks an attribute:
+    draw.io stores rich-text labels as HTML, so a hand-edited label can carry
+    `<span style="...">` and the quote terminates value="..." mid-string.
+    """
+    return _escape(str(s), {'"': "&quot;", **(extra or {})})
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -79,6 +89,8 @@ ER_FROM_STYLE = {v: k for k, v in ER_ARROWS.items()}
 def _fill(name):
     if not name:
         return PALETTE["grey"]
+    if str(name) == "none":                 # transparent — containers, so nested boxes show through
+        return ("none", "#666666")
     if str(name).startswith("#"):
         return (name, "#444444")
     return PALETTE.get(name, PALETTE["grey"])
@@ -89,6 +101,11 @@ def _fill(name):
 #   diamond — flowchart decision            entity — ER entity (left/top-aligned: name then attrs)
 def _node_style(shape, fill, stroke):
     base = f"whiteSpace=wrap;html=1;fillColor={fill};strokeColor={stroke};fontSize=14;"
+    if shape == "container":
+        # A grouping box other nodes nest inside (a VPC, a subnet, a scope boundary). Label sits at
+        # the top so the interior stays clear; collapsible=0 so it cannot be folded shut in draw.io.
+        return ("rounded=0;container=1;collapsible=0;" + base
+                + "align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;")
     if shape == "diamond":
         return "rhombus;" + base + "align=center;verticalAlign=middle;"
     if shape == "ellipse":
@@ -104,6 +121,8 @@ def _node_style(shape, fill, stroke):
 
 def _shape_from_style(style):
     style = style or ""
+    if "container=1" in style:
+        return "container"
     if "rhombus" in style:
         return "diamond"
     if "ellipse" in style:
@@ -120,31 +139,67 @@ def _shape_from_style(style):
 
 # --- author the .drawio (stdlib) ---------------------------------------------
 def build_drawio(spec: dict) -> str:
+    """Author the .drawio XML for a spec.
+
+    Two placement modes, mixable in one diagram:
+
+      grid       `row` / `col` — the default. Nodes land on a pitch that fits the largest box.
+      absolute   `x` / `y` — explicit canvas coordinates. Needed for nested layouts, where a
+                 container's children have to sit where the topology says, not on a shared grid.
+
+    Nesting: a node may name a `parent` (a container node's id). Spec coordinates are always
+    ABSOLUTE — the parent offset is subtracted on emit, because draw.io stores a child's geometry
+    relative to its container. Containers are emitted before their children so they render behind
+    them, and `pos` keeps absolute coordinates so edge anchoring is unaffected by nesting.
+    """
     nodes = spec.get("nodes", [])
     edges = spec.get("edges", [])
     auto = 0
     for n in nodes:
-        if "row" not in n or "col" not in n:
+        if not {"row", "col"} & set(n) and not {"x", "y"} & set(n):
             n.setdefault("row", auto)
             n.setdefault("col", 0)
             auto += 1
     cells = []
-    pos = {}                                  # id -> (x, y, w, h) for edge anchoring
+    pos = {}                                  # id -> (x, y, w, h), ABSOLUTE, for edge anchoring
     # Grid pitch fits the largest node so tall/wide nodes (e.g. ER entities) don't collide; for
     # uniform diagrams this is exactly (W+GX, H+GY), leaving network/flowchart layouts unchanged.
-    pitch_x = max((n.get("w", W) for n in nodes), default=W) + GX
-    pitch_y = max((n.get("h", H) for n in nodes), default=H) + GY
-    for n in nodes:
+    # Absolutely-placed nodes are excluded — a big container must not inflate the grid pitch.
+    grid_nodes = [n for n in nodes if "row" in n or "col" in n]
+    pitch_x = max((n.get("w", W) for n in grid_nodes), default=W) + GX
+    pitch_y = max((n.get("h", H) for n in grid_nodes), default=H) + GY
+
+    by_id = {n["id"]: n for n in nodes}
+
+    def depth(n, seen=None):
+        """How deeply nested a node is — emit order, so a container precedes what it holds."""
+        seen = seen or set()
+        p = n.get("parent")
+        if not p or p not in by_id or p in seen:
+            return 0
+        return 1 + depth(by_id[p], seen | {n["id"]})
+
+    def absolute(n):
+        if "x" in n or "y" in n:
+            return float(n.get("x", MARGIN)), float(n.get("y", MARGIN))
+        return MARGIN + n.get("col", 0) * pitch_x, MARGIN + n.get("row", 0) * pitch_y
+
+    for n in sorted(nodes, key=depth):
         fill, stroke = _fill(n.get("fill"))
         w, h = n.get("w", W), n.get("h", H)
-        x = MARGIN + n["col"] * pitch_x
-        y = MARGIN + n["row"] * pitch_y
+        x, y = absolute(n)
         pos[n["id"]] = (x, y, w, h)
         label = escape(str(n.get("label", n["id"]))).replace("\\n", "&#10;").replace("\n", "&#10;")
         style = _node_style(n.get("shape"), fill, stroke)
+        parent = n.get("parent")
+        gx, gy = x, y
+        if parent and parent in pos:          # draw.io stores child geometry relative to its parent
+            px, py, _, _ = pos[parent]
+            gx, gy = x - px, y - py
         cells.append(
-            f'<mxCell id="{escape(str(n["id"]))}" value="{label}" style="{style}" vertex="1" parent="1">'
-            f'<mxGeometry x="{x}" y="{y}" width="{w}" height="{h}" as="geometry"/></mxCell>'
+            f'<mxCell id="{escape(str(n["id"]))}" value="{label}" style="{style}" vertex="1" '
+            f'parent="{escape(str(parent)) if parent and parent in pos else "1"}">'
+            f'<mxGeometry x="{gx}" y="{gy}" width="{w}" height="{h}" as="geometry"/></mxCell>'
         )
     for i, e in enumerate(edges):
         label = escape(str(e.get("label", "")))
@@ -156,18 +211,33 @@ def build_drawio(spec: dict) -> str:
         else:
             style = "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=12;"
         # Author explicit exit/entry ports so the edge geometry is deterministic in BOTH draw.io and
-        # the Pillow renderer (no reliance on either side's floating auto-router).
+        # the Pillow renderer (no reliance on either side's floating auto-router). A spec may pin
+        # `exit`/`entry` (and `waypoints`) explicitly — that is how a diagram tidied by hand in
+        # draw.io round-trips back through a spec without losing its routing.
         src, tgt = pos.get(e["from"]), pos.get(e["to"])
-        if src and tgt:
+        ex, en = e.get("exit"), e.get("entry")
+        if ex and en:
+            sx, sy = float(ex[0]), float(ex[1])
+            tx, ty = float(en[0]), float(en[1])
+        elif src and tgt:
             a = {"x": src[0], "y": src[1], "w": src[2], "h": src[3]}
             b = {"x": tgt[0], "y": tgt[1], "w": tgt[2], "h": tgt[3]}
             (sx, sy), (tx, ty) = _float_anchors(a, b)
+        else:
+            sx = sy = tx = ty = None
+        if sx is not None:
             style += (f"exitX={sx};exitY={sy};exitDx=0;exitDy=0;"
                       f"entryX={tx};entryY={ty};entryDx=0;entryDy=0;")
+        wps = e.get("waypoints") or []
+        geo = '<mxGeometry relative="1" as="geometry"/>'
+        if wps:
+            pts = "".join(f'<mxPoint x="{float(px)}" y="{float(py)}"/>' for px, py in wps)
+            geo = ('<mxGeometry relative="1" as="geometry">'
+                   f'<Array as="points">{pts}</Array></mxGeometry>')
         cells.append(
             f'<mxCell id="e{i}" value="{label}" style="{style}" edge="1" parent="1" '
             f'source="{escape(str(e["from"]))}" target="{escape(str(e["to"]))}">'
-            f'<mxGeometry relative="1" as="geometry"/></mxCell>'
+            f'{geo}</mxCell>'
         )
     name = escape(str(spec.get("title", "Diagram")))
     body = "".join(cells)
@@ -215,9 +285,11 @@ def parse_drawio(xml: str):
     than re-guessing it from box centres."""
     root = ET.fromstring(xml)
     nodes, edges = {}, []
+    parent_of = {}
     for cell in root.iter("mxCell"):
         if cell.get("vertex") == "1":
             geo = cell.find("mxGeometry")
+            parent_of[cell.get("id")] = cell.get("parent")
             nodes[cell.get("id")] = {
                 "label": (cell.get("value") or "").replace("&#10;", "\n").replace("\\n", "\n"),
                 "x": float(geo.get("x", 0)), "y": float(geo.get("y", 0)),
@@ -241,6 +313,27 @@ def parse_drawio(xml: str):
                           "start_marker": ER_FROM_STYLE.get(_style_get(style, "startArrow")),
                           "end_marker": ER_FROM_STYLE.get(_style_get(style, "endArrow")),
                           "waypoints": waypoints})
+
+    # draw.io stores a nested cell's geometry relative to its container. Everything downstream —
+    # edge routing, canvas sizing, drawing — works in absolute canvas coordinates, so resolve the
+    # parent chain once here. Flat diagrams (every parent is "1") are unaffected.
+    #
+    # Offsets are computed from the ORIGINAL relative geometry and applied afterwards: resolving in
+    # place would read parents that had already been converted and count their offset twice.
+    rel = {nid: (n["x"], n["y"]) for nid, n in nodes.items()}
+
+    def offset(nid, seen=None):
+        seen = seen or set()
+        p = parent_of.get(nid)
+        if p is None or p not in nodes or p in seen:
+            return 0.0, 0.0
+        px, py = offset(p, seen | {nid})
+        return rel[p][0] + px, rel[p][1] + py
+
+    for nid, n in nodes.items():
+        dx, dy = offset(nid)
+        n["x"] = rel[nid][0] + dx
+        n["y"] = rel[nid][1] + dy
     return nodes, edges
 
 
@@ -389,7 +482,49 @@ def render(nodes: dict, edges: list, scale: int = 2) -> "Image.Image":
     body_font = _font(14 * S)
     edge_font = _font(12 * S)
 
-    # edges first (behind boxes)
+    # Draw order: containers, then edges, then everything else. Containers go first so their fill
+    # cannot paint over an edge that enters them (an arrow into a box inside a subnet would lose its
+    # head and its label); leaf boxes go last so edge ends tuck under them as before.
+    def _draw_box(n):
+        x0, y0 = n["x"] * S, n["y"] * S
+        x1, y1 = (n["x"] + n["w"]) * S, (n["y"] + n["h"]) * S
+        fill, stroke, shape = n["fill"], n["stroke"], n.get("shape", "rounded")
+        if fill == "none":                      # transparent — outline only, interior shows through
+            fill = None
+        lw = max(2, S)
+        if shape == "diamond":
+            mx, my = (x0 + x1) / 2, (y0 + y1) / 2
+            poly = [(mx, y0), (x1, my), (mx, y1), (x0, my)]
+            d.polygon(poly, fill=fill)
+            d.line(poly + [poly[0]], fill=stroke, width=lw)
+        elif shape == "ellipse":
+            d.ellipse([x0, y0, x1, y1], fill=fill, outline=stroke, width=lw)
+        elif shape == "stadium":
+            d.rounded_rectangle([x0, y0, x1, y1], radius=(y1 - y0) / 2, fill=fill, outline=stroke, width=lw)
+        elif shape in ("rect", "entity", "container"):
+            d.rectangle([x0, y0, x1, y1], fill=fill, outline=stroke, width=lw)
+        else:
+            d.rounded_rectangle([x0, y0, x1, y1], radius=8 * S, fill=fill, outline=stroke, width=lw)
+
+        lines = _wrap(d, n["label"], body_font, n["w"] * S - 12 * S)
+        lh = (body_font.getbbox("Ay")[3] - body_font.getbbox("Ay")[1]) + 4 * S
+        if shape in ("container", "entity"):     # label top-left; the interior stays clear
+            tx, ty = x0 + 8 * S, y0 + 6 * S
+            for ln in lines:
+                d.text((tx, ty), ln, fill="#222222", font=body_font)
+                ty += lh
+        else:
+            ty = (y0 + y1) / 2 - (len(lines) * lh) / 2
+            for ln in lines:
+                tw = d.textlength(ln, font=body_font)
+                d.text(((x0 + x1) / 2 - tw / 2, ty), ln, fill="#222222", font=body_font)
+                ty += lh
+
+    containers = [n for n in nodes.values() if n.get("shape") == "container"]
+    leaves = [n for n in nodes.values() if n.get("shape") != "container"]
+    for n in sorted(containers, key=lambda n: -(n["w"] * n["h"])):   # outermost first
+        _draw_box(n)
+
     for e in edges:
         a, b = nodes.get(e["source"]), nodes.get(e["target"])
         if not a or not b:
@@ -417,39 +552,8 @@ def render(nodes: dict, edges: list, scale: int = 2) -> "Image.Image":
             mid = pts[len(pts) // 2]
             d.text((mid[0] * S + 4 * S, mid[1] * S - 16 * S), e["label"], fill="#333333", font=edge_font)
 
-    # boxes + labels on top
-    for n in nodes.values():
-        x0, y0 = n["x"] * S, n["y"] * S
-        x1, y1 = (n["x"] + n["w"]) * S, (n["y"] + n["h"]) * S
-        fill, stroke, shape = n["fill"], n["stroke"], n.get("shape", "rounded")
-        lw = max(2, S)
-        if shape == "diamond":
-            mx, my = (x0 + x1) / 2, (y0 + y1) / 2
-            poly = [(mx, y0), (x1, my), (mx, y1), (x0, my)]
-            d.polygon(poly, fill=fill)
-            d.line(poly + [poly[0]], fill=stroke, width=lw)
-        elif shape == "ellipse":
-            d.ellipse([x0, y0, x1, y1], fill=fill, outline=stroke, width=lw)
-        elif shape == "stadium":
-            d.rounded_rectangle([x0, y0, x1, y1], radius=(y1 - y0) / 2, fill=fill, outline=stroke, width=lw)
-        elif shape in ("rect", "entity"):
-            d.rectangle([x0, y0, x1, y1], fill=fill, outline=stroke, width=lw)
-        else:
-            d.rounded_rectangle([x0, y0, x1, y1], radius=8 * S, fill=fill, outline=stroke, width=lw)
-
-        lines = _wrap(d, n["label"], body_font, n["w"] * S - 12 * S)
-        lh = (body_font.getbbox("Ay")[3] - body_font.getbbox("Ay")[1]) + 4 * S
-        if shape == "entity":                            # name then attributes, left/top-aligned
-            tx, ty = x0 + 6 * S, y0 + 6 * S
-            for ln in lines:
-                d.text((tx, ty), ln, fill="#222222", font=body_font)
-                ty += lh
-        else:
-            ty = (y0 + y1) / 2 - (len(lines) * lh) / 2
-            for ln in lines:
-                tw = d.textlength(ln, font=body_font)
-                d.text(((x0 + x1) / 2 - tw / 2, ty), ln, fill="#222222", font=body_font)
-                ty += lh
+    for n in leaves:                                     # leaf boxes last, on top of the edge ends
+        _draw_box(n)
     return img
 
 
