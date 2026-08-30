@@ -17,7 +17,7 @@ enforces, so the emitted tags are precisely the set that validator expects:
     sub-bullets are the items (e.g. ICTICT517 PE). Nested sub-bullets under a normal
     item are kept indented beneath it, as part of that one item.
   - the trailing "Assessors of this unit must satisfy..." paragraph is emitted as one
-    extra AC item only when --assessor-ac is given (CL1/CL2 style; off for CL3).
+    extra AC item only when --assessor-ac is given.
 
 Output is Markdown: '- [UNIT SEC num] <verbatim text>' lines, organised under
 '## UNIT — SECTION' comments for navigation. Feed it to the grouping step.
@@ -133,20 +133,24 @@ def emit_item(tag: str, parent_line: str, children=None) -> str:
 
 
 def inventory(code: str, md: str, assessor_ac: bool):
-    """Yield ('## CODE — SECTION', [rendered item lines]) for each section."""
+    """Yield ('## CODE — SECTION', [rendered item lines]) for each section.
+
+    Every one of the five sections is assessable and mandatory in a training-package UoC, so a
+    section that yields nothing is an extraction failure, not an empty section — see the raise
+    below."""
     # PC
     pcs = parse_pcs(md)
-    yield (f"## {code} — Performance Criteria",
-           [f"- {text} [{code} PC {num}]" for num, text in pcs])
+    sections = [(f"## {code} — Performance Criteria",
+                 [f"- {text} [{code} PC {num}]" for num, text in pcs])]
     # FS — house style bolds the skill name and separates it from the description
     fs = parse_fs(md)
-    yield (f"## {code} — Foundation Skills",
-           [f"- **{name}** — {desc} [{code} FS {name}]" for name, desc in fs])
+    sections.append((f"## {code} — Foundation Skills",
+                     [f"- **{name}** — {desc} [{code} FS {name}]" for name, desc in fs]))
     # PE / KE
     for sec, heading in (("PE", "Performance Evidence"), ("KE", "Knowledge Evidence")):
         blocks = parse_bullets(md, heading)
         items = [emit_item(f"{code} {sec} {i}", b[0], b[1:]) for i, b in enumerate(blocks, 1)]
-        yield (f"## {code} — {heading}", items)
+        sections.append((f"## {code} — {heading}", items))
     # AC (+ optional trailing assessor paragraph)
     blocks = parse_bullets(md, "Assessment Conditions")
     items = [emit_item(f"{code} AC {i}", b[0], b[1:]) for i, b in enumerate(blocks, 1)]
@@ -154,7 +158,18 @@ def inventory(code: str, md: str, assessor_ac: bool):
         para = trailing_assessor_ac(md)
         if para:
             items.append(f"- {para} [{code} AC {len(blocks) + 1}]")
-    yield (f"## {code} — Assessment Conditions", items)
+    sections.append((f"## {code} — Assessment Conditions", items))
+
+    empty = [h.split(" — ", 1)[1] for h, its in sections if not its]
+    if empty:
+        # A silently empty section shrinks the item register without failing anything:
+        # validate_consolidated.py builds its expected set by these same rules, so it would
+        # measure the consolidated doc against a yardstick short by a whole section and pass.
+        raise ValueError(
+            f"{code}: no items extracted from {', '.join(empty)}. The heading is missing or "
+            f"renamed, or the items are not formatted as bullets/table rows.")
+
+    yield from sections
 
 
 def main():
@@ -172,7 +187,12 @@ def main():
             ap.error(f"--unit must be CODE=PATH, got {spec!r}")
         md = Path(path).read_text(encoding="utf-8")
         out.append(f"# {code}")
-        for header, items in inventory(code, md, args.assessor_ac):
+        try:
+            sections = list(inventory(code, md, args.assessor_ac))
+        except ValueError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            sys.exit(2)
+        for header, items in sections:
             out.append(header)
             out.extend(items)
             out.append("")

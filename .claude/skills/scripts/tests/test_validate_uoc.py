@@ -65,8 +65,9 @@ def h(level: int, text: str) -> str:
     return p(text, style=f"Heading{level}")
 
 
-def bullet(text: str) -> str:
-    return p(text, style="ListBullet")
+def bullet(text: str, depth: int = 0) -> str:
+    """A list paragraph. Depth comes from the style suffix: ListBullet, ListBullet2, ListBullet3."""
+    return p(text, style="ListBullet" + (str(depth + 1) if depth else ""))
 
 
 def raw_p(inner: str) -> str:
@@ -74,13 +75,16 @@ def raw_p(inner: str) -> str:
     return f"<w:p><w:r>{inner}</w:r></w:p>"
 
 
-def tbl(rows: list[list[str]]) -> str:
-    """A table. A newline inside a cell starts a new paragraph in that cell."""
+def tbl(rows: list[list[str]], cell_style: str | None = None) -> str:
+    """A table. A newline inside a cell starts a new paragraph in that cell.
+
+    `cell_style` styles the cell paragraphs — the real UoC documents style many of them `List`,
+    which is why a list-shape check must exclude paragraphs inside tables."""
     out = ["<w:tbl>"]
     for row in rows:
         out.append("<w:tr>")
         for cell in row:
-            paras = "".join(p(part) for part in cell.split("\n"))
+            paras = "".join(p(part, style=cell_style) for part in cell.split("\n"))
             out.append(f"<w:tc>{paras}</w:tc>")
         out.append("</w:tr>")
     out.append("</w:tbl>")
@@ -102,15 +106,25 @@ def make_docx(tmp_path: Path, blocks: list[str], furniture: bool = False, name="
 
 
 def verdict(tmp_path: Path, docx: Path, md_text: str) -> str:
-    """Run the gate over a pair and reduce it to its verdict: exact | cosmetic | substantive."""
+    """Run the gate over a pair and reduce it to its verdict.
+
+    exact | cosmetic | substantive (word content differs) | structure (the list shape differs).
+    """
     md = tmp_path / "unit.md"
     md.write_text(md_text, encoding="utf-8")
-    f = V.diff_report("fixture", V.docx_to_text(docx), V.md_to_text(md))
+    f = V.compare(docx, md, "fixture")
+    if f["structure_diff"]:
+        return "structure"
     if f["exact_match"]:
         return "exact"
     if f["cosmetic_match"]:
         return "cosmetic"
     return "substantive"
+
+
+# Losing or inventing a whole bullet trips both axes — the words differ AND the list shape
+# differs. Either verdict blocks the gate, so those tests assert failure rather than a class.
+FAILS = ("substantive", "structure")
 
 
 # ---------------------------------------------------------------------------
@@ -220,7 +234,7 @@ def test_dropped_negation_fails(tmp_path):
 
 def test_dropped_bullet_fails(tmp_path, source):
     """A whole PE item lost — the mode that silently reduces what the cluster must assess."""
-    assert verdict(tmp_path, source, MD.replace("- document the configuration\n", "")) == "substantive"
+    assert verdict(tmp_path, source, MD.replace("- document the configuration\n", "")) in FAILS
 
 
 def test_dropped_table_cell_fails(tmp_path, source):
@@ -246,7 +260,7 @@ def test_added_sentence_fails(tmp_path, source):
 
 def test_added_bullet_fails(tmp_path, source):
     broken = MD.replace("- document the configuration", "- document the configuration\n- test the configuration")
-    assert verdict(tmp_path, source, broken) == "substantive"
+    assert verdict(tmp_path, source, broken) in FAILS
 
 
 def test_added_table_row_fails(tmp_path, source):
@@ -261,7 +275,7 @@ def test_added_table_row_fails(tmp_path, source):
 def test_duplicated_item_fails(tmp_path, source):
     """Copy-paste during hand-editing: the same PE bullet transcribed twice."""
     broken = MD.replace("- configure two cloud services\n", "- configure two cloud services\n" * 2)
-    assert verdict(tmp_path, source, broken) == "substantive"
+    assert verdict(tmp_path, source, broken) in FAILS
 
 
 # ---------------------------------------------------------------------------
@@ -354,21 +368,58 @@ def test_empty_source_is_not_a_pass(tmp_path):
 
 
 # ---------------------------------------------------------------------------
-# Scope boundary — what this gate does NOT prove
+# List shape — bullet identity, which the word diff cannot see
+#
+# Step 2 itemises PE/KE/AC by counting top-level bullets, and numbers them 1..N. So a bullet
+# that arrives as a plain paragraph is not a lost word — it is a lost assessable item, and the
+# expected register silently shrinks with it. The source .docx list styling is the oracle:
+# it is independent of the markdown entirely.
 # ---------------------------------------------------------------------------
 
-def test_gate_is_structure_blind(tmp_path, source):
-    """Documented boundary, not an endorsement: the diff is over words, so structure is invisible.
+def test_faithful_bullets_pass(tmp_path):
+    """The baseline for the shape check: two depths, transcribed as indented markdown bullets."""
+    docx = make_docx(tmp_path, [p("The candidate must:"), bullet("configure the service"),
+                                bullet("record the result", depth=1)])
+    assert verdict(tmp_path, docx, "The candidate must:\n\n- configure the service\n  - record the result\n") == "exact"
 
-    A PE bullet transcribed as a plain paragraph keeps the same word sequence and passes here.
-    Bullet identity is what step 2's inventory counts, so proving structure belongs to Gate 2→3 —
-    which must not assume this gate covered it.
+
+def test_flattened_bullet_is_detected(tmp_path):
+    """A list paragraph transcribed as prose. Same words, one fewer assessable item."""
+    docx = make_docx(tmp_path, [bullet("configure the service"), bullet("record the result")])
+    assert verdict(tmp_path, docx, "- configure the service\n\nrecord the result\n") == "structure"
+
+
+def test_invented_bullet_is_detected(tmp_path):
+    """The mirror: a source paragraph transcribed as a bullet invents an assessable item."""
+    docx = make_docx(tmp_path, [bullet("configure the service"), p("record the result")])
+    assert verdict(tmp_path, docx, "- configure the service\n- record the result\n") == "structure"
+
+
+def test_lost_nesting_depth_is_detected(tmp_path):
+    """Depth is not decoration.
+
+    A child promoted to top level turns one item into two; a parent demoted turns two into one.
+    The PE parent-ending-':' rule and the KE fold-children rule both hang off this.
     """
-    flattened = MD.replace(
-        "- configure two cloud services\n- document the configuration",
-        "configure two cloud services document the configuration",
-    )
-    assert verdict(tmp_path, source, flattened) == "exact"
+    docx = make_docx(tmp_path, [bullet("for one organisation:"), bullet("configure the service", depth=1)])
+    assert verdict(tmp_path, docx, "- for one organisation:\n- configure the service\n") == "structure"
+
+
+def test_list_paragraphs_inside_a_table_are_not_bullets(tmp_path):
+    """The real UoC documents style table-cell paragraphs `List`; they render as table rows.
+
+    Counting them as bullets would fail every genuine transcription in the corpus.
+    """
+    docx = make_docx(tmp_path, [tbl([["Element", "PC"], ["1. Prepare", "1.1 Confirm"]], cell_style="List")])
+    md = "| Element | PC |\n| --- | --- |\n| 1. Prepare | 1.1 Confirm |\n"
+    assert verdict(tmp_path, docx, md) == "exact"
+
+
+def test_an_unhandled_list_style_is_detected(tmp_path):
+    """The transcriber only recognises List(Bullet|Number|Paragraph); a bare `List` style in the
+    body would silently become a paragraph. The oracle counts any List* style, so it catches it."""
+    docx = make_docx(tmp_path, [p("configure the service", style="List")])
+    assert verdict(tmp_path, docx, "configure the service\n") == "structure"
 
 
 # ---------------------------------------------------------------------------
@@ -390,6 +441,19 @@ def test_cli_exits_one_on_a_substantive_diff(tmp_path, source):
     md = tmp_path / "unit.md"
     md.write_text(MD.replace("- document the configuration\n", ""), encoding="utf-8")
     assert run_cli(source, md).returncode == 1
+
+
+def test_cli_exits_one_on_a_structure_only_diff(tmp_path):
+    """The words match exactly and only the list shape differs — the gate must still fail.
+
+    This is the flattened-bullet case as the run-sheet meets it: a green word diff is not a pass.
+    """
+    docx = make_docx(tmp_path, [bullet("configure the service"), bullet("record the result")])
+    md = tmp_path / "unit.md"
+    md.write_text("- configure the service\n\nrecord the result\n", encoding="utf-8")
+    r = run_cli(docx, md)
+    assert r.returncode == 1, r.stdout
+    assert "LIST STRUCTURE DIFFERS" in r.stdout
 
 
 def test_cli_exits_zero_on_cosmetic_only(tmp_path):

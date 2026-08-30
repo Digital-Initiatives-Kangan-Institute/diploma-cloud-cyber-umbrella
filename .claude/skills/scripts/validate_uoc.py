@@ -84,6 +84,68 @@ def docx_to_text(docx_path: Path) -> str:
     return "\n".join(out_lines)
 
 
+def docx_list_shape(docx_path: Path) -> list[int]:
+    """The source's list structure: one nesting depth per list paragraph, in document order.
+
+    A word-level diff cannot see whether a line arrived as a bullet or as prose, but step 2
+    itemises PE/KE/AC by counting top-level bullets — so a flattened bullet is a lost assessable
+    item, not a cosmetic difference. This reads the shape from the .docx paragraph styles, which
+    is independent of the markdown and of the transcriber's own style rules.
+
+    Any style starting with 'List' counts (deliberately wider than the transcriber's
+    List(Bullet|Number|Paragraph) rule, so an unhandled style shows up as a mismatch rather than
+    silently flattening). Paragraphs inside a table are excluded: the real UoC documents style
+    many table-cell paragraphs 'List', and those render as table rows, not bullets.
+    """
+    with zipfile.ZipFile(docx_path) as z:
+        with z.open("word/document.xml") as f:
+            tree = ET.parse(f)
+
+    body = tree.getroot().find(f"{W_NS}body")
+    if body is None:
+        return []
+
+    depths = []
+
+    def style_of(p_elem):
+        pPr = p_elem.find(f"{W_NS}pPr")
+        if pPr is None:
+            return None
+        s = pPr.find(f"{W_NS}pStyle")
+        return s.get(f"{W_NS}val") if s is not None else None
+
+    def walk(elem, in_table):
+        for child in elem:
+            tag = child.tag
+            if tag == f"{W_NS}p":
+                style = style_of(child)
+                if not in_table and style and style.startswith("List"):
+                    if "".join(n.text or "" for n in child.iter(f"{W_NS}t")).strip():
+                        m = re.search(r"(\d+)$", style)
+                        depths.append(int(m.group(1)) - 1 if m else 0)
+            elif tag == f"{W_NS}tbl":
+                walk(child, True)
+            elif tag == f"{W_NS}sdt":
+                content = child.find(f"{W_NS}sdtContent")
+                if content is not None:
+                    walk(content, in_table)
+            else:
+                walk(child, in_table)
+
+    walk(body, False)
+    return depths
+
+
+def md_list_shape(md_path: Path) -> list[int]:
+    """The transcription's list structure — one depth per bullet, from its indentation."""
+    out = []
+    for line in md_path.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^( *)- ", line)
+        if m:
+            out.append(len(m.group(1)) // 2)
+    return out
+
+
 def md_to_text(md_path: Path) -> str:
     """Strip markdown syntax from a .md file, leaving the textual content.
 
@@ -174,6 +236,7 @@ def diff_report(label: str, docx_text: str, md_text: str) -> dict:
         "cosmetic_match": cosmetic_match,
         "substantive_diff": [],
         "cosmetic_diff": [],
+        "structure_diff": [],
         "empty_source": not docx_words,
     }
 
@@ -213,11 +276,40 @@ def diff_report(label: str, docx_text: str, md_text: str) -> dict:
     return findings
 
 
+def compare(docx_path: Path, md_path: Path, label: str) -> dict:
+    """The full gate over one pair: word content plus list shape."""
+    f = diff_report(label, docx_to_text(docx_path), md_to_text(md_path))
+    docx_shape = docx_list_shape(docx_path)
+    md_shape = md_list_shape(md_path)
+    if docx_shape != md_shape:
+        sm = difflib.SequenceMatcher(a=docx_shape, b=md_shape, autojunk=False)
+        for tag, i1, i2, j1, j2 in sm.get_opcodes():
+            if tag == "equal":
+                continue
+            f["structure_diff"].append({
+                "op": tag,
+                "at_bullet": i1,
+                "docx_depths": docx_shape[i1:i2],
+                "md_depths": md_shape[j1:j2],
+            })
+    f["docx_bullets"] = len(docx_shape)
+    f["md_bullets"] = len(md_shape)
+    return f
+
+
 def print_findings(f: dict) -> None:
     print(f"\n{'=' * 70}")
     print(f"  {f['label']}")
     print(f"{'=' * 70}")
     print(f"  docx words: {f['docx_word_count']}    md words: {f['md_word_count']}")
+    if "docx_bullets" in f:
+        print(f"  docx bullets: {f['docx_bullets']}    md bullets: {f['md_bullets']}")
+    if f["structure_diff"]:
+        print("  RESULT: LIST STRUCTURE DIFFERS — a bullet was flattened, invented, or re-nested")
+        for d in f["structure_diff"]:
+            print(f"    [{d['op']}] at bullet {d['at_bullet']}  "
+                  f"docx depths {d['docx_depths']} != md depths {d['md_depths']}")
+        return
     if f["empty_source"]:
         print("  RESULT: FAIL — no extractable text in the .docx (nothing to validate against)")
         return
@@ -253,11 +345,9 @@ def main():
         docx_path = Path(pairs[i])
         md_path = Path(pairs[i + 1])
         label = f"{docx_path.name}  vs  {md_path.name}"
-        docx_text = docx_to_text(docx_path)
-        md_text = md_to_text(md_path)
-        f = diff_report(label, docx_text, md_text)
+        f = compare(docx_path, md_path, label)
         print_findings(f)
-        if not f["cosmetic_match"]:
+        if not f["cosmetic_match"] or f["structure_diff"]:
             any_substantive = True
 
     print()

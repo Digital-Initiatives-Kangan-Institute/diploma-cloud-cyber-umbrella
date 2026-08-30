@@ -17,8 +17,8 @@ Usage:
   --unit CODE=PATH  a source unit: its tag code and its .md path (relative to
                     the cluster dir, or absolute). Repeatable.
   --assessor-ac     count the trailing "Assessors of this unit must satisfy..."
-                    paragraph as one extra AC item per unit (CL1/CL2 style).
-                    Omit for clusters that do not tag it (CL3 style).
+                    paragraph as one extra AC item per unit. Omit for clusters
+                    that do not tag it.
 
 Exit 0 = PASS (every expected item present exactly once, nothing extra).
 """
@@ -29,91 +29,76 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-
-def parse_pcs(md_text: str) -> list[str]:
-    """Extract PC numbers (e.g. '1.2') from the Elements and Performance Criteria table."""
-    m = re.search(r"# Elements and Performance Criteria\n(.*?)(?=\n# )", md_text, re.DOTALL)
-    if not m:
-        return []
-    section = m.group(1)
-    return re.findall(r"\b(\d+\.\d+)\s+", section)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import inventory_uoc  # noqa: E402
+from validate_uoc import normalise_cosmetic  # noqa: E402
 
 
-def parse_fs(md_text: str) -> list[str]:
-    """Extract Foundation Skill names from the Foundation Skills table."""
-    m = re.search(r"# Foundation Skills\n(.*?)(?=\n# )", md_text, re.DOTALL)
-    if not m:
-        return []
-    section = m.group(1)
-    names = []
-    for line in section.splitlines():
-        line = line.strip()
-        if not line.startswith("|"):
-            continue
-        if re.match(r"\|\s*(SKILL|Skill)\s*\|", line):
-            continue
-        if re.match(r"\|\s*-+\s*\|", line):
-            continue
-        cells = [c.strip() for c in line.strip("|").split("|")]
-        if len(cells) >= 2 and cells[0] and not cells[0].lower().startswith("skill"):
-            names.append(cells[0])
-    return names
+TAG_RE = r"\[(ICT\w+|BSB\w+|VU\d+) (PC|FS|PE|KE|AC) ([^\]]+)\]"
 
 
-def parse_section_bullets(md_text: str, heading: str) -> int:
-    """Count assessable bullets under a heading (PE, KE, AC).
+def build_inventory(units: list[tuple[str, Path]], assessor_ac: bool) -> dict[str, str]:
+    """The expected items, {tag: verbatim item block}, from the source UoCs.
 
-    Counts top-level bullets ('- '). Special case: a single top-level bullet
-    ending in ':' is a parent with nested children — count the immediate
-    sub-bullets ('  - ') instead.
+    Itemisation is delegated to inventory_uoc — the same extractor that produces the item lines
+    in the first place. There is deliberately no second copy of the parsing rules here: two
+    mirrored parsers that must agree are a maintenance hazard, not independent evidence. The
+    independent check on the .md's structure lives upstream at Gate 1, where the .docx is the
+    oracle.
     """
-    pattern = rf"# {re.escape(heading)}\n(.*?)(?=\n# )"
-    m = re.search(pattern, md_text, re.DOTALL)
-    if not m:
-        sections = re.findall(rf"# {re.escape(heading)}\n(.*?)(?=\n# |\Z)", md_text, re.DOTALL)
-        if not sections:
-            return 0
-        section = sections[-1]
-    else:
-        section = m.group(1)
-
-    lines = section.splitlines()
-    top_level = [line for line in lines if re.match(r"^- ", line)]
-
-    if len(top_level) == 1 and top_level[0].rstrip().endswith(":"):
-        sub = [line for line in lines if re.match(r"^  - ", line)]
-        return len(sub)
-
-    return len(top_level)
-
-
-def build_inventory(units: list[tuple[str, Path]], assessor_ac: bool) -> set[str]:
-    """Build the expected set of reference tags from the source UoCs."""
-    expected = set()
+    expected = {}
     for unit, md_path in units:
         md = md_path.read_text(encoding="utf-8")
-        for pc in parse_pcs(md):
-            expected.add(f"{unit} PC {pc}")
-        for fs in parse_fs(md):
-            expected.add(f"{unit} FS {fs}")
-        for n in range(1, parse_section_bullets(md, "Performance Evidence") + 1):
-            expected.add(f"{unit} PE {n}")
-        for n in range(1, parse_section_bullets(md, "Knowledge Evidence") + 1):
-            expected.add(f"{unit} KE {n}")
-        ac_count = parse_section_bullets(md, "Assessment Conditions")
-        if assessor_ac:
-            # CL1/CL2 numbered the trailing assessor-requirements paragraph
-            # as one extra AC item after the "access to" bullets.
-            ac_count += 1
-        for n in range(1, ac_count + 1):
-            expected.add(f"{unit} AC {n}")
+        for _header, items in inventory_uoc.inventory(unit, md, assessor_ac):
+            for block in items:
+                m = re.search(TAG_RE, block)
+                expected[f"{m.group(1)} {m.group(2)} {m.group(3).strip()}"] = block
     return expected
 
 
 def extract_refs(text: str) -> list[tuple[str, str, str]]:
     """Pull every reference tag from the consolidated doc, skipping code spans."""
     cleaned = re.sub(r"`[^`]*`", "", text)
-    return re.findall(r"\[(ICT\w+|BSB\w+|VU\d+) (PC|FS|PE|KE|AC) ([^\]]+)\]", cleaned)
+    return re.findall(TAG_RE, cleaned)
+
+
+def item_blocks(text: str) -> dict[str, str]:
+    """{tag: item block} for the consolidated doc's tagged bullet lines.
+
+    An item line is a bullet carrying its tag OUTSIDE a code span — editorial prose cites tags in
+    backticks, and must not be mistaken for an item. The block runs on through any following
+    indented, untagged sub-bullets, which belong to that item.
+    """
+    lines = text.splitlines()
+    out = {}
+    for i, line in enumerate(lines):
+        bare = re.sub(r"`[^`]*`", "", line)
+        if not re.match(r"^[-*] ", line):
+            continue
+        m = re.search(TAG_RE, bare)
+        if not m:
+            continue
+        block = [line]
+        for nxt in lines[i + 1:]:
+            if re.match(r"^\s+[-*] ", nxt) and not re.search(TAG_RE, re.sub(r"`[^`]*`", "", nxt)):
+                block.append(nxt)
+            else:
+                break
+        out.setdefault(f"{m.group(1)} {m.group(2)} {m.group(3).strip()}", "\n".join(block))
+    return out
+
+
+def item_words(block: str) -> list[str]:
+    """An item's text as a word sequence, for comparison against its source.
+
+    Everything that is rendering rather than content is removed: the tag, bullet markers and
+    indentation, bold markers, and <br> cell separators. Word's cosmetic substitutions are
+    normalised with the same rule Gate 1 uses, so a smart quote is not a mistranscription.
+    """
+    text = re.sub(TAG_RE, "", block)
+    text = re.sub(r"<br\s*/?>", " ", text).replace("**", "")
+    text = re.sub(r"^\s*[-*]\s+", "", text, flags=re.M)
+    return normalise_cosmetic(text).split()
 
 
 def main():
@@ -138,16 +123,30 @@ def main():
 
     consolidated_path = cluster_dir / "consolidated_uoc.md"
 
-    expected = build_inventory(units, args.assessor_ac)
+    try:
+        expected = build_inventory(units, args.assessor_ac)
+    except ValueError as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(2)
     consolidated = consolidated_path.read_text(encoding="utf-8")
     raw_refs = extract_refs(consolidated)
-    found = [f"{u} {s} {n}" for u, s, n in raw_refs]
+    found = [f"{u} {s.strip()} {n.strip()}" for u, s, n in raw_refs]
     counts = Counter(found)
 
     found_set = set(found)
-    missing = sorted(expected - found_set)
-    unexpected = sorted(found_set - expected)
+    missing = sorted(set(expected) - found_set)
+    unexpected = sorted(found_set - set(expected))
     duplicated = sorted([(ref, c) for ref, c in counts.items() if c > 1])
+
+    # Every item present under the right tag must also still say what the source says.
+    blocks = item_blocks(consolidated)
+    mistranscribed = []
+    for ref in sorted(set(expected) & found_set):
+        block = blocks.get(ref)
+        if block is None:
+            mistranscribed.append((ref, "no item line carries this tag (cited in prose only)"))
+        elif item_words(block) != item_words(expected[ref]):
+            mistranscribed.append((ref, "text differs from the source unit"))
 
     print(f"Cluster:          {cluster_dir.name}")
     print(f"Units:            {', '.join(u for u, _ in units)}")
@@ -174,8 +173,18 @@ def main():
             print(f"  - {ref}  ({c} times)")
         print()
 
-    if not missing and not unexpected and not duplicated:
-        print("RESULT: PASS — every expected item appears exactly once, nothing extra.")
+    if mistranscribed:
+        print(f"MISTRANSCRIBED ({len(mistranscribed)}):")
+        for ref, why in mistranscribed:
+            print(f"  - {ref}  ({why})")
+            src = " ".join(item_words(expected[ref]))
+            got = " ".join(item_words(blocks[ref])) if ref in blocks else ""
+            print(f"      source: {src[:160]}")
+            print(f"      doc:    {got[:160]}")
+        print()
+
+    if not missing and not unexpected and not duplicated and not mistranscribed:
+        print("RESULT: PASS — every expected item appears exactly once, verbatim, nothing extra.")
         sys.exit(0)
     else:
         print("RESULT: FAIL")
