@@ -160,13 +160,18 @@ Cloud Architecting Sandbox, 2026-06-07.)
   larger class than the sandbox permits. **Express (`sqlserver-ex`) deploys fine** on `db.t3.medium` (proven in
   `us-east-1` **and** `ap-southeast-2`, 2026-06-21). For an empty lab DB the edition is immaterial; if the
   scenario calls for Standard, ship Express as a documented stand-in. ✔ (2026-06-21)
-- **The sandbox role denies `rds:ModifyDBInstance` — RDS is create-only.** The `voclabs` role can **create** an
-  RDS instance but **cannot modify** an existing one (a change-set altering `BackupRetentionPeriod` failed with
-  `AccessDenied`, 2026-06-21, CL3 AT3). **For any apply-as-update / change-set lab-pack: never modify an existing
-  RDS instance** — set the DB's final config at *create* time and leave it untouched by later updates. This
-  blocks in-lab DB modification via **both** CloudFormation and the console, so DB-tier changes needing
-  `ModifyDBInstance` (retention, etc.) are not lab-executable; show DB reliability via PITR/restore instead
-  (restore perms not yet verified). ✔ (2026-06-21)
+- **`rds:ModifyDBInstance` — prove it, don't assume it.** The evidence is mixed and environment-specific, so
+  treat this as a question every apply-as-update pack must answer in its own proving run.
+  - A change-set altering `BackupRetentionPeriod` failed with `AccessDenied` in the **Cloud Architecting
+    Sandbox** (2026-06-21, CL3 AT3). That is a Sandbox observation. It was never retested in the Learner Lab —
+    the change-set was rewritten to avoid the DB, which made the question moot rather than answered.
+  - **CL1 AT3 converts a running RDS instance to Multi-AZ in the Learner Lab, via the console, and it works**
+    — recorded as proven live in that pack's notes.
+  So: `CreateDBInstance` is fine everywhere; **console** modify is proven in the Learner Lab; **CloudFormation**
+  modify in the Learner Lab is still unproven. Do not write "the lab cannot modify RDS" into a pack as a
+  standing constraint on the strength of one Sandbox failure. If a proving run does hit `AccessDenied`, the
+  fallback is to have the improved template **create** the end state as its own stack rather than update the
+  baseline — a change of model, not a redesign. ✔ (revised 2026-08-31)
 - **2-AZ gotchas:** an internet-facing **ALB needs ≥2 subnets in 2 AZs**, and an **RDS DB subnet
   group needs ≥2 AZs** — so even a "single-AZ baseline" must include a 2nd public + 2nd data
   subnet to deploy. Keep the **compute (ASG) single-AZ** to preserve the non-HA state. ✔
