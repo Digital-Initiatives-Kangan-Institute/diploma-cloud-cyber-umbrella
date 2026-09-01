@@ -64,19 +64,18 @@ need to be skipped, and nothing should carry an "applicability" caveat. A studen
 able to treat every section as theirs to complete.
 
 Where two assessments produce the same *kind* of document but ask for different things, they get
-separate templates rather than one superset with parts marked inapplicable. The Deployment Report is
-the worked example: S1-CL1 AT2 (a foundation build) has its own template, split from the shared
-superset that still serves other deployments. S1-CL2 AT2 has a serverless/IaC variant. The
-per-state selection lives in the `templates` array in the website repo's
-`src/pages/intranet/[state]/templates/index.astro`.
+separate templates rather than one superset with parts marked inapplicable — and naming follows what
+the template actually is, so a template serving one assessment says so in its filename rather than
+presenting itself as a standing organisational document.
 
-Naming follows what the template actually is. Where a template serves one assessment, its filename
-says so (`AT2-Deployment-Report-Template.docx`) rather than presenting itself as a standing
-organisational document.
-
-The ambition is that every template is scoped this way. Templates still shared across assessments —
-the Solution Design, DR Plan and Team Plan, and the Deployment Report superset — are scoped as their
-own assessments are reviewed.
+**The library is the set of templates an assessment asks for.** The intranet Templates page carries
+those and nothing else: offering a template no criterion marks invites a student to write their
+assessment into it. A survey of all nine S1 instruments found three — the Business Case and its
+board-presentation deck (S1-CL1 AT1), and the Disaster Recovery Plan (S1-CL2 AT1). The Solution
+Design, Deployment Report and Team Plan templates were retired when those assessments became
+workbooks that capture the work themselves. The page lives at the website repo's
+`src/pages/intranet/[state]/templates/index.astro`; add an entry when an assessment starts asking
+for a deliverable document.
 
 ## When a deliverable template is needed at all
 
