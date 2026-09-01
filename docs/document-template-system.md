@@ -78,6 +78,22 @@ The ambition is that every template is scoped this way. Templates still shared a
 the Solution Design, DR Plan and Team Plan, and the Deployment Report superset — are scoped as their
 own assessments are reviewed.
 
+## When a deliverable template is needed at all
+
+The current approach is that an assessment instrument is a **workbook** which captures the student's work
+itself, so a separate fillable template is used only where a unit-of-competency requirement explicitly
+demands one — and an **exemplar exists only where such a template does**, because the assessor copy of the
+workbook already carries the model answers. Templates and exemplars with no student submittable under the
+current design are retired.
+
+The test is to quote the assessment condition that requires a document. `[ICTCLD501 AC 3]` — "reporting
+standards for documenting and communicating disaster recovery plan" — requires one. `[ICTCLD503]`,
+`[ICTCLD504]` and `[ICTCLD505]` name only environment and input conditions, so their "document and justify"
+criteria are met by the workbook. See
+[assessment-workbook-format.md](assessment-workbook-format.md).
+
+The roles below apply to the templates that do survive.
+
 ## Artefact roles per document type
 
 1. **Fillable template** — the document the student completes, served from the website repo

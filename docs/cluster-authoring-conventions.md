@@ -27,19 +27,29 @@ This document captures the standing conventions for authoring cluster assessment
 
 ## 3. Institutional template workflow
 
-**Why:** institutional templates are the format-of-record for live delivery. Markdown is a one-time scaffold for drafting; the `.docx` becomes canonical after paste.
+**Why:** institutional templates are the format-of-record for live delivery, and an instrument has to be
+reproducible from source rather than hand-maintained as a binary.
 
 **How to apply:**
-- The workspace `templates/` folder contains the institutional Word/Excel templates (Project Assessment - Assessor.docx, Project Assessment - Student.docx, Written Assessment - Assessor.docx, Written Assessment - Student.docx, Assessment Mapping Tool.docx, Delivery_Plan_Template_v0.1.docx).
-- For each cluster AT, copy the relevant template into the cluster AT folder with a descriptive name (e.g. `AT1-BusinessCase-Assessor.docx`).
-- Author the content in a **companion markdown file** alongside (e.g. `AT1-BusinessCase-Assessor.md`) that mirrors the template's section structure. The content is copy-pasted into the .docx when ready.
-- **Once pasted, the .docx is canonical.** Subsequent edits (reviews, simplifications, fixes) happen in the .docx, not the .md. Don't try to keep the .md in sync — fighting Word's formatting through markdown round-trips is wasted effort.
-- **Delete the companion .md after paste-in is complete.** It's a scaffold, not a long-lived artefact; stale .md files invite confusion about which is the source of truth.
-- Same applies to other "working .md" authoring scaffolds (benchmarks, rubrics drafted as separate .md files): once their content lands in the canonical .docx, delete the scaffold.
-- **Project Assessment template fits multi-part assessments** (e.g. written deliverable + observed presentation) because it has native Part A / Part B structure + per-Part marking guide tables + observation accommodation.
-- **Written Assessment template fits single-mode written assessments** (questioning, report). See §7 for the refined template-choice rule.
+- The umbrella `kangan-templates/` folder holds the institutional Word templates (Project Assessment -
+  Assessor.docx, Project Assessment - Student.docx, Written Assessment - Assessor.docx, Written Assessment -
+  Student.docx, Assessment Mapping Tool.docx, Delivery_Plan_Template_v0.1.docx).
+- **An instrument is generated, not hand-edited.** Its content lives in a Python content module in the
+  content repo; a per-AT builder fills the institutional template and renders the workbook into it. Do not
+  hand-edit a generated `.docx` — edit the content module and rebuild, or the change is lost on the next
+  build and can't be reviewed in a diff.
+- The assessor and student copies are **one definition rendered twice**, so they cannot disagree. The
+  student builder is a thin entry point calling the assessor module in `student` mode.
+- The marking guide, the reverse map and the mapping engine's `BENCHMARK` are **derived from the
+  workbook's own UoC tags** — see [assessment-workbook-format.md](assessment-workbook-format.md).
+- **Project Assessment template fits multi-part assessments** (e.g. a design part plus an observed
+  presentation) because it has native Part A / Part B structure + per-Part marking guide tables +
+  observation accommodation.
+- **Written Assessment template fits single-mode written assessments** (questioning, report). See §7 for the
+  refined template-choice rule.
 
-For the full template system, see [document-template-system.md](document-template-system.md).
+For the instrument format, see [assessment-workbook-format.md](assessment-workbook-format.md); for the
+branded YAT deliverable documents, [document-template-system.md](document-template-system.md).
 
 ## 4. Scenario references in cluster artefacts
 
