@@ -1,11 +1,11 @@
 ---
 name: s1cl2-delivery
-description: "S1-CL2 (Cloud Disaster Recovery) delivery workstream — COURSE-COMPLETE through Step 5 (Gates 1–4 PASS, 10/10 slide plans + decks built; Step 5 practice complete: LMS engagement, AT2 practice build artefacts as separate intranet docs, s1-cl2-at2 state added, no-leakage verified). Step-6 gate built; the delivery plan itself is a semester-instance artefact, deferred until a real intake exists."
+description: "S1-CL2 (Cloud Disaster Recovery) delivery workstream — COURSE-COMPLETE through Step 5 (Gates 1–4 PASS, 10/10 slide plans + decks; Step 5 practice: AT1+AT2 practice run sheets mirroring the assessments, LMS engagement, AT2 practice build artefacts, s1-cl2-at2 state, no-leakage verified). Step-6 gate built; the delivery plan itself is a semester-instance artefact, deferred until a real intake exists."
 metadata: 
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
-  modified: 2026-09-08T20:38:43.774Z
+  modified: 2026-09-08T21:21:02.430Z
 ---
 
 S1-CL2 **delivery-planning** workstream (separate from assessment authoring — see [[s1cl2-assessment]]).
@@ -39,10 +39,15 @@ docs/scenario-flow.md.)
   ignores "no text" ~1-in-9, so **human-check gen images** (topic_02 needed a regen for a typo).
 - **Step 5 (practice tasks) COMPLETE** — see below. Committed to both repos.
 
-## Step 5 — practice tasks (COMPLETE 2026-07-02)
-- **Model (docs/process-delivery.md §5):** practice task = the AT decomposed 1:1 into exercises on the
-  practice scenario; re-scenarioing IS the no-leakage guard. The 28 `[EX]` slides across T1–10 ARE the
-  practice tasks (coverage guaranteed — derived from the components).
+## Step 5 — practice tasks (COMPLETE 2026-07-02; run sheets added 2026-09-08)
+- **Practice run sheets built (2026-09-08):** `AT1-Practice-Design-DR-Plan-Run-Sheet.docx` (43 tasks) +
+  `AT2-Practice-Microservice-IaC-Run-Sheet.docx` (22 tasks) in `delivery/practice/`, mirroring both
+  assessments task-for-task through the assessments' own renderers (per docs/process-delivery.md §5 /
+  docs/assessment-workbook-format.md). AT2 practice carries a *different kind* of planted fault
+  (ProvisionedThroughput∧PAY_PER_REQUEST mutual exclusion vs the assessment's KeySchema mismatch).
+  Machine-verified (repro ×4, leak lint, live URL sweep); human read + lab walk pending.
+- **Model (docs/process-delivery.md §5):** re-scenarioing IS the no-leakage guard. The 28 `[EX]` slides
+  across T1–10 are the in-class exercises (coverage guaranteed — derived from the components).
 - **LMS practice engagement exists + state-correct:** `projects/lms-global-expansion/` (website repo) —
   full parity with the assessment engagement `website-global-expansion/` (MSA/role-brief/requirements/
   data-residency/consultation-notes). Practice inputs are YAT operational docs **referenced at the

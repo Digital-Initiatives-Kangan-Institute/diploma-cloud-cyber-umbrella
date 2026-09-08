@@ -1,10 +1,11 @@
 ---
 name: s1cl3-delivery
-description: S1-CL3 (Cloud Infrastructure Improvement) delivery workstream — COURSE-COMPLETE through Step 5 (8-Topic spine; coverage 64/64; 8 slide plans + decks; practice = website EX tasks + a cfn-lint-clean website practice baseline modelled on the Ledgerline AT3 baseline, open improvement). Only Step 6 (delivery plan, deferred per-instance) remains.
+description: S1-CL3 (Cloud Infrastructure Improvement) delivery workstream — COURSE-COMPLETE through Step 5 (8-Topic spine; coverage 64/64; 8 slide plans + decks; practice = AT1/AT2/AT3 practice run sheets mirroring the assessments + website EX tasks + the cfn-lint-clean practice baseline, open improvement). Only Step 6 (delivery plan, deferred per-instance) remains.
 metadata: 
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
+  modified: 2026-09-08T21:21:09.374Z
 ---
 
 S1-CL3 **delivery-planning** workstream (separate from assessment authoring — see [[s1cl3-assessment]]).
@@ -46,12 +47,19 @@ Vehicle = **Ledgerline** (assessed); **website = practice vehicle**.
 - **Process note:** run `inspect-file-size` on the built decks **before** committing (the process
   prescribes it at Step 4 — don't skip it).
 
-## Step 5 (practice tasks) — COMPLETE 2026-07-02
+## Step 5 (practice tasks) — COMPLETE 2026-07-02; run sheets added 2026-09-08
 Practice vehicle = the **website** (Ledgerline is assessed). Confirmed:
+- **Practice run sheets built (2026-09-08):** AT1 Design (18 tasks) + AT2 Team Implementation (17) +
+  AT3 Implement (13) in `delivery/practice/`, mirroring all three assessments task-for-task through the
+  assessments' own renderers (docs/process-delivery.md §5). AT3 practice deploys the practice lab-pack
+  baseline and applies the student's OWN improvement (no reference template — deliberate). AT2's
+  contrast is honestly thin (leadership is leadership); its value is rehearsing the record-as-you-go
+  habit Parts D/E die without. Machine-verified (repro ×6, leak lint ×3, live URLs 23/23); human read +
+  lab walk pending.
 - **Practice engagement `website-improvement`** exists with full parity to the `ledgerline-improvement`
   assessment engagement (role-brief/consultation-notes/improvement-requirements/indian-reg/MSA/
-  solution-design), tagged `s1-cl3-at1/at2/at3`. The **EX slides across all 8 topics ARE the practice
-  tasks** (AT decomposed 1:1 onto the website).
+  solution-design), tagged `s1-cl3-at1/at2/at3`. The **EX slides across all 8 topics** are the in-class
+  exercises (AT decomposed 1:1 onto the website).
 - **Website practice baseline authored** — `delivery/practice-lab-pack/baseline.yaml` (+ README, .cfnlintrc),
   **modelled on the proven Ledgerline AT3 baseline**, adapted: internet-facing ALB (public site) · Linux +
   **MySQL** (not Windows/SQL Server) · single-AZ · same subnet/NAT/`!GetAZs`/region-substitution patterns.

@@ -365,6 +365,14 @@ vehicle for a system assessed in another cluster must stay clear of that cluster
 [scenario-flow.md](scenario-flow.md)). Practice vehicles are maintained under this run-sheet, not the
 assessment one.
 
+**The standard artefact is a practice run sheet** — a YAT/MTS-branded workbook mirroring the AT task for
+task, rendered through the assessment's **own** renderer with practice content lists passed in (so the
+two cannot drift structurally; see [assessment-workbook-format.md](assessment-workbook-format.md)). It
+adds what the assessment withholds — `clicks`, `consider`, `exemplar` rows, notes boxes — and strips the
+marking apparatus. Built by `build_..._practice.py` generators to `<cluster>/delivery/practice/`; every
+cluster's ATs have one (CL1 AT2/AT3; CL2 AT1/AT2; CL3 AT1/AT2/AT3). The in-deck `[EX]` slides remain the
+in-class exercises; the run sheet is the step-5 deliverable.
+
 **Result (S1-CL1):** the YAT Accounting System (Ledgerline) practice scenario — same org, different
 system, added to the AT1 intranet as a peer engagement to the LMS, indistinguishable until the task is
 handed out. A practice-scenario deck is built via `scripts/scenario/`.

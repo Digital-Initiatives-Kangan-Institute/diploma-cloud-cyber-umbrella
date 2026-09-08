@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
+  modified: 2026-09-08T21:20:50.115Z
 ---
 
 The cluster **delivery process is a formalised step→gate run-sheet** —
@@ -79,7 +80,10 @@ briefs not recoverable) for full back-test parity.
 - **Step-5 practice-task model:** a practice task = the assessment **decomposed into its nominal steps, 1:1**
   (assessment step N → practice task N), on the **practice scenario** (comparable, not identical — the
   no-leakage guard), **interleaved** with teaching (teach→practice→…→sit the assessment; repeat per
-  assessment across the cluster). Checkable: every assessment step has a practice task. Human judgment =
+  assessment across the cluster). **The standard artefact (2026-09-08) is a practice run sheet** —
+  the AT mirrored task-for-task through the assessment's own renderer, adding `clicks`/`consider`/
+  `exemplar`/notes (docs/process-delivery.md §5); built for every S1 AT
+  (CL1 AT2+AT3 · CL2 AT1+AT2 · CL3 AT1+AT2+AT3). Checkable: every assessment step has a practice task. Human judgment =
   decomposition + re-scenario.
 
 **Deck-image pipeline BUILT (2026-06-24).** The **`draw-diagram` skill** (umbrella `.claude/skills/`)
