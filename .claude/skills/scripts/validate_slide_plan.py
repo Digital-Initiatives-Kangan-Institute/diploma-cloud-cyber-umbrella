@@ -10,6 +10,13 @@ FORMAT:
   - every slide carries a recognised [<TYPE>] tag and a mandatory 'image:' field whose value is one of
     none / reuse / diagram / gen / placeholder.
 
+RENDER SAFETY (mirrors build_topic_deck.py's line grammar — both found only at the visual pass on CL1):
+  - no wrapped/stray line inside a slide block: a line that is not a bullet, a field, a table row or
+    notes-block content is rendered as its own level-0 bullet, splitting a sentence mid-clause.
+    Every bullet goes on ONE line, however long;
+  - no markdown in rendered text (titles, kickers, bullets): the deck engine has no markdown support,
+    so `**bold**`, `*italic*` and `backticks` come out literally. Plain text only.
+
 BACKWARDS COVERAGE (vs the sibling coverage.md):
   - every component coverage.md declares has a '### C<n>' section;
   - the union of the slide plan's 'Teaches:' tags covers every UoC item coverage.md teaches
@@ -37,6 +44,46 @@ SLIDE_LINE = re.compile(r"^\s*-\s*\**\s*`?\s*\[([^\]]+)\]")   # - **`[TYPE ...]`
 TEACHES_LINE = re.compile(r"^\s*-?\s*Teaches:\s*(.+)$", re.IGNORECASE)
 IMAGE_LINE = re.compile(r"^\s*image:\s*(\S+)", re.IGNORECASE)
 COMP_HEADING = re.compile(r"^###\s+(C\d+)\b", re.IGNORECASE)
+
+# --- render safety: mirror build_topic_deck.py's line grammar ---
+FIELD_LINE = re.compile(r"^\s*(image|kicker|timer|source|note):\s*", re.IGNORECASE)
+NOTES_LINE = re.compile(r"^(\s*)notes:\s*", re.IGNORECASE)
+BULLET_LINE = re.compile(r"^(\s*)-\s+(.*)$")
+MARKDOWN = re.compile(r"\*\*|`|(?<![\w*])\*[^*\s][^*]*\*(?![\w*])")   # **bold** / `code` / *italic*
+
+
+def render_safety_issues(block: list) -> list:
+    """Issues in one slide block (block[0] = the '- [TYPE] title' line) that would render wrongly:
+    ('stray', line) — a line the builder would treat as its own level-0 bullet (a wrapped bullet);
+    ('markdown', line) — markdown in text the deck renders literally (titles/kickers/bullets)."""
+    issues = []
+    title = block[0].split("]", 1)[-1]
+    if MARKDOWN.search(title):
+        issues.append(("markdown", block[0].strip()))
+    notes_indent = None
+    for raw in block[1:]:
+        if notes_indent is not None:
+            if raw.strip() == "" or len(raw) - len(raw.lstrip()) > notes_indent:
+                continue                      # notes-block content — not rendered on the slide
+            notes_indent = None
+        nm = NOTES_LINE.match(raw)
+        if nm:
+            notes_indent = len(nm.group(1))
+            continue
+        if FIELD_LINE.match(raw):
+            if raw.lower().lstrip().startswith("kicker:") and MARKDOWN.search(raw):
+                issues.append(("markdown", raw.strip()))
+            continue
+        if raw.strip().startswith("|"):
+            continue
+        bm = BULLET_LINE.match(raw)
+        if bm:
+            if MARKDOWN.search(bm.group(2)):
+                issues.append(("markdown", raw.strip()))
+            continue
+        if raw.strip():
+            issues.append(("stray", raw.strip()))
+    return issues
 
 
 def tags_from(text: str) -> set:
@@ -169,6 +216,13 @@ def main():
                 errors.append(f"{heading}: slide '[{tag}] {title}' has no 'image:' field (mandatory)")
             elif img not in IMG_KEYWORDS:
                 errors.append(f"{heading}: slide '[{tag}] {title}' image: '{img}' not a valid keyword")
+            for kind_, line_ in render_safety_issues(block):
+                if kind_ == "stray":
+                    errors.append(f"{heading}: slide '[{tag}] {title}' — line would render as its own "
+                                  f"bullet (wrapped bullet? join onto one line): '{line_[:60]}'")
+                else:
+                    errors.append(f"{heading}: slide '[{tag}] {title}' — markdown renders literally "
+                                  f"(plain text only): '{line_[:60]}'")
 
     # --- backwards coverage vs coverage.md (scoped to a declared subset for a split-deck topic) ---
     cov_components = coverage_components(cov_text)
