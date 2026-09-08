@@ -83,6 +83,19 @@ def test_screenshot_slot_describes_for_assessor_prompts_for_student():
     assert _cells(doc2)[0][0].startswith("SCREENSHOT — ")
 
 
+def test_element_renders_practice_scaffolding_after_the_task():
+    """`clicks` and `consider` are what the practice sheet adds; the assessment never sets them."""
+    doc = Document()
+    el = dict(n=3, title="Create the subnet", prompt="Build the subnet you designed.",
+              clicks=["Open the VPC console.", "Choose Subnets, then Create subnet."],
+              consider=["Which zone is the load actually in?"])
+    element(doc, lambda t: doc.add_paragraph(t), el, "student")
+    text = [p.text for p in doc.paragraphs]
+    assert "How to do it" in text
+    assert "1.  Open the VPC console." in text
+    assert text.index("How to do it") < text.index("Things to consider")
+
+
 # ---------------------------------------------------------------- the scaffolding dials
 
 def test_given_prefills_leading_columns_only():

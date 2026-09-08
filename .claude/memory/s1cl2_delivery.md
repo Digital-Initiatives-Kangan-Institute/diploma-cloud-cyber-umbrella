@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
+  modified: 2026-09-08T20:38:43.774Z
 ---
 
 S1-CL2 **delivery-planning** workstream (separate from assessment authoring — see [[s1cl2-assessment]]).
@@ -55,7 +56,13 @@ docs/scenario-flow.md.)
 - **State-model fix:** CL2 had **no `s1-cl2-at2` state** (every other cluster has per-AT states). Added it
   and **cloned `s1-cl2-at1` → `s1-cl2-at2`** across all 61 tagged docs (underlying state unchanged for the
   build; scan found zero exceptions). Pattern for adding a per-AT state: add to `states.ts`, add the slug
-  to every appearsIn that has the prior AT's slug, scan for exceptions, `astro sync`.
+  to every appearsIn that has the prior AT's slug, **add it to `src/config/projects.ts` too — the project
+  records carry their own `appearsIn` (+ `stateOverrides`)**, scan for exceptions, `astro sync`.
+  **That `projects.ts` step was missed in the original clone and shipped a live defect** (found 2026-09-08):
+  the project-document route gates on the state being in BOTH the document's `appearsIn` and the project's,
+  so every `/intranet/s1-cl2-at2/projects/…` URL 404'd — breaking the committed AT2 instrument's own links
+  and the provided build artefacts, which exist only at that state. Fixed + deployed. **Verify a new state
+  by sweeping the live URLs, not by trusting the frontmatter** — the repo looked correct throughout.
 - **No-leakage PASS:** the website assessment *requires* the anonymous-public axis (CDN/WAF/SEO — "exposure
   an internal authenticated system does not carry"); the LMS practice is clean of it → the LMS answer can't
   be transposed to the website. LMS = CL1 assessment / CL2 practice (assessed once; practice≠assessment).

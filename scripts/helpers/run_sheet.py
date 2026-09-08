@@ -413,6 +413,7 @@ def element(doc, h2, el, mode, label="Task", notes=False):
       diagram    caption for a drawing slot
       uoc        the UoC items this element evidences  (assessor copy only)
       standard   what must be true for them to be met  (assessor copy only)
+      clicks     click-by-click steps (PRACTICE ONLY)
       consider   leading questions (PRACTICE ONLY)
 
     Design tasks and close-out tasks both carry performance criteria, so both are framed as
@@ -435,6 +436,8 @@ def element(doc, h2, el, mode, label="Task", notes=False):
     uoc_line(doc, el.get("uoc", []), mode)
     if el.get("standard"):
         standard_line(doc, el["standard"], mode)
+    if el.get("clicks"):
+        clicks(doc, el["clicks"])
     if el.get("consider"):
         consider(doc, el["consider"])
     if notes:

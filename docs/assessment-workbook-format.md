@@ -59,6 +59,7 @@ A content module is a list of dicts. `helpers/run_sheet.py:element()` renders on
 | `diagram` | caption for a drawing slot |
 | `uoc` | the UoC items this element evidences — **assessor copy only** |
 | `standard` | what must be true for them to be met — **assessor copy only** |
+| `clicks` | click-by-click steps — **practice only** |
 | `consider` | leading questions — **practice only** |
 
 An element with no `uoc` and no `standard` renders as scaffolding: it is not a marking criterion, and
