@@ -15,7 +15,7 @@ flowchart TD
   S5["5 · Consolidate the assessment plans<br/><i>🏠 generate-consolidated-plan</i><br/><i>📦 assessment_plan.md</i><br/><i>👤 human-led</i><br/><i>(per scenario — after every cluster's step 4)</i>"]:::step
   S6["6 · Scenario plan<br/><i>👤 human-led</i><br/><i>(per scenario — developed from the completed contract)</i>"]:::step
   S7["7 · Scenario materials<br/><i>👤 human-led</i><br/><i>(per scenario — built from the scenario plan; timing flexible)</i>"]:::step
-  S8["8 · Assessor instruments<br/><i>👤 human-led</i><br/><i>(loop per AT)</i>"]:::step
+  S8["8 · Assessor instruments<br/><i>🏠 validate-instrument-reproduction, docx_tables</i><br/><i>👤 human-led</i><br/><i>(loop per AT)</i>"]:::step
   S9["9 · Student instruments<br/><i>👤 human-led</i><br/><i>(loop per AT)</i>"]:::step
   S10["10 · Mapping documents<br/><i>🏠 generate_mapping_doc</i><br/><i>👤 human-led</i><br/><i>(cluster-level)</i>"]:::step
   S11["11 · Cluster coverage<br/><i>📦 consolidated_uoc.md</i><br/><i>👤 human-led</i><br/><i>(capstone)</i>"]:::step
@@ -75,7 +75,7 @@ flowchart TD
 | 5 · Consolidate the assessment plans | 🛠 `generate-consolidated-plan` | 📦 `assessment_plan.md` | 👤 human-led |
 | 6 · Scenario plan | — | — | 👤 human-led |
 | 7 · Scenario materials | — | — | 👤 human-led |
-| 8 · Assessor instruments | — | — | 👤 human-led |
+| 8 · Assessor instruments | 🛠 `validate-instrument-reproduction`, ⚙ `docx_tables` | — | 👤 human-led |
 | 9 · Student instruments | — | — | 👤 human-led |
 | 10 · Mapping documents | ⚙ `generate_mapping_doc` | — | 👤 human-led |
 | 11 · Cluster coverage | — | 📦 `consolidated_uoc.md` | 👤 human-led |
@@ -100,7 +100,7 @@ flowchart TD
 | 6→7 | validator | `validate-scenario-plan`, `SR-*`, `SR-*` | `validate-scenario-plan`→skill | — | ✓ ok |
 | 7→8 | human | `verify-scenario-realisation`, `partial`, `mismatch` | `verify-scenario-realisation`→agent | built | ✓ ok |
 | 8→9 | validator | `validate-at-traceability`, `--expect` | `validate-at-traceability`→skill | — | ✓ ok |
-| 9→10 | validator | `validate-student-instrument`, `[UNIT SEC num]` | `validate-student-instrument`→skill | built | ✓ ok |
+| 9→10 | validator | `validate-student-instrument`, `[UNIT SEC num]`, `.docx`, `git diff`, ` for g in scripts/s1_clN/build_s1_clN_at*_{assessor,student}.py; do ../scripts/.venv/bin/python $g; done git diff --stat -- '*/assessments/*.docx'      # must be empty `, ` A generator can be corrected and its built artefact left behind — that is how an AT3 instrument kept a link to a page the split had retired, on a green board (2026-08-28). ` | `validate-student-instrument`→skill | built | ✓ ok |
 | 10→11 | validator | `validate-mapping-doc` | `validate-mapping-doc`→skill | — | ✓ ok |
 | 11→12 | validator | `validate-cluster-coverage`, `--include-ac` | `validate-cluster-coverage`→skill | — | ✓ ok |
 | 12→done | human | human | — | — | human-only gate — candidate for tooling |

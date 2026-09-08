@@ -38,7 +38,12 @@
       "skill": null,
       "scope": "loop per Topic",
       "status": null,
-      "tools": [],
+      "tools": [
+        {
+          "name": "run_sheet",
+          "kind": "engine"
+        }
+      ],
       "data": [
         {
           "name": "coverage.md",
@@ -105,6 +110,16 @@
           "name": "Topic_NN_Slides.pptx",
           "path": "Topic_NN_Slides.pptx",
           "locus": "subrepo"
+        },
+        {
+          "name": "slide_plan_08a.md",
+          "path": "slide_plan_08a.md",
+          "locus": "subrepo"
+        },
+        {
+          "name": "slide_plan_08b.md",
+          "path": "slide_plan_08b.md",
+          "locus": "subrepo"
         }
       ]
     },
@@ -114,7 +129,12 @@
       "skill": null,
       "scope": "loop per AT",
       "status": null,
-      "tools": [],
+      "tools": [
+        {
+          "name": "run_sheet",
+          "kind": "engine"
+        }
+      ],
       "data": [
         {
           "name": "states.ts",

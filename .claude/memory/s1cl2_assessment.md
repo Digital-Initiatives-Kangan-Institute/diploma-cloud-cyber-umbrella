@@ -1,6 +1,6 @@
 ---
 name: s1cl2-assessment
-description: S1-CL2 (Cloud Disaster Recovery, ICTCLD501/503/505) assessment workstream — durable design decisions: vehicle, AT structure, the DR≠design≠residency reframe, scenario spine, DR/microservice/residency calls, lab usage, template parity.
+description: S1-CL2 (Cloud Disaster Recovery, ICTCLD501/503/505) assessment workstream — durable design decisions: vehicle, the workbook AT structure, the DR≠design≠residency reframe, scenario spine, DR/microservice/residency calls, lab usage, and which template survives.
 metadata:
   type: project
 ---
@@ -15,17 +15,19 @@ practises on the **LMS** (`lms-global-expansion`). **AT1** = Design + DR Plan; *
 website's audit-log microservice (503 build + 505 IaC + monitoring). The practice↔assessment contrast
 below applies.
 
-## AT structure (settled)
-- **AT1 — Design & DR Plan, three parts:** **A** Solution Design (503 design: web-scale + the
-  microservice) · **B** DR Plan (501, pure recovery) · **C** presentation of A+B for approval (501
-  element 5 = design-approval gate + verbal KE Q&A). A and B are **separate documents**.
-- **AT2 — single Deployment Report** (503 build + 505 IaC + monitoring), implementing the AT1 design.
+## AT structure (settled — converted to the workbook format 2026-09-01)
+Both instruments are **guided workbooks** per docs/assessment-workbook-format.md: one document the
+student works through task by task, authored once and rendered blank for the student / worked for the
+assessor. Task numbering is **continuous across an instrument** and criterion codes are **unique across
+the cluster** — both are tooling requirements, not style (see the format doc).
+- **AT1 — Design & DR Plan, three parts, 43 tasks + 7 knowledge questions, one continuous sequence:**
+  **A** design (503: web-scale + the microservice, tasks 1–19) · **B** DR plan (501 el 1–4, tasks
+  20–37) · **C** approval (501 el 5, tasks 38–43; the first two are unmarked preparation).
+- **AT2 — the microservice + IaC build**, 22 tasks + 3 knowledge questions (503 build + 505 + monitoring).
 - **Two approval moments:** design approval at AT1 (501 el 5); build sign-off at AT2 (503/505 el 4).
-- **KE evidencing (settled):** a written **Knowledge Evidence appendix** per report is the *mandatory*
-  location — KE is OUT of report bodies; the **instrument** carries the contextual KE *questions*
-  (answered in the appendix); Part C re-covers them verbally (C5); templates are **KE-free**. CL2
-  allocation: **A12 = 503 KE 3/4/6** (Solution Design); **B15 = 501 KE 1–6** (DR Plan); **`501 KE 6`
-  (monitor/alerts) in AT1 Part B**.
+- **KE evidencing:** a **knowledge-questions section in each workbook**, asked about the student's own
+  design and build; Part C re-covers them verbally. (Superseded the per-document KE appendix, which went
+  with the deliverable templates.)
 - **Coverage:** AT1 + AT2 together evidence every PC/FS/PE/KE in `consolidated_uoc.md` — the
   cluster-coverage validator passes (105/105). Foundation Skills are **co-evidenced** through the
   technical deliverables and troubleshooting (assessment plan G11), noted in the marking guides rather
@@ -66,12 +68,17 @@ plan.**
   in the Learner Lab. (General Learner Lab constraints + the serverless-on-`LabRole` capability live in
   docs/lab-pack-standard.md.)
 
-## Template parity
-The exemplar's body shape MUST equal the template's; the only exemplar-extra is the KE appendix
-(instrument-driven). Keep the report validation/approval sections in the exemplars (DR §7, SD §11) to
-match templates. The **Solution Design + Deployment Report templates are SHARED with CL1** (forked into
-web-scale / serverless variants, state-gated by slug) → do NOT strip them; the **DR-plan template is
-CL2-only**. See docs/document-template-system.md.
+## Which template survives, and why (settled 2026-09-01)
+**One: the DR Plan.** `[ICTCLD501 AC 3]` names "reporting standards for documenting and communicating
+disaster recovery plan", so the plan is a real document — AT1 task 37 assembles the worksheet's answers
+into the YAT template, and **both the workbook and the plan are submitted**; the plan is what is marked
+for `[ICTCLD501 PC 4.3]`. Its exemplar survives with it.
+
+**Nothing else.** ICTCLD503's and ICTCLD505's assessment conditions are environment conditions and name
+no document format, so their "document and justify" criteria are met by the worksheet. `[ICTCLD501 PC
+5.1]` asks for a **verbal** walkthrough, so Part C needs no deck. The Solution Design, Deployment Report
+and presentation templates and their exemplars are retired. See docs/assessment-workbook-format.md for
+the quote-the-AC test.
 
 ## Open — external gates only (authoring + coverage are complete: 105/105)
 Nothing further is authorable here; the only remaining gate is the **institutional Pre-Validation**
@@ -84,23 +91,8 @@ pre-university case study, not a real compliance deliverable, so no legal review
 across clusters (CL2 + CL3). Don't reopen it as a `[VERIFY]`.
 
 
-## Planned rework to the CL1 run-sheet style (intent, 2026-08-28)
-
-**Intent, not yet decided in detail:** CL2 and CL3 assessments are to be reworked to the same shape
-CL1's AT2 and AT3 now take — a **guided run sheet / workbook the student fills in and submits as one
-document**, rather than a separate templated deliverable. Discussed while cleaning up CL1's supporting
-material; no work started, no plan authored.
-
-Two consequences to expect when it happens, both already visible in CL1:
-
-- **The Deployment Report and Solution Design templates retire.** They exist today only because CL2 and
-  CL3 still ask for them (CL2 AT1 → Solution Design + DR Plan; CL2 AT2 → Deployment Report Serverless;
-  CL3 AT1 → Solution Design; CL3 AT3 → Deployment Report). CL1's equivalents are already retired.
-- **The intranet template library is gated meanwhile, not resolved.** Solution Design and Deployment
-  Report are withheld from the `s1-cl1-*` states so an AT3 student cannot download a document that maps
-  onto their Part A or Part B, while staying available to CL2/CL3. See the comment in
-  `website-s1/src/pages/intranet/[state]/templates/index.astro`. When the rework lands, both come out
-  altogether and the gate goes with them.
-
-Do **not** audit CL2/CL3 assessments against their current shape and record them as settled — the shape
-is expected to change. See [[s1cl1-assessment]] for the CL1 form they are moving toward.
+## Done, don't redo
+The rework to the workbook format is **complete** for both ATs. Gates 1, 2, 4, 8, 9, 10 and 11 all pass;
+the mapping documents are regenerated and machine-validated. What remains is human: the institutional
+Pre-Validation meeting, and the 34 FS/AC closest-fit cells in the mapping documents that the validator
+flags as advisory because they are not benchmark-traceable.

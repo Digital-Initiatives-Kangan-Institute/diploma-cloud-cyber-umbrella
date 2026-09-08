@@ -21,15 +21,27 @@ the write is the one job free to divide, and **dividing it by component is 401's
 touches no individual 504 evidence. Don't re-tangle the two units onto one deliverable.
 
 ## AT model
-- **AT1 (individual) — Design** (`504 el 1–2`): **Part A** Solution Design — analyse the baseline + design
-  the whole improvement across all four concerns (CL2 Solution Design type; its *Review of the Existing
-  Architecture* section is the analysis). **Part B** present for review + obtain sign-off-to-proceed
-  (`PC 2.4/2.5`, FS Oral — an observed individual oral).
-- **AT2 (group) — Team Implementation** (`401 el 1–4`): **Part A** project/team plan + allocate one IaC
-  **component** to each member. **Part B** the team writes the CloudFormation for the agreed design,
-  divided by component + integrated, across individually-led meetings; coordinate / support / monitor each
-  against the plan / manage conflict; team sign-off gate. The write is the team-work vehicle, **not**
-  504-assessed.
+All three instruments are **guided workbooks** per docs/assessment-workbook-format.md — one document
+worked through task by task, rendered blank for the student and worked for the assessor. **No YAT
+deliverable template is used anywhere in this cluster:** 504's and 401's assessment conditions are
+environment conditions and name no document format, so `[ICTCLD504 PC 2.4]` "document and present" and
+`[PC 4.1]` "document as-deployed architecture" are met by the workbook itself, and no exemplar is
+required.
+- **AT1 (individual) — Design** (`504 el 1–2`): **Part A** 15 tasks — analyse the baseline, evaluate the
+  business impact, assess compliance, identify options, set measurable goals and metrics, design across
+  the four concerns, justify each on cost-benefit, draw it, write the justification. **Part B** present
+  for review + obtain sign-off-to-proceed (`PC 2.4/2.5`, FS Oral — an observed individual oral).
+- **AT2 (group) — Team Implementation** (`401 el 1–4`): each student completes **their own** workbook —
+  the work is the team's, the assessment is the individual's. Part A is a planning-meeting agenda worked
+  through with the team; Part B records the student's own component and their part in integration;
+  Part C is one team meeting they lead with the assessor observing, with a signed observation record in
+  the workbook; Part D is three written reflections (a conflict, a coaching instance, a team issue);
+  Part E is the performance review, feedback and development actions. The CloudFormation write is the
+  team-work vehicle, **not** 504-assessed, and its technical quality is not marked here.
+  - **The observed meeting is not the sole evidence, and must not be treated as it.** 401 ties coaching,
+    issue resolution and conflict management to no meeting, and `[BSBXTW401 AC 1]` asks only for a safe
+    working or simulated environment. Those criteria are carried by the Part D reflections; a student
+    whose led meeting happened to be quiet must not fail for it.
 - **AT3 (individual) — Implement** (`504 el 3–4`): **apply-as-update** — deploy the baseline, then apply the
   approved improvement as a CloudFormation **change-set**; demonstrate / test / refine / document the
   **whole** system (all four concerns) + final sign-off. 401's division lives in the AT2 write, so AT3 is
@@ -54,18 +66,18 @@ touches no individual 504 evidence. Don't re-tangle the two units onto one deliv
 - **Scalability = elastic-capacity-on-demand, demonstrable by test** (not a forecast of load growth) — lets
   each component carry a real scalability story on an internal low-load finance system without breaching
   IR-2 (over-provisioning would be the gold-plating IR-2 forbids).
-- **No business case** — neither UoC requires one; the 504 approval gate is the AT1 presentation; cost-benefit
-  rides inside the Solution Design.
-- The agreed "to be" design is **provided** to AT2 (the AT1 Solution Design exemplar doubles as it; published
-  in-world at `s1-cl3-at2` onward). An assessor **reference combined template** is the AT3 fallback.
+- **No business case** — neither UoC requires one; the 504 approval gate is the AT1 presentation; the
+  cost-benefit justification is a task in the AT1 workbook.
+- The agreed "to be" design is **provided** to AT2 (the in-world Improved Solution Design, published at
+  `s1-cl3-at2` onward). An assessor **reference combined template** is the AT3 fallback.
 
 ## Build state — instruments authored + validated
 The full assessment is authored: **AT1 Design, AT2 Team Implementation, AT3 Implement — assessor + student
 each — plus the AT1 Solution Design exemplar.** Kangan Project-Assessment instruments, single-sourced
 (student derives from assessor); generators in `scripts/s1_cl3/`. **Validation PASS:** cluster coverage
-72/72 + AT1/AT2/AT3 bidirectional traceability. Reuse: CL1 AT3 lab-pack pattern; CL2 Solution Design (AT1) +
-Deployment Report (AT3) templates/generators + scenario world; students' CL2 (505) IaC skill (the AT2 write
-reuses it).
+72/72 + AT1/AT2/AT3 bidirectional traceability. Reuse: CL1 AT3 lab-pack pattern; the shared workbook engine
+and Kangan instrument assembly (`scripts/helpers/run_sheet.py` + `workbook_instrument.py`) + scenario
+world; students' CL2 (505) IaC skill (the AT2 write reuses it).
 
 ## Remaining (engineering / process, not instrument authoring)
 - **AT3 lab-pack — PROVEN live 2026-06-21** (Cloud Architecting Sandbox): Express baseline deploys (`us-east-1`
@@ -103,23 +115,14 @@ reuses it).
   [[s1cl3-delivery]].
 
 
-## Planned rework to the CL1 run-sheet style (intent, 2026-08-28)
+## Done, don't redo
+The rework to the workbook format is **complete** for all three ATs (2026-09-01). Gates 1, 2, 4, 8, 9,
+10 and 11 all pass; the mapping documents are regenerated and machine-validated. What remains is human:
+the institutional Pre-Validation meeting, and the 10 FS/AC closest-fit cells the mapping validator flags
+as advisory because they are not benchmark-traceable.
 
-**Intent, not yet decided in detail:** CL2 and CL3 assessments are to be reworked to the same shape
-CL1's AT2 and AT3 now take — a **guided run sheet / workbook the student fills in and submits as one
-document**, rather than a separate templated deliverable. Discussed while cleaning up CL1's supporting
-material; no work started, no plan authored.
-
-Two consequences to expect when it happens, both already visible in CL1:
-
-- **The Deployment Report and Solution Design templates retire.** They exist today only because CL2 and
-  CL3 still ask for them (CL2 AT1 → Solution Design + DR Plan; CL2 AT2 → Deployment Report Serverless;
-  CL3 AT1 → Solution Design; CL3 AT3 → Deployment Report). CL1's equivalents are already retired.
-- **The intranet template library is gated meanwhile, not resolved.** Solution Design and Deployment
-  Report are withheld from the `s1-cl1-*` states so an AT3 student cannot download a document that maps
-  onto their Part A or Part B, while staying available to CL2/CL3. See the comment in
-  `website-s1/src/pages/intranet/[state]/templates/index.astro`. When the rework lands, both come out
-  altogether and the gate goes with them.
-
-Do **not** audit CL2/CL3 assessments against their current shape and record them as settled — the shape
-is expected to change. See [[s1cl1-assessment]] for the CL1 form they are moving toward.
+**Ledgerline's database can be made highly available.** The earlier "vendor-certified single-instance,
+Multi-AZ unavailable" constraint (TF-03) was removed from the scenario, and the improvement is **open**:
+converting the database to a standby is defensible on a recovery goal, and so is leaving it
+single-instance with a tested restore if argued on cost against a business-hours system. Mark the
+reasoning, not which answer they reach.
