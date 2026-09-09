@@ -70,7 +70,23 @@ capability to change (e.g. the Learner Lab refusing IAM creation). Full principl
 
 Never record anything as *decided / agreed / canonical* unless it was actively discussed **and**
 explicitly approved. Flag anything not yet agreed with `[TBD — needs discussion: <what is open>]`
-rather than writing it as settled.
+rather than writing it as settled. A thing tried **once** is not a convention — say it is being
+trialled, name where, and don't propagate it.
+
+**Documentation is never grounds for declining an idea.** This is the harm the rule above exists to
+prevent: Tim proposes improvements to how the work is done, and locking language written today becomes
+a later session **quoting the docs back at him** — *"it is written that we do it this way"* — as a
+reason not to consider his idea. What is written records how we **currently** understand the job and
+**currently** approach it; new understanding, methods and tooling are always possible. When a proposal
+touches something already written down, treat the doc as **context, never as an objection**: say what
+it says and why, then keep weighing the idea on its merits.
+
+**No check, constraint or finding is ever decisive or a dead end.** Never frame a test, lookup or
+investigation as settling a question or blocking the work — *"this decides it"*, *"this means we
+can't proceed"*. A check yields **one input**, weighed with everything else. At most it leans us
+toward an option or rules out one particular way of doing a thing; the goal stays reachable and there
+is room to be creative about how. The framing is always: *we'll check this, and it informs how we
+proceed.*
 
 - Capture only what was discussed and agreed; don't extrapolate a principle into unraised specifics.
 - Flag open questions explicitly with `[TBD — …]` so a later session picks them up deliberately.
