@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
+  modified: 2026-09-09T15:06:56.553Z
 ---
 
 **Principle (Tim, 2026-07-09 — "the single most important factor"): every artefact type is produced by
@@ -34,6 +35,11 @@ per-cluster.
   **`brand.py`** seam. The visual/layout pack (`kangan_deck.py`) is the one remaining brand seam — swap it
   per institution, don't fork the engine ([[umbrella-engine-architecture]]).
 - **Don't abstract speculatively** — generalise a seam only when a second course/brand actually needs it.
+- **(2026-09-08) Process scripts live in version control, never the scratchpad.** Any script that
+  generates a step/stage artefact of the process is process machinery: put it in the umbrella `scripts/`
+  (or drive it off the common engine) the FIRST time, don't rewrite it per session. Trigger case: the
+  coverage.md generator was written ad hoc three times (CL1/CL2/CL3) in session scratchpads before being
+  promoted to `scripts/generate_topic_coverage.py`.
 
 Related: [[umbrella-engine-architecture]], [[assessment-run-sheet]], [[delivery-run-sheet]],
 [[memory-principles-not-state]].
