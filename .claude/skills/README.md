@@ -47,15 +47,18 @@ The step→gate skills of the two run-sheets ([docs/process-assessment.md](../..
 | [validate-cluster-spec](validate-cluster-spec/) | 1.0.0 | Prove a `cluster-specification.md` conforms to the format skeleton and the frame + topic-budget arithmetic reconciles (over-nominal hours carry a recorded authorisation). Gate for Step 1. |
 | [validate-topic-breakdown](validate-topic-breakdown/) | 1.0.0 | Prove the AT→Topic breakdown is structurally sound — every AT has ≥1 Topic, every Topic declares a valid AT (`**AT<n> content Topic**` marker), Topic count fits the frame. Gate for Step 2. |
 | [validate-slide-plan](validate-slide-plan/) | 1.0.0 | Prove a Topic's `slide_plan.md` conforms (every component `Teaches:`; every slide a `[TYPE]` + `image:`) and backwards-covers its sibling `coverage.md`. Gate before deck build (Step 4). |
-| [validate-delivery-plan](validate-delivery-plan/) | 1.0.0 | Prove a `delivery-plan.md` outline is complete-for-generation — conforms, grid internally consistent, every Topic + assessment placed, reconciles with the frame. Gate for Step 6. |
 
 **Shared engine — `scripts/`:** `inventory_uoc.py` · `transcribe_uoc.py` · `validate_uoc.py` ·
 `validate_consolidated.py` · `validate_assessment_plan.py` · `generate_consolidated_plan.py` ·
 `validate_consolidated_plan.py` · `validate_scenario_plan.py` · `validate_at_traceability.py` ·
 `validate_student_instrument.py` · `validate_instrument_reproduction.py` · `validate_deck_reproduction.py` (regenerated `.pptx` == committed: body+notes+image count — the deck-migration gate) ·
 `validate_mapping_doc.py` · `validate_cluster_coverage.py` · `validate_cluster_spec.py` ·
-`validate_topic_breakdown.py` · `validate_slide_plan.py` · `validate_delivery_coverage.py` ·
-`validate_delivery_plan.py`.
+`validate_topic_breakdown.py` · `validate_slide_plan.py` · `validate_delivery_coverage.py`.
+
+> **Retired:** `validate_delivery_plan.py` + its skill were **ported into the factory** and deleted here —
+> now `factory/process_03_delivery/step_06_cluster_delivery_plan/scripts/validate_cluster_delivery_plan.py`,
+> rebuilt on `factory/common/helpers/` and covered by cases `CDP-01…29`. A purely mechanical gate needs
+> no skill wrapper.
 *(`validate_delivery_coverage.py` is the delivery spine engine — invoked at delivery Gate 3→4; it has
 no dedicated skill-folder wrapper yet.)*
 
