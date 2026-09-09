@@ -167,9 +167,11 @@ into exercises that together cover all parts of the AT. → detail [§5](#5--pra
 **6 · Delivery plan** *(cluster-level — capstone)*
 Lay the Topics + assessment sessions onto the session grid from the frame, and generate the institutional
 **Delivery Plan** docx (`templates/Delivery_Plan_Template_v0.1.docx`). → detail [§6](#6--delivery-plan).
-> **⟱ Gate 6→done:** *validator* `validate-delivery-plan` = every Topic + every assessment is placed in a
-> session; the sessions reconcile with the cluster-specification frame; the docx conforms to the template
-> **+ human review.** **built** (`validate-delivery-plan`, 2026-07-02). The cluster's delivery is complete.
+> **⟱ Gate 6→done:** *validator* `validate_cluster_delivery_plan.py` = every Topic + every assessment is
+> placed in a session; the sessions reconcile with the cluster-specification frame
+> **+ human review** (whether the *sequence* is sound — no validator, by design). **Built + ported into
+> the factory** (`factory/process_03_delivery/step_06_cluster_delivery_plan/scripts/validate_cluster_delivery_plan.py`).
+> The cluster's delivery is complete.
 
 ---
 
@@ -420,14 +422,15 @@ human-AI juggling session** — try a layout, look, move things, refit — until
 (`<cluster>/delivery/delivery-plan.md`)** whose completeness can be checked; when it validates, an
 automated step fills the docx from it (from `kangan-templates/Delivery_Plan_Template_v0.1.docx`).
 
-**Pipeline:** prerequisites known → juggling session writes the outline → `validate-delivery-plan` →
+**Pipeline:** prerequisites known → juggling session writes the outline → `validate_cluster_delivery_plan.py` →
 (gaps reported → keep prompting the human) → PASS → generate the docx. The outline format is
-[delivery-plan-format.md](delivery-plan-format.md).
+[delivery-plan-format.md](../factory/process_03_delivery/step_06_cluster_delivery_plan/_02_delivery-plan-format.md)
+(held in its step folder).
 
-The step-6 gate is **`validate-delivery-plan`** (BUILT 2026-07-02 — `validate_delivery_plan.py` +
-skill): a **completeness-for-generation** check — the outline conforms to the format (header fields +
+The step-6 gate is **`validate_cluster_delivery_plan.py`**, in the factory step folder
+(`factory/process_03_delivery/step_06_cluster_delivery_plan/scripts/`), covered by cases `CDP-01…29`: a **completeness-for-generation** check — the outline conforms to the format (header fields +
 grid columns from the skeleton), the session grid is internally consistent (numbered `1…N`, every cell
-decided, `Mode`/`Activity` in vocabulary), **every built Topic (`delivery/topic_NN/`) and every
+decided, `Mode`/`Activity` in vocabulary, `Date` ISO and running forward), **every built Topic (`delivery/topic_NN/`) and every
 assessment (`assessments/AT<n>/`) is placed**, and the grid reconciles with the frame (row count ==
 declared total; reservations honoured). It **reports** intake-vs-nominal divergence + the mode split. A
 PASS means "complete enough to generate the docx"; each FAIL is a decision still to be made. There is

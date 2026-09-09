@@ -55,6 +55,32 @@ shared layer.
 - Per-semester working state (system↔scenario mappings, delivery state) lives in **MEMORY**, namespaced
   per semester — not here (it changes).
 
+## ⚠ In progress — refactoring the machinery into `factory/`
+
+The tooling is being reorganised from the flat `scripts/` + `.claude/skills/scripts/` layout into
+**[`factory/`](factory/README.md)**, structured the way the work actually runs: **factory → process →
+step → gate**. A *process* is one run-sheet; a *step* is one unit of work within it, held in its own
+folder with everything that step needs — its instructions, the tools and scripts it runs, and the gate
+that must pass before the next step starts. See [factory/docs/INDEX.md](factory/docs/INDEX.md).
+
+**Why — it is for the humans.** In the flat layout a filename tells you what a script does but never
+*where in the process it runs*, so finding "everything involved in producing a delivery plan" means
+already knowing the answer. An LLM can hold the whole tree in context and may gain little from the
+reorganisation; a human cannot, and needs to see the process laid out and navigate straight to the part
+they are working on. That accessibility is the main reason for doing it. The secondary reason is that
+structure produces **consistent quality** — a predictable shape for every step is what stops the work
+being uneven from one step to the next.
+
+**How it converts — progressively, by asking.** Both layouts are live; nothing is ported wholesale.
+When work touches something still in the old structure, **ask the operator whether to convert it into
+the factory structure at that point** — do not convert unprompted, and do not treat a task in the old
+layout as licence to reorganise it. If the answer is yes, it moves test-first (plan cases → tests →
+code, per [docs/test-first-process.md](docs/test-first-process.md)) and leaves nothing behind. If no,
+the work proceeds where it is. Bit by bit, as things are touched, everything converts.
+
+`factory/` is authoritative for anything that has moved; the legacy locations remain authoritative for
+everything else.
+
 ## Sub-repo context
 Each sub-repo has its own `CLAUDE.md`, **auto-loaded (lazily) when Claude reads a file in that repo**
 (plain links, never `@imports` — the cascade is lazy by design). Launched from the umbrella, you get the

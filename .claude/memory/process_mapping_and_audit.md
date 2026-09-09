@@ -23,7 +23,7 @@ derived artefacts — regenerate, never hand-edit.** Registered in [docs/INDEX.m
 - **Cross-check = the audit seam.** Every gate's named validator is resolved against the real inventory
   (skill dir / `skills/scripts/` engine / `agents/*.md` / umbrella `scripts/` engine / `mcp__*`); a
   named-but-missing validator or a doc status marker that contradicts reality is flagged red. This caught
-  a real stale marker — delivery Gate 6 said "to build" though `validate-delivery-plan` was built
+  a real stale marker — delivery Gate 6 said "to build" though the step-6 validator was built
   2026-07-02 (fixed; both maps now 0-flag).
 
 **First downstream use (2026-07-09):** the map's amber "candidate for tooling" flags (human-only gates)

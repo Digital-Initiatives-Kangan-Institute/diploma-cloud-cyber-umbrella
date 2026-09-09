@@ -76,7 +76,7 @@ docs/scenario-flow.md.)
   extends it via the HA-hardened ICT records; no dedicated provided design needed.
 
 ## Status of Step 6 — deferred by design
-CL2 is **course-complete through Step 5**. The Step-6 gate `validate-delivery-plan` is now **BUILT**
+CL2 is **course-complete through Step 5**. The Step-6 gate `validate_cluster_delivery_plan.py` (factory step folder) is **BUILT**
 (see [[delivery-run-sheet]]), but the CL2 **delivery plan itself is deferred**: the plan is a
 **semester-instance** artefact whose prerequisites (a real intake's session count / days / online-vs-
 classroom split) don't exist yet. It is produced later in a human-AI juggling session, validated, then

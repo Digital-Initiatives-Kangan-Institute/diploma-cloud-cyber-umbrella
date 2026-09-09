@@ -1,0 +1,13 @@
+# Factory dependencies — factory/ is one unit of development, so this is its one requirements file.
+# Install into the standard test environment:
+#     python3 -m venv venvs/test && ./venvs/test/bin/pip install -r requirements.txt
+#
+# Most of the factory is deliberately STDLIB-ONLY: every validator, and four of the five helpers
+# (format_contract, numeric, md_table, uoc_sections), import nothing from here. Keep it that way —
+# a gate should run anywhere with a bare Python 3. Entries below are for the document GENERATORS,
+# which cannot avoid a library, and for running the suite.
+#
+# Add a line here the moment a new dependency is introduced, with a note saying what needs it.
+
+pytest          # the test suite
+python-docx     # docx_template.py + the delivery-plan docx generator (institutional .docx templates)

@@ -33,7 +33,7 @@ than hard-coding them. Three layers run on the plan, in order:
   with the human turn by turn, and writes the outline **to this format**. It is **not** a sub-agent:
   producing the plan is interactive human dialogue, which only the main session can do. *(Runs at
   instance-time; there is no standing skill for it yet — the format + gate are what exist now.)*
-- **`validate-delivery-plan` (linter — deterministic):** the **completeness-for-generation** gate —
+- **`validate_cluster_delivery_plan.py` (linter — deterministic):** the **completeness-for-generation** gate —
   every heading, header field and grid column **named in the skeleton** is present, the session grid is
   internally consistent (numbered `1…N` with no gaps, every cell decided), **every Topic and every
   assessment is placed**, and the grid **reconciles with the frame** (`cluster-specification.md`). Any
@@ -43,7 +43,7 @@ than hard-coding them. Three layers run on the plan, in order:
   juggling session, not something a validator should second-guess.
 
 **Step gate (Step 6).** The plan's gate is **per-instance**: an outline for a given intake is ready to
-generate the docx when it **passes** `validate-delivery-plan`. There is no semester-level phase gate
+generate the docx when it **passes** `validate_cluster_delivery_plan.py`. There is no semester-level phase gate
 after it — Step 6 is the terminal step, run once per intake.
 
 ## Prerequisites (what must be known before the juggling session)
@@ -69,21 +69,44 @@ contract** the linter parses.
    the intake and pointing at the frame + the docx to be generated.
 2. **`## 1. Instance prerequisites`** — the prerequisite facts, as labelled `- Field: value` lines:
    `Intake:` · `Total sessions available:` · `Teaching days per week:` · `Teaching days:` ·
-   `Online/classroom split:`.
-3. **`## 2. Session grid`** — a markdown table, **one row per session**, columns:
-   `#` *(session number, contiguous `1…N`)* · `Week` · `Day` · `Mode` *(`online` or `classroom`)* ·
+   `Online/classroom split:` · `Assessment types:` *(each AT's institutional assessment type —
+   `Written` / `Project` / `Obs` / `3rdP` — written `AT1: Project · AT2: Project`. It is an
+   institutional classification, not something to infer from the instrument.)*
+3. **`## 2. Document details`** — the institutional document's header fields, as labelled
+   `- Field: value` lines: `Qualification code and title:` · `Unit code and title:` ·
+   `Cohort description:` · `Materials and resources:`.
+
+   **LLN requirements are NOT here.** They are derived at generation time from the cluster's own units
+   (`consolidated_uoc.md` Foundation Skills). The outline holds **decisions**; a pure derivation with no
+   per-instance variation is computed, because a copy in the outline can only go stale when the units
+   change. Contrast `Date` and `Time`, which are derived *with an override* and so do live in the grid.
+
+   These are **document content, not scheduling** — they fill the Details, Materials and LLN tables at
+   the top of the institutional docx. They live in the outline so the docx step is a straight copy with
+   nothing left to compose, and so the gate can refuse a plan that would generate a document with empty
+   headers. A multi-line value is written as one `- Field:` line; use `;` to separate items.
+
+4. **`## 3. Session grid`** — a markdown table, **one row per session**, columns:
+   `#` *(session number, contiguous `1…N`)* · `Date` *(ISO `YYYY-MM-DD`, the session's real calendar
+   date)* · `Week` · `Day` · `Time` *(the slot, e.g. `9am-12pm`)* · `Mode` *(`online` or `classroom`)* ·
    `Activity` *(one of `onboarding` / `teach` / `practice` / `practical` / `presentation` /
    `assessment` / `spare`)* · `Placed` *(what runs — Topic(s) as `T<n>`, practice as `[EX]`, an
    assessment as `AT<n>`, or `—` for a reserved/empty session)*.
-4. **`## 3. Notes / decisions`** — free prose the human wants on the record: sequencing rationale,
+
+   **`Date` and `Time` are derived, not decided.** They fall out of the intake's start date, its
+   teaching days and its class times — all prerequisites the juggling session already has — so a
+   producing session computes them rather than asking. They are carried in the grid because the
+   institutional docx has a Session date and Time field per session, and a plan that only counts
+   sessions cannot fill them. Public holidays are excluded before the dates are laid down.
+5. **`## 4. Notes / decisions`** — free prose the human wants on the record: sequencing rationale,
    where catch-up lands, why a Topic spans the sessions it does. Not judged by the linter.
-5. **`## Changelog`** — dated entries.
+6. **`## Changelog`** — dated entries.
 
 ## What the linter checks
 
-`validate-delivery-plan` is deterministic and stdlib-only. **It reads this document's
+`validate_cluster_delivery_plan.py` is deterministic and stdlib-only. **It reads this document's
 [skeleton](#skeleton) to learn the contract** (the `## …` headings, the `- Label:` header fields, and
-the `## 2. Session grid` **column names**), then against a plan it:
+the session-grid **column names**), then against a plan it:
 
 - confirms every heading, header field and grid column **named in the skeleton** is **present** (header
   fields also non-empty);
@@ -119,19 +142,26 @@ docx**; every failure is a decision still to be made.
 - Teaching days per week: 2
 - Teaching days: Tuesday, Thursday
 - Online/classroom split: classroom for practical + presentation sessions; online for lecture/teach
+- Assessment types: AT1: Project · AT2: Project
 
-## 2. Session grid
-| #  | Week | Day | Mode      | Activity     | Placed        |
-|----|------|-----|-----------|--------------|---------------|
-| 1  | 9    | Tue | classroom | onboarding   | —             |
-| 2  | 9    | Thu | online    | teach        | T1            |
-| 3  | 10   | Tue | classroom | practice     | T1 [EX]       |
-| .. | ..   | ..  | ..        | ..           | ..            |
-| 28 | 17   | Thu | classroom | assessment   | AT2           |
-| 29 | 18   | Tue | classroom | spare        | —             |
-| 30 | 18   | Thu | classroom | spare        | —             |
+## 2. Document details
+- Qualification code and title: ICT50220 Diploma of Information Technology
+- Unit code and title: ICTCLD501 Design and implement a cloud disaster recovery strategy
+- Cohort description: <who this intake is>
+- Materials and resources: <the learning materials and resources used in this cluster>
 
-## 3. Notes / decisions
+## 3. Session grid
+| #  | Date        | Week | Day | Time         | Mode      | Activity     | Placed        |
+|----|-------------|------|-----|--------------|-----------|--------------|---------------|
+| 1  | 2026-10-06  | 9    | Tue | 9am-12pm     | classroom | onboarding   | —             |
+| 2  | 2026-10-08  | 9    | Thu | 1pm-4pm      | online    | teach        | T1            |
+| 3  | 2026-10-13  | 10   | Tue | 9am-12pm     | classroom | practice     | T1 [EX]       |
+| .. | ..          | ..   | ..  | ..           | ..        | ..           | ..            |
+| 28 | 2026-11-26  | 17   | Thu | 1pm-4pm      | classroom | assessment   | AT2           |
+| 29 | 2026-12-01  | 18   | Tue | 9am-12pm     | classroom | spare        | —             |
+| 30 | 2026-12-03  | 18   | Thu | 1pm-4pm      | classroom | spare        | —             |
+
+## 4. Notes / decisions
 - <sequencing rationale, catch-up placement, mode choices worth recording>
 
 ## Changelog

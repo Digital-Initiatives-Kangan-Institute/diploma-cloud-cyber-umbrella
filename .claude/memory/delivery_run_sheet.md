@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 5fe40dfd-42a4-49d7-8e7d-5da57c8df524
-  modified: 2026-09-08T21:20:50.115Z
+  modified: 2026-09-09T17:38:21.054Z
 ---
 
 The cluster **delivery process is a formalised step→gate run-sheet** —
@@ -151,11 +151,16 @@ practice) with **no** delivery plan, because the plan needs facts that don't exi
 imminent — session count, days, and which sessions are **online vs classroom** (~2–4 weeks out). It is
 **prerequisite-gated + disposable-per-instance**: those instance facts → a **collaborative human-AI
 juggling session** (sequencing = human judgment, stays human) → a machine-readable **outline
-`<cluster>/delivery/delivery-plan.md`** → `validate-delivery-plan` → (gaps reported, keep prompting) →
+`<cluster>/delivery/delivery-plan.md`** → `validate_cluster_delivery_plan.py` → (gaps reported, keep prompting) →
 PASS → an automated step fills the docx. So reaching Step 6 = the cluster is **course-complete**, not
-unfinished. `docs/delivery-plan-format.md` (skeleton = contract: instance-prereq header + session grid
-`# · Week · Day · Mode · Activity · Placed`) + `validate_delivery_plan.py` + `validate-delivery-plan`
-skill. The gate is **completeness-for-generation** (each FAIL = a decision still to make): contract
+unfinished. `factory/process_03_delivery/step_06_cluster_delivery_plan/_02_delivery-plan-format.md` (moved
+there from `docs/` — a step's format standard now lives in its step folder; pass `--format` explicitly
+until the validator is ported) (skeleton = contract: instance-prereq header + session grid
+`# · Date · Week · Day · Time · Mode · Activity · Placed`; Date/Time derived from the intake's
+start date + class times, plus an `Assessment types:` header field) + `validate_cluster_delivery_plan.py`. **PORTED INTO THE
+FACTORY 2026-09-09** (`factory/process_03_delivery/step_06_cluster_delivery_plan/scripts/validate_cluster_delivery_plan.py`),
+rebuilt on `factory/common/helpers/`, covered by cases `CDP-01…29`; the legacy script + its skill were
+deleted — a purely mechanical gate needs no skill. The gate is **completeness-for-generation** (each FAIL = a decision still to make): contract
 present, grid internally consistent (1..N, every cell decided, Mode/Activity in vocab), **every built
 Topic (`topic_NN/`) + every assessment (`AT<n>/`) placed** (enumerated from dirs), frame reconciliation
 (row count == declared total; reservations honoured); reports intake-vs-nominal + mode split. **No agent
