@@ -29,3 +29,6 @@ __pycache__/
 
 # Local scratch — working notes and drafts, easy to reach but never committed.
 /scratch/
+
+# Test/demo virtual environments — visible on disk (venvs/test/, …), never committed (test-first standard).
+venvs/
