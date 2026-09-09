@@ -21,6 +21,22 @@ Usage:
   python validate_topic_breakdown.py --cluster <S1-CLx dir>
 Exit 0 = PASS, 1 = FAIL, 2 = usage/error.
 """
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# Before migrating this script into factory/, CHECK factory/common/helpers/ and
+# prefer what is there over writing your own. Relevant to this file:
+#   format_contract - find_format_doc / parse_contract (the '## Skeleton' contract) /
+#                     parse_labelled_fields ('- Label: value').
+#   numeric         - num() / fmt(): pull a number out of a free-text field, display it back.
+#   uoc_sections    - which UoC SECTIONS a Topic teaches (PC/KE/PE/FS/AC), plus
+#                     taught_block(). Section presence only - NOT item enumeration.
+#
+# Enumerating individual UoC items - expanding ranges, abbreviated tags inheriting a
+# unit, compound tags - already has ONE home: validate_at_traceability.resolve_tags.
+# uoc_sections deliberately does not repeat it. Use resolve_tags; do not fork it.
+# Every helper is covered by cases in factory/docs/test-plan.md. If one is wrong,
+# fix it there and add the case - never fork a local copy.
+# -----------------------------------------------------------------------------
+
 from __future__ import annotations
 
 import argparse

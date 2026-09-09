@@ -15,6 +15,19 @@ Emits the structure the validators require: the `**AT<n> content Topic**` marker
 (validate-topic-breakdown), `- **C<n> …` component declarations and the `UoC mapping` table whose last
 cell is the component (validate-slide-plan), with canonical unwrapped tags.
 """
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# Before migrating this script into factory/, CHECK factory/common/helpers/ and
+# prefer what is there over writing your own. Relevant to this file:
+#   uoc_sections    - which UoC SECTIONS a Topic teaches (PC/KE/PE/FS/AC), plus
+#                     taught_block(). Section presence only - NOT item enumeration.
+#
+# Enumerating individual UoC items - expanding ranges, abbreviated tags inheriting a
+# unit, compound tags - already has ONE home: validate_at_traceability.resolve_tags.
+# uoc_sections deliberately does not repeat it. Use resolve_tags; do not fork it.
+# Every helper is covered by cases in factory/docs/test-plan.md. If one is wrong,
+# fix it there and add the case - never fork a local copy.
+# -----------------------------------------------------------------------------
+
 import argparse
 import re
 import sys

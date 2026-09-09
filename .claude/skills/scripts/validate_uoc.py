@@ -10,6 +10,15 @@ Reports differences in two tiers:
   - Cosmetic: punctuation/quote/whitespace normalisation differences
 """
 
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# Before migrating this script into factory/, CHECK factory/common/helpers/ and
+# prefer what is there over writing your own. Relevant to this file:
+#   md_table        - markdown tables: split_row / is_separator / rows_under_heading.
+#                     Rows keep their source line number so a failure can cite a line.
+# Every helper is covered by cases in factory/docs/test-plan.md. If one is wrong,
+# fix it there and add the case - never fork a local copy.
+# -----------------------------------------------------------------------------
+
 import difflib
 import re
 import sys

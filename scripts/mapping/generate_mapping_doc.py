@@ -19,6 +19,17 @@ USAGE:
   python scripts/mapping/generate_mapping_doc.py --check {cl2|cl3|all}   # table content vs committed
   python scripts/mapping/generate_mapping_doc.py --build {cl2|cl3|all}   # (re)write the docx
 """
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# Before migrating this script into factory/, CHECK factory/common/helpers/ and
+# prefer what is there over writing your own. Relevant to this file:
+#   md_table        - markdown tables: split_row / is_separator / rows_under_heading.
+#                     Rows keep their source line number so a failure can cite a line.
+#   docx_template   - clone_block_after() to repeat a heading+table block, and
+#                     set_cell_text() which PRESERVES the template's run formatting.
+# Every helper is covered by cases in factory/docs/test-plan.md. If one is wrong,
+# fix it there and add the case - never fork a local copy.
+# -----------------------------------------------------------------------------
+
 import argparse
 import copy
 import importlib

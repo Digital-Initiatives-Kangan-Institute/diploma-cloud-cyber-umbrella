@@ -25,6 +25,17 @@ Usage:
 
 Exit 0 = PASS (no phantom tags, no untagged criteria, expected coverage met if given).
 """
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# THIS FILE OWNS THE UoC TAG GRAMMAR. resolve_tags / valid_tag_set here are the
+# single implementation - validate_delivery_coverage imports them rather than
+# carrying a copy, and factory/common/helpers/uoc_sections.py deliberately does
+# NOT duplicate them (it answers a narrower question: which SECTIONS a Topic
+# teaches, for a document that wants a category rather than a citation).
+# When this file migrates into factory/, that grammar should become a common
+# helper with its own test-plan cases - it is a library living inside a
+# validator, which is why it is awkward to reach today.
+# -----------------------------------------------------------------------------
+
 import argparse
 import re
 import sys

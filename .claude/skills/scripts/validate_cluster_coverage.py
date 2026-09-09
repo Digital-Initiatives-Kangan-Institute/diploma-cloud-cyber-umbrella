@@ -4,6 +4,19 @@ consolidated UoC? This is the capstone check: the per-AT traceability validator 
 references are valid and tagged; this proves the ATs collectively leave nothing unassessed.
 
 It builds the expected item set from the cluster's consolidated_uoc.md, collects the UoC references
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# Before migrating this script into factory/, CHECK factory/common/helpers/ and
+# prefer what is there over writing your own. Relevant to this file:
+#   uoc_sections    - which UoC SECTIONS a Topic teaches (PC/KE/PE/FS/AC), plus
+#                     taught_block(). Section presence only - NOT item enumeration.
+#
+# Enumerating individual UoC items - expanding ranges, abbreviated tags inheriting a
+# unit, compound tags - already has ONE home: validate_at_traceability.resolve_tags.
+# uoc_sections deliberately does not repeat it. Use resolve_tags; do not fork it.
+# Every helper is covered by cases in factory/docs/test-plan.md. If one is wrong,
+# fix it there and add the case - never fork a local copy.
+# -----------------------------------------------------------------------------
+
 from each AT's benchmark/traceability section (resolving abbreviated tags and expanding range/list
 tags exactly as the traceability validator does), and reports:
   * MISSING — consolidated items that no AT evidences (the gap that must be closed before the

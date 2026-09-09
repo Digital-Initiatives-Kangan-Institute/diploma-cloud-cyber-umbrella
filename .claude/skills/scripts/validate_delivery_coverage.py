@@ -4,6 +4,19 @@ assessment assesses? This is the delivery-side analogue of validate_cluster_cove
 side proves every consolidated item is *assessed*; this proves every assessed item is *taught*.
 
 It builds the expected item set from the cluster's consolidated_uoc.md and collects the UoC references
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# Before migrating this script into factory/, CHECK factory/common/helpers/ and
+# prefer what is there over writing your own. Relevant to this file:
+#   uoc_sections    - which UoC SECTIONS a Topic teaches (PC/KE/PE/FS/AC), plus
+#                     taught_block(). Section presence only - NOT item enumeration.
+#
+# Enumerating individual UoC items - expanding ranges, abbreviated tags inheriting a
+# unit, compound tags - already has ONE home: validate_at_traceability.resolve_tags.
+# uoc_sections deliberately does not repeat it. Use resolve_tags; do not fork it.
+# Every helper is covered by cases in factory/docs/test-plan.md. If one is wrong,
+# fix it there and add the case - never fork a local copy.
+# -----------------------------------------------------------------------------
+
 from each Topic's coverage.md — specifically the "taught / developed" mapping (NOT the 'applied earlier'
 or 'out of scope' sections, so an item only-ever-applied or deferred surfaces as a genuine gap).
 

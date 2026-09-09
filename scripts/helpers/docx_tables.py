@@ -4,6 +4,16 @@ Two table builders (a blank *template* table with grey placeholder styling, and 
 *data* table with filled values) plus low-level cell/row operations. Branded tables
 use the YAT palette and the shared shading/border helpers.
 """
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# SIBLING, NOT DUPLICATE, of factory/common/helpers/docx_template.py. Keep both.
+#   THIS file BUILDS our own branded tables - the styling is ours to set, so
+#   set_cell_content() correctly discards existing runs and adds a fresh one.
+#   docx_template FILLS an institutional template - the styling is theirs, so
+#   set_cell_text() reuses the first run and its font/size/colour survive.
+# Using the wrong one silently flattens a supplied template's formatting.
+# When migrating, carry both across under their own names and cases.
+# -----------------------------------------------------------------------------
+
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt, Cm, RGBColor

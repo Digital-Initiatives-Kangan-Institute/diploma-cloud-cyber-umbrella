@@ -29,6 +29,21 @@ taught-table reader as validate_delivery_coverage, so a tag counts here exactly 
 Usage:  validate_slide_plan.py --plan <topic_NN>/slide_plan.md   (coverage.md auto-found alongside)
 Exit 0 = PASS.
 """
+# --- FACTORY MIGRATION NOTE --------------------------------------------------
+# Before migrating this script into factory/, CHECK factory/common/helpers/ and
+# prefer what is there over writing your own. Relevant to this file:
+#   md_table        - markdown tables: split_row / is_separator / rows_under_heading.
+#                     Rows keep their source line number so a failure can cite a line.
+#   uoc_sections    - which UoC SECTIONS a Topic teaches (PC/KE/PE/FS/AC), plus
+#                     taught_block(). Section presence only - NOT item enumeration.
+#
+# Enumerating individual UoC items - expanding ranges, abbreviated tags inheriting a
+# unit, compound tags - already has ONE home: validate_at_traceability.resolve_tags.
+# uoc_sections deliberately does not repeat it. Use resolve_tags; do not fork it.
+# Every helper is covered by cases in factory/docs/test-plan.md. If one is wrong,
+# fix it there and add the case - never fork a local copy.
+# -----------------------------------------------------------------------------
+
 import argparse
 import re
 import sys
