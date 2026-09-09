@@ -2,16 +2,14 @@
 
 ## Background
 
-The Diploma of IT (Cloud and Cyber Security) was originally developed as a **multi-TAFE collaboration**: each participating TAFE authored a different subset of the 21 units, with no shared spine across them. Kangan was a participant in that collaboration. The current state has two problems that flow directly from how it was built:
+The Diploma of IT (Cloud and Cyber Security) was originally developed as a **multi-TAFE collaboration**: each participating TAFE authored a different subset of the 20 units, with no shared spine across them. Kangan was a participant in that collaboration. The current state has two problems that flow directly from how it was built:
 
 1. **Significant cross-unit duplication.** Different units assess the same or very similar things, creating wasted assessment effort for both learners and assessors and confusion about which assessment "owns" a competency.
 2. **No continuity of narrative or delivery.** Because units were authored independently by different TAFEs, there is no shared spine — context, examples, vocabulary, scenarios, and tooling vary unnecessarily between units that learners experience back-to-back.
 
 The product also includes a mix of authoring styles, document conventions, and folder structures, which itself adds friction for delivery staff and validators.
 
-**Reuse permissions (working assumption, TBD pending legal confirmation).** As a participant in the original multi-TAFE collaboration, Kangan has permission to reuse all materials in `original_materials/` — including content authored by other participating TAFEs (e.g. the YAT College case study attributed to Melbourne Polytechnic). Work is to proceed on that assumption. Tim is double-checking with the Kangan legal team; flag any actions that would be hard to reverse if the assumption turns out to be wrong.
-
-**Fallback if reuse is not permitted.** Tim's standing instruction for this work is to **reuse existing material wherever possible**. If legal advises that specific source content (e.g. the YAT College case study) cannot be reused as-is, the fallback is to **reauthor the affected materials under a different name with equivalent but distinct content** — preserving the structural shape (scenario type, document set, AT mappings) so the rest of the cluster work is unaffected. The architectural decisions (3-AT structure, scenario-spine approach, contextual reflective questions, document inventory) do not depend on any specific source identity and remain stable across this contingency.
+**Reuse permissions:** working assumption is that reuse of all `original_materials/` content is permitted (multi-TAFE collaboration), pending legal confirmation — details and the reauthor-under-a-different-name fallback are in [reuse-permissions.md](reuse-permissions.md).
 
 ## Goal
 
@@ -29,15 +27,15 @@ Stated more concretely, by the end of the project we want, for each cluster:
 
 **Student lab access:** students have access to both **AWS Academy Cloud Foundations [104469]** and **AWS Academy Cloud Architecting [172221]**. These are the authorised lab environments for cluster delivery — assessment design should align to what those courses provide rather than assume access to a free-form personal AWS account.
 
-**Scenario architecture (2026-05-23):** the cluster scenario materials (YAT College) live at `<repo_root>/scenario/` rather than inside any one cluster's folder. Intent: the scenario is **shared across the course** — the same YAT organisation appears in every cluster, with state-versioned documents evolving as the course progresses. Cluster folders reference scenario content abstractly (e.g. "the YAT intranet's ICT Strategic Plan page") rather than by relative filesystem path, so the structure is independent of any one cluster's needs.
+**Scenario architecture:** the shared YAT College scenario is rendered by the semester's **website repo** — the single source of truth for in-world content, with state-versioned documents evolving as the course progresses (see [website-architecture.md](website-architecture.md) and [scenario-flow.md](scenario-flow.md)). The content repo's `scenario/` holds only the per-cluster scenario design docs. Cluster materials reference scenario content abstractly ("the YAT intranet's ICT Strategic Plan page"), never by filesystem path.
 
 ## Scope
 
-**In scope:** the 21 units listed in `clusters.md`, grouped into 7 clusters (3 cloud + 4 cyber). Reuse of existing material in `original_materials/`, refactoring of existing material, and creation of new material where required.
+**In scope:** the 20 units listed in `clusters.md`, grouped into 7 clusters (3 cloud + 4 cyber). Reuse of existing material in `original_materials/`, refactoring of existing material, and creation of new material where required.
 
 **Out of scope (working assumption — confirm):** ICTPRG549 and ICTSAS518, which have source materials present but do not appear in the cluster list.
 
-**No inherited learning/assessment material:** VU23226 (Enterprise Systems) and ICTCLD505 (Cloud Disaster Recovery) have no folders in `original_materials/`. ICTCLD505's UoC reference (`_Complete_R1.docx`) is present in `courseware/`, so we have a defined target to author against. **VU23226 has no UoC reference either** — that needs to be obtained upstream (training.gov.au / VETNet) before the Enterprise Systems mapping can include it. This is the one narrow exception to the read-only-originals principle: we don't chase source content upstream, but we do need the unit's UoC reference document, because without it there's no defined target to author against.
+**No inherited learning/assessment material:** VU23226 (Enterprise Systems) and ICTCLD505 (Cloud Disaster Recovery) have no folders in `original_materials/`. ICTCLD505's UoC reference (`_Complete_R1.docx`) is present in its cluster's `units_of_competency/original/`, so we have a defined target to author against. **VU23226 has no UoC reference either** — that needs to be obtained upstream (training.gov.au / VETNet) before the Enterprise Systems mapping can include it. This is the one narrow exception to the read-only-originals principle: we don't chase source content upstream, but we do need the unit's UoC reference document, because without it there's no defined target to author against.
 
 ## Operating principles
 
@@ -55,7 +53,7 @@ Stated more concretely, by the end of the project we want, for each cluster:
 | **VU23226 has no inherited source *and* no UoC reference.** | The UoC reference must be obtained before the Enterprise Systems cluster mapping can include it. Narrow upstream ask, but real. |
 | **Source materials are inconsistent in structure.** | Comparing units to find overlap is harder when documents are organised differently and named differently. A normalisation step (the per-unit summary, in our own workspace) is needed before meaningful audit work can start. |
 | **Two units (ICTCLD503, ICTCLD504) have an updated set of materials in a separate folder.** | Risk of referencing stale content unless we explicitly nominate the updated set as the canonical reference and ignore the older copies. |
-| **Cluster assignments are "suggested" but not yet final.** | Some unit placements may shift after content audit reveals actual overlap (e.g. ICTSAS526 DR/contingency vs ICTCLD501 Cloud DR). |
+| **S2 cluster assignments may still shift.** | S1's three clusters are settled (specs AGREED, instruments built); S2's four are pre-audit and unit placements may move. |
 | **Tracked changes / comments may exist inside .docx files.** | Worth knowing before we treat any file as the "current" version. |
 | **Tim is one person.** | Pace and prioritisation matter. Critical-path work (audit + cluster scope-of-work decisions) needs to come before material refactoring. |
 
@@ -69,7 +67,7 @@ The project is "done" when each cluster has:
 4. A traceability artefact (unit mapping document) showing where each PC/PE/KE/FS/AC is taught and assessed within the cluster.
 5. A record of which source items were reused as-is, which were refactored, and which were newly authored — so validators can see the lineage.
 
-All cluster outputs are authored against the templates in `templates/` at the workspace root (delivery plan, assessment mapping tool, project + written assessment templates for both student and assessor versions). The institutional `_TEMPLATES/` folder inside `original_materials/` is a *reference only* — `templates/` is the format-of-record for new work.
+Assessment instruments are **generated guided workbooks** — one source renders the student, assessor and practice-twin copies (see [assessment-workbook-format.md](assessment-workbook-format.md)); mapping documents are generated too ([mapping-document-standard.md](mapping-document-standard.md)). The `kangan-templates/` folder holds the institutional formats these generators fill (delivery plan, mapping tool); the `_TEMPLATES/` folder inside `original_materials/` is reference only.
 
 ## Method (working approach)
 
@@ -80,4 +78,4 @@ Roughly four phases, run mostly in sequence with some overlap:
 3. **Cluster build** — produce the cluster deliverables (delivery plan, consolidated assessment, learner resource, mapping).
 4. **Validation pass** — internal review against pre-validation tool + training package mapping before submission.
 
-Phases are detailed in `work_breakdown_structure.md`.
+The phases are realised as the two step→gate run-sheets: [process-assessment.md](process-assessment.md) and [process-delivery.md](process-delivery.md); the one-page overview is [big-picture.md](big-picture.md).

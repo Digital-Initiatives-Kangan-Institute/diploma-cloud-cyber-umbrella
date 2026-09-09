@@ -1,6 +1,6 @@
 # Website architecture
 
-The **YAT scenario website** (`diploma-cloud-cyber-website`, a sibling repo) is the in-world delivery vehicle and the **single source of truth for scenario content** — the clusters pull from it, and the old `<repo_root>/scenario/` folder is no longer authoritative. It is an Astro static site deployed to Cloudflare Pages, comprising a public marketing site plus an `/intranet/` that the assessments reference. This document describes its durable architecture: the tech stack, the state-folder URL model, content collections and the shared schema, the projects model, state-versioned docs, the year-offset pattern, downloadable documents, the public site and sign-in, the diagram pattern, Astro gotchas, and the standing principles applied.
+The **YAT scenario website** (`diploma-cloud-cyber-website-s1` / `…-s2`, sibling repos — one per semester) is the in-world delivery vehicle and the **single source of truth for scenario content** — the clusters pull from it, and the old `<repo_root>/scenario/` folder is no longer authoritative. It is an Astro static site deployed to Cloudflare Pages, comprising a public marketing site plus an `/intranet/` that the assessments reference. This document describes its durable architecture: the tech stack, the state-folder URL model, content collections and the shared schema, the projects model, state-versioned docs, the year-offset pattern, downloadable documents, the public site and sign-in, the diagram pattern, Astro gotchas, and the standing principles applied.
 
 Paths are relative to the **website repo** root.
 
@@ -33,8 +33,13 @@ Projects attach to a state by `appearsIn`. The standing projects + their scenari
 - **MTS – Accounting System Cloud Migration** (`accounting-cloud-migration`) — the **practice**
   engagement (Ledgerline), a peer engagement to the LMS (see the S1 CL1 delivery process in
   [process-delivery.md](process-delivery.md)).
-- **LMS Global Expansion** (`lms-global-expansion`) — the CL2 web-scale + DR vehicle (see the S1 CL2
-  assessment flow in [scenario-flow.md](scenario-flow.md)).
+- **LMS Global Expansion** (`lms-global-expansion`) — the CL2 **practice** vehicle.
+- **Website Cloud Migration / Global Expansion / Improvement** (`website-cloud-migration`,
+  `website-global-expansion`, `website-improvement`) — the website engagements: CL2's **assessment**
+  vehicle and CL3's practice improvement.
+- **Ledgerline Improvement** (`ledgerline-improvement`) — CL3's **assessment** engagement.
+  (Roles per cluster: [scenario-flow.md](scenario-flow.md)'s matrix; the config source of truth is
+  `src/config/projects.ts`.)
 
 ## State-versioned docs
 Some ICT docs share a title but **fork content by state** — on-prem (AT1/AT2) / post-cutover single-AZ

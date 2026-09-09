@@ -126,7 +126,10 @@ watching for are assessing what no item requires, and setting a bar well above w
 
 Both of these were learned by breaking them.
 
-**Task numbering is continuous across the whole instrument.** Not restarted per part. The traceability
+**Task numbering is continuous across the whole instrument.** Not restarted per part. Renumbering a
+task is a **breaking change twice over**: the marking criteria's task ranges shift, and every delivery
+deck's activity slides point at these numbers ("Workbook — tasks 5 to 9") — re-run the delivery
+realignment loop for the affected topics. The traceability
 validator resolves a criterion's `(tasks 12–14)` scope to workbook elements by number, so per-part
 numbering makes any criterion beyond Part A unverifiable. It also reads better: a student following a
 43-task workbook has one sequence, not three.
@@ -146,7 +149,8 @@ course-agnostic and lives in the umbrella; a course supplies content.
 | `scripts/helpers/run_sheet.py` | the workbook engine — the rendering primitives and `element()` |
 | `scripts/helpers/workbook_instrument.py` | derives the marking guide, the reverse map and the mapping engine's `BENCHMARK` from the workbook's tags; and `assemble()`, which fills the institutional template |
 | `scripts/tests/test_run_sheet.py` | holds the student/assessor split and the scaffolding dials |
-| `<content-repo>/scripts/<cluster>/at<N>_run_sheet.py` | the content — task lists plus a `render()` laying out that AT's document spine |
+| `<content-repo>/scripts/<cluster>/s?_cl?_at<N>_run_sheet.py` | the content — task lists plus a `render()` laying out that AT's document spine (CL1 uses the bare `atN_` form; a large AT may split across part files, e.g. CL2 AT1's `_part_{a,b,c}_`) |
+| `<content-repo>/scripts/<cluster>/*_practice_run_sheet.py` + `build_*_practice.py` | the practice twin — same structure through the assessment's own renderer, different specifics, guidance added, marking apparatus stripped |
 | `<content-repo>/scripts/<cluster>/build_..._assessor.py` | the instrument: institutional front matter, the criteria map, and the build |
 | `<content-repo>/scripts/<cluster>/build_..._student.py` | a thin entry point calling the assessor module in `student` mode |
 

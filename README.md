@@ -32,7 +32,8 @@ two repos are self-contained; **semesters do not share scenario continuity.**
 ```
 <umbrella>/                       ← this repo (the course-agnostic layer)
 ├── .claude/                      ← shared tooling: skills + validators, rules, memory, settings, hooks
-├── docs/                         ← process + format standards + the current course's docs
+├── docs/                         ← process + format standards + the current course's docs (start at docs/INDEX.md)
+├── scripts/                      ← the shared engine: deck builder, workbook/docx helpers, mapping + coverage generators, tests
 ├── CLAUDE.md                     ← umbrella context + working rules
 ├── README.md                     ← you are here
 ├── diploma-cloud-cyber-content-s1/   ← WORKING REPO (cloned inside; gitignored here)
@@ -47,10 +48,13 @@ it never tracks their files — each remains the sole owner of its own history.
 
 **The umbrella ⇄ sub-repo boundary:**
 - **Umbrella = common process + tooling (course-agnostic):** the step→gate run-sheets and format
-  standards (`docs/`), the authoring skills + validators + shared engine (`.claude/skills/`),
+  standards (`docs/` — catalogued in [docs/INDEX.md](docs/INDEX.md), with the one-page overview in
+  [docs/big-picture.md](docs/big-picture.md)); the authoring skills + validators (`.claude/skills/`);
+  the shared engine (`scripts/` — deck builder, workbook/docx helpers, mapping + coverage generators);
   institutional templates, project-wide rules, and portable memory. The reproducible machinery.
-- **Sub-repo = the specifics:** the units/clusters, assessment instruments, mappings, the scenario
-  website, and any semester-specific generators.
+- **Sub-repo = the specifics:** the units/clusters, the generated assessment instruments (guided
+  workbooks with practice twins — see [docs/assessment-workbook-format.md](docs/assessment-workbook-format.md)),
+  mappings, the scenario website, and the semester-specific generators the engine drives.
 
 ---
 
@@ -80,16 +84,9 @@ the repo. After that, setup is permanent on this machine.
 ## ⭐ The one rule: always launch Claude from the umbrella
 
 **Open your Claude session with the umbrella as the workspace root — even when the actual editing
-happens inside a sub-repo.**
-
-This is how Claude Code's discovery works. Claude resolves its tooling relative to the folder you launch
-in, and **some asset types are only discovered from the launch directory** (they don't reach into
-sub-folders). Launch from the umbrella and you get the full toolkit; launch from inside a sub-repo and
-you silently lose the umbrella's agents, settings, rules, and shared memory.
-
-The two asset types that *do* cascade downward (skills and `CLAUDE.md`) still work when you edit inside a
-sub-repo — so launching from the umbrella genuinely gives you **everything**: the umbrella's shared
-layer, plus each sub-repo's own context as you touch its files.
+happens inside a sub-repo.** Skills and `CLAUDE.md` cascade down into the sub-repos; agents, settings,
+rules and memory are only discovered from the launch directory (the table below). Launching from a
+sub-repo silently loses the shared layer.
 
 ---
 
@@ -111,17 +108,16 @@ The umbrella file is the always-on base layer; each sub-repo's file layers on to
 | **Umbrella `CLAUDE.md`** | umbrella root | ✅ always loaded |
 | **Repo-specific `CLAUDE.md`** | each sub-repo | ✅ lazy-loaded when you read that repo's files |
 | **Process skills + validators** (the shared toolchain) | umbrella `.claude/skills/` | ✅ always |
-| **Semester-specific generators** | the sub-repo's `scripts/` | ✅ on-demand when working there |
+| **Shared engine** (deck builder, workbook/docx helpers, mapping + coverage generators) | umbrella `scripts/` (run with its `.venv`) | ✅ always |
+| **Semester-specific generators** | the sub-repo's `scripts/` (driven by the umbrella engine) | ✅ on-demand when working there |
 | **Rules** | umbrella `.claude/rules/` (scoped with `paths:` globs) | ✅ always — target sub-repo files via globs |
 | **Agents** | umbrella `.claude/agents/` | ⚠️ only from the umbrella (no nested discovery) |
 | **Settings** | umbrella `.claude/settings.json` (+ machine-local `settings.local.json`) | ⚠️ only from the umbrella |
 | **Memory** | umbrella `.claude/memory/` | ⚠️ only from the umbrella |
 
-Rule of thumb: **skills and `CLAUDE.md` follow you down into the sub-repos; agents, settings, rules, and
-memory stay at the top.** That asymmetry is the whole reason for "always launch from the umbrella." The
-**course-agnostic toolchain** (skills, validators, the deck/mapping engine) lives in the umbrella so any
-semester of any course can reuse it unchanged; only **course/semester-specific** artefacts and generators
-live in the sub-repos.
+That asymmetry is the whole reason for the one rule. The course-agnostic toolchain lives in the
+umbrella so any semester of any course reuses it unchanged; only course/semester-specific artefacts and
+generators live in the sub-repos.
 
 ### 3. Self-healing, version-controlled memory
 

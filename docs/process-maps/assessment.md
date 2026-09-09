@@ -100,7 +100,7 @@ flowchart TD
 | 6→7 | validator | `validate-scenario-plan`, `SR-*`, `SR-*` | `validate-scenario-plan`→skill | — | ✓ ok |
 | 7→8 | human | `verify-scenario-realisation`, `partial`, `mismatch` | `verify-scenario-realisation`→agent | built | ✓ ok |
 | 8→9 | validator | `validate-at-traceability`, `--expect` | `validate-at-traceability`→skill | — | ✓ ok |
-| 9→10 | validator | `validate-student-instrument`, `[UNIT SEC num]`, `.docx`, `git diff`, ` for g in scripts/s1_clN/build_s1_clN_at*_{assessor,student}.py; do ../scripts/.venv/bin/python $g; done git diff --stat -- '*/assessments/*.docx'      # must be empty `, ` A generator can be corrected and its built artefact left behind — that is how an AT3 instrument kept a link to a page the split had retired, on a green board (2026-08-28). ` | `validate-student-instrument`→skill | built | ✓ ok |
+| 9→10 | validator | `validate-student-instrument`, `[UNIT SEC num]`, `.docx`, `git diff`, ` for g in scripts/s1_clN/build_s1_clN_at*_{assessor,student,practice}.py; do ../scripts/.venv/bin/python $g; done  # practice twins rebuild with their ATs git diff --stat -- '*/assessments/*.docx'      # must be empty `, ` A generator can be corrected and its built artefact left behind — that is how an AT3 instrument kept a link to a page the split had retired, on a green board (2026-08-28). ` | `validate-student-instrument`→skill | built | ✓ ok |
 | 10→11 | validator | `validate-mapping-doc` | `validate-mapping-doc`→skill | — | ✓ ok |
 | 11→12 | validator | `validate-cluster-coverage`, `--include-ac` | `validate-cluster-coverage`→skill | — | ✓ ok |
 | 12→done | human | human | — | — | human-only gate — candidate for tooling |

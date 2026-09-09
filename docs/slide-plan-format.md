@@ -6,11 +6,11 @@ root.
 
 A Topic's **slide plan** (`delivery/topic_NN/slide_plan.md`) is the **kept, validated source** the deck
 is built from — the teaching + exercise slides in deck order, each with its type, its **finished content**
-(title + bullets, read verbatim by `build_topic_deck.py`), and its image source. It is the **counterpart
-of `coverage.md`**:
-`coverage.md` says *what the Topic must cover* (components + UoC); the slide plan says *how each of those
-is delivered, slide by slide*. The deck is built from it; it is **no longer disposable** (the older
-convention deleted it — superseded).
+(title + bullets, read verbatim by `build_topic_deck.py`), and its image source. It is authored from the
+AT's **practice workbook**: each component is one block of workbook tasks, taught then exercised, so the
+deck and the worksheet advance together. The Topic's `coverage.md` (its UoC contract) is **generated
+from the plan** by `scripts/generate_topic_coverage.py` — the plan is the source of truth; coverage is
+the derived mapping record.
 
 Two checks run against it (deterministic; no agent — pedagogical quality stays human review):
 
@@ -34,6 +34,14 @@ Two checks run against it (deterministic; no agent — pedagogical quality stays
   optional). One of: `[PRIMER]` (vendor-neutral fundamental), `[BESPOKE]` (authored from brief),
   `[AWS <Mx> <Sy>]` (reuse a named source slide), `[DEMO]` (recorded/live demo), `[EX]` (exercise),
   `[TABLE]`, `[TAKEAWAYS]`. Compound is allowed (`[EX] [BESPOKE]`).
+- **Every `[EX]` slide names its workbook tasks** — its first bullet is `Workbook — tasks N to M.` (or a
+  question rehearsal: `The assessment's questions Q1 to Q3, rehearsed from your practice build.`). This
+  is the activity→worksheet alignment the whole delivery model rests on.
+- **Render safety (machine-gated — the builder has no line-wrapping and no markdown):** every bullet
+  goes on **one line**, however long — a wrapped continuation renders as its own broken bullet; and
+  rendered text (titles, kickers, bullets) is **plain text only** — `**bold**`, `*italic*` and backticks
+  come out literally on the slide. `notes:` blocks are exempt (speaker pane). Both fail
+  `validate-slide-plan` before build.
 - **Image source — every slide carries an `image:` field** (mandatory, no exceptions), so there is never
   ambiguity about whether a slide has an image. Value is exactly one of:
   - `image: none` — the slide has no image. **An explicit, required value, not an omission.**
@@ -76,24 +84,20 @@ pane** (Presenter View / printable notes pages), **never** on the projected slid
 **teacher-facing**, they are the one place **meta-language is allowed** — UoC codes, the assessment tie,
 AWS source refs — none of which may appear on a student slide. They make a deck **teachable cold**.
 
-**Type-aware content** (each slide type gets a different kind of note):
-- **Teaching** (`content`/`visual` / `[PRIMER]`/`[BESPOKE]`/`[AWS]`) — frame the slide, walk each point
-  (what to *say*, not restate), the *why*, a **misconception to pre-empt**, a **question to pose**, the
-  UoC/assessment tie.
-- **Demo** (`[DEMO]`) — what to demonstrate, what to **emphasise**, prep + timing, **and exactly where to
-  find the AWS recorded demo** (deck · module · slide, from `planning/aws-recorded-demos-catalogue.md`).
-- **Activity** (`[EX]`) — a **facilitation script**: the exact words to tell students, numbered steps, what
-  they must produce, timing + where they get stuck, a share-back prompt, the no-leakage reminder.
+**Keep them brief: 3–6 bullets per slide** — the intent (what this slide is for), one point to press,
+one misconception or facilitation hint. Not an essay; a teacher running the deck cold needs hints.
+Type flavour:
+- **Teaching** (`[PRIMER]`/`[BESPOKE]`/`[AWS]`) — the intent, a press point, a misconception or a
+  question to pose.
+- **Demo** (`[DEMO]`) — what to demonstrate and emphasise, prep + rough timing; name the recorded demo
+  source where one exists.
+- **Activity** (`[EX]`) — which workbook tasks it runs, where students get stuck, what to press.
 - **Skip** title / divider / takeaways / table — self-explanatory.
 
-**How notes are authored + attached (source-level — never post-build; a rebuild must repopulate them):**
-- A per-slide **`notes:`** block in `slide_plan.md` (multi-line, indented under the slide, placed last).
-  The generic `build_topic_deck.py` reads them and `register_notes()`s the `{title: notes}` map before
-  building — one mechanism for **every** cluster (CL1 was migrated onto it 2026-07-09; there is no longer a
-  per-topic `topicNN_notes.py` sidecar).
-- **Drafting:** the **`draft-slide-notes`** step — an agent reads the slide content + the topic's
-  `coverage.md` (UoC context) and drafts the type-aware notes; human reviews. Co-drafted with the slides
-  for new work; a source-level retrofit pass for existing decks.
+**How notes are attached (source-level — never post-build; a rebuild must repopulate them):** a
+per-slide **`notes:`** block in `slide_plan.md` (multi-line, indented under the slide, placed last),
+co-authored with the slide content. `build_topic_deck.py` reads them and writes the notes pane on
+every build — one mechanism for every cluster.
 
 Engine: `register_notes()` + `notes=` on the content/visual/activity/demo layouts write `slide.notes_slide`
 (owned by `kangan_deck.py`). Notes are committed source, regenerated into the deck on every build.
@@ -128,6 +132,9 @@ folder as its contract. It:
   non-empty `Teaches:` line; every slide line carries a recognised `[<TYPE>]` tag; **every slide carries
   an `image:` field** whose value is a valid keyword (`none`/`reuse`/`diagram`/`gen`/`placeholder`) — a
   slide with no `image:` field at all is a failure (ambiguous);
+- **render safety** (mirrors the builder's line grammar): no stray line inside a slide block (a line
+  that isn't a bullet, a field, a table row or notes-block content would render as its own level-0
+  bullet — the wrapped-bullet defect), and no markdown in rendered text (titles, kickers, bullets);
 - **backwards coverage** (vs the sibling `coverage.md`): every component `coverage.md` declares has a
   `### C<n>` section; the **union of the slide plan's `Teaches:` tags covers every UoC item `coverage.md`
   teaches** (MISSING = a taught item no slide plans to teach); no `Teaches:` tag is a phantom (PHANTOM =
@@ -157,30 +164,32 @@ ACF M05 S5–S9, S11–S13; ACA M07 S10–S20, S30, S45.
 
 ### Opener
 - [BESPOKE] Continuing the build
-  Foundation done (Topic 6); now build the network the workload sits in.
+  - Foundation done last Topic; now build the network the workload sits in.
   image: none
 
 ### C1 — Virtual network & subnets
 - Teaches: [ICTCLD401 PC 2.2] · [ICTCLD401 KE 5]
 - [PRIMER] Networking, the essentials
-  What a network/subnet/IP/CIDR is.
+  - What a network, subnet, IP address and CIDR block are.
   image: reuse ACF M05 S6
 - [AWS M05 S11] The VPC — your private network in AWS
-  A VPC is a logically isolated section of AWS you define.
+  - A VPC is a logically isolated section of AWS you define.
   image: none
-- [EX] Build the design's VPC + subnets
-  Stand up the VPC + subnets in the lab.
+- [EX] Build the design's VPC and subnets
+  - Workbook — tasks 4 and 5.
+  - Stand up the VPC and subnets in the lab.
+  timer: ~25 min
   image: none
 
 ### C2 — Controlling traffic (security groups)
 - Teaches: [ICTCLD401 KE 9]
 - [BESPOKE] Security groups — stateful, least-privilege
-  The sg-alb -> sg-app -> sg-db chain.
+  - The chain: load balancer group, then app group, then database group.
   image: diagram sg-chain
 
 ### Close
 - [BESPOKE] What you built
-  The network tier, to the design, evidenced.
+  - The network tier, to the design, evidenced.
   image: none
 
 ## Build notes

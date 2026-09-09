@@ -148,7 +148,7 @@ Marking Guide, benchmark, and model answers). → detail [§9](#9--student-instr
 > **Also at this gate — the committed `.docx` must still be what its generator emits.** With the tree
 > otherwise clean, rebuild every instrument in the cluster and confirm `git diff` reports nothing:
 > ```
-> for g in scripts/s1_clN/build_s1_clN_at*_{assessor,student}.py; do ../scripts/.venv/bin/python $g; done
+> for g in scripts/s1_clN/build_s1_clN_at*_{assessor,student,practice}.py; do ../scripts/.venv/bin/python $g; done  # practice twins rebuild with their ATs
 > git diff --stat -- '*/assessments/*.docx'      # must be empty
 > ```
 > A generator can be corrected and its built artefact left behind — that is how an AT3 instrument kept
@@ -158,7 +158,7 @@ Marking Guide, benchmark, and model answers). → detail [§9](#9--student-instr
 
 **10 · Mapping documents** *(cluster-level)*
 Generate the per-unit Assessment Mapping docs from the engine (rows from the source UoC, AT-column codes
-from the assessor benchmarks — inverted for CL2/CL3, read from the assessors' reverse-map tables for
+from the assessor benchmarks — inverted for CL2/CL3, from the hand-authored `DATA_*` dicts for
 CL1 — FS/AC closest-fit). Never hand-edit a mapping docx — it is derived. →
 [mapping-document-standard.md](mapping-document-standard.md) · detail [§10](#10--mapping-documents).
 > **⟱ Gate 10→11:** *validator* `validate-mapping-doc` = **PASS** for every unit — complete vs the unit's
@@ -347,8 +347,9 @@ auditable `--sub`, so the check still proves "identical except the intended chan
 scenario site, **never a URL** (evergreen — see [cluster-authoring-conventions.md](cluster-authoring-conventions.md)).
 
 ## §9 — Student instruments
-*(loops per AT.)* Copy the institutional Student template; derive content from the assessor companion (shared Details/Task/
-Resources; strip Marking Guide, assessor instructions, benchmark, model KE answers). The **`validate-student-instrument`**
+*(loops per AT.)* The student copy is not derived by hand: one workbook source renders in `student`
+mode (the assessor module rendered without the marking apparatus — see
+[assessment-workbook-format.md](assessment-workbook-format.md)). The **`validate-student-instrument`**
 gate then proves the strip is clean — no UoC mapping tags or assessor-only labels leaked into the
 `*-Student.docx` (the sanctioned UoC footer, "Knowledge Evidence" deliverable names, and criterion codes
 are legitimate and pass). Completeness + in-world tone remain the human review.

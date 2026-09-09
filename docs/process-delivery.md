@@ -121,32 +121,37 @@ sub-agent). → [cluster-specification-format.md](cluster-specification-format.m
 > clusters' frames are locked and signed off.
 
 **2 · Topic breakdown** *(loop per AT)*
-From each AT, identify the conceptual **Topics** — coherent teaching units anchored to the AT's own
-structure (deliverable sections, appendix/KE questions, marking criteria), placed into the cluster's
-session sequence against the frame's bookends; create a `topic_NN/` folder each. → detail [§2](#2--topic-breakdown).
+From each AT's **practice workbook**, identify the conceptual **Topics** — each Topic is one continuous
+run of workbook tasks with one subject. Boundaries are judged by **topic coherence, not session
+length** (sessions rarely break cleanly on topics anyway); create a `topic_NN/` folder each.
+→ detail [§2](#2--topic-breakdown).
 > **⟱ Gate 2→3:** *validator* `validate-topic-breakdown` = every AT (`assessments/AT<n>/`) has **≥1
 > Topic**; every Topic declares a valid AT via its `coverage.md` **`**AT<n> content Topic**`** marker (no
 > phantom AT; any alignment heading agrees); the Topic count **fits the frame** (≤ sessions available —
 > nominal-count divergence is reported, not failed) **+ human review** — the Topics are the *right* ones,
 > sized sanely against the frame. **built** — *structure only; the UoC-coverage depth is Gate 3→4.*
 
-**3 · Topic spec (`coverage.md`)** *(loop per Topic)*
-State what each Topic must cover, in **UoC** and **AT** terms — components C1..Cn from the AT; per
-component the UoC it **teaches** (canonical `[UNIT SEC num]` tags) and the **AT alignment**. **The AT
-sets the depth ceiling** — don't teach deeper than the assessment requires. → detail [§3](#3--topic-spec).
+**3 · Topic spec (`coverage.md`)** *(loop per Topic — derived, not hand-authored)*
+Each Topic's `coverage.md` is its UoC contract — components C1..Cn, per component the UoC it **teaches**
+(canonical `[UNIT SEC num]` tags) and the workbook tasks it culminates in. It is **generated from the
+Topic's slide plan** by `scripts/generate_topic_coverage.py` (`--cluster <dir> --at-map 1-5:AT1,…`) once
+step 4's plan is authored — never hand-edited. The role it plays: the mapping record for "where is this
+UoC item covered? — this slide here", and the per-topic contract `validate-slide-plan` re-checks.
+→ detail [§3](#3--topic-spec).
 > **⟱ Gate 3→4:** *validator* `validate-delivery-coverage` = the union of all Topics' `coverage.md` tags
 > **covers every assessed UoC item** in `consolidated_uoc.md` (nothing assessed-but-untaught; no phantom
 > tags) **+ human review.** **built** — *this is the delivery spine, the analogue of the assessment
-> run-sheet's `validate-cluster-coverage`* (back-tested on CL1, 90/90).
+> run-sheet's `validate-cluster-coverage`.* Run it after regenerating coverage; 100% is the bar
+> (CL1 105/105 · CL2 91/91 · CL3 64/64).
 
 **4 · Slide plan → Topic deck** *(loop per Topic)*
-Five stages: **author** `slide_plan.md` (the kept, validated source) → **validate** (`validate-slide-plan`)
-→ **assemble** the Topic's committed image assets (`diagrams/` specs + `images/` gen/reuse files) →
-**build** the Kangan deck (images placed + body text auto-fit in-pipeline) → **QA** (`inspect-file-size`
-+ `review-slides`). The **deck is a pure function of committed source**, so it rebuilds + re-reviews at
-will. → [slide-plan-format.md](slide-plan-format.md) · [kangan-branding.md](kangan-branding.md) · detail
-[§4](#4--topic-decks). **generic builder `build_topic_deck.py` + validate-slide-plan + inspect-file-size +
-review-slides built.**
+Five stages: **author** `slide_plan.md` from the practice workbook's task order (the kept, validated
+source) → **validate** (`validate-slide-plan`) → **assemble** the Topic's committed image assets
+(`diagrams/` specs + `images/` gen/reuse files) → **build** the Kangan deck (images placed + body text
+auto-fit in-pipeline) → **QA** (`inspect-file-size` + `review-slides`). The **deck is a pure function of
+committed source**, so it rebuilds + re-reviews at will. → [slide-plan-format.md](slide-plan-format.md) ·
+[kangan-branding.md](kangan-branding.md) · detail [§4](#4--topic-decks). **generic builder
+`build_topic_deck.py` + validate-slide-plan + inspect-file-size + review-slides built.**
 > **⟱ Gate 4→5:** *validator* `validate-slide-plan` = **PASS** (conforms + covers `coverage.md`) **before
 > the deck is built**; then on the built deck `inspect-file-size` ≤ guideline (git-tracked — keep small)
 > **+ `review-slides`** (render → per-slide PNGs): **0 placeholder boxes**, no overflow/overlap, no garbled
@@ -190,12 +195,14 @@ net against each other.
   Record who authorised it and why.
 
 ## §2 — Topic breakdown
-*(loops per AT.)* From the assessment itself, identify the conceptual **Topics** — coherent teaching
-units anchored to the AT's own structure (the natural movements of producing the deliverable; e.g. a
-Business Case = *know the tech → diagnose → build evidence → decide & plan → make the case*). Read **both**
-the Student and Assessor `.docx` (the source of truth — see the appendix). Name the Topics, place them in
-the cluster Topic sequence against the frame's fixed bookends (onboarding, spare buffer, assessment
-sessions), and create a `topic_NN/` folder each.
+*(loops per AT.)* From each AT's **practice workbook**, identify the conceptual **Topics**. A Topic is
+one continuous run of workbook tasks with one subject; every boundary is a subject change in the
+workbook. Judge boundaries by **topic coherence, not session length** — delivery rarely breaks cleanly
+on topics (one finishes early, the next starts, a session ends mid-topic and picks up next time), so
+don't shape topics around sessions. Before redrafting or building anything, put the full
+**task→topic frame** (a table mapping every workbook task to a topic, plus any boundary changes) to the
+human for approval — merges, re-cuts and moved tasks are decisions, not defaults. Name the Topics,
+create a `topic_NN/` folder each.
 
 **Model:** `AT → Topic → component`. A **Topic** is the delivery unit (one `topic_NN/` folder — the level
 you build materials for and schedule into sessions; aligns with the Delivery Plan template's "Topic and
@@ -209,27 +216,25 @@ Topic→AT assignment, corroborated by the `## N. AT<n> equivalence / alignment`
 **`validate-topic-breakdown`** gate reads that marker to prove every AT has ≥1 Topic, every Topic names a
 real AT, and the Topic count fits the frame.
 
-**Result (S1-CL1):** 14 content Topics across AT1 (1–5) / AT2 (6–10) / AT3 (11–14); assessments are
-separate lettered non-Topic sessions; + onboarding (S1) + spare/catch-up (S31–32).
+**Current state:** CL1 15 Topics (AT1 1–5 / AT2 6–10 / AT3 11–15) · CL2 9 (AT1 1–5 / AT2 6–9) ·
+CL3 8 (AT1 1–4 / AT2 5–6 / AT3 7–8) — all aligned to their workbooks' task runs.
 
 ## §3 — Topic spec
-*(loops per Topic.)* State what the Topic must cover, in **UoC** and **AT** terms — the contract its
-materials satisfy. **The AT sets the depth ceiling** — don't teach deeper than the assessment requires
-(e.g. Topic 1 = exactly Appendix 2 Q1–Q5, *recognise/explain/classify*, not build). List the Topic's
-components C1..Cn (from the AT); per component, the UoC it **teaches** (full `[UNIT SECTION num]` tags) +
-the **AT alignment** (which criteria / deliverable sections / appendix questions it prepares for);
-distinguish *taught here* vs *applied (taught earlier)*; state what is out of scope; end with a coverage
-checklist. **Only UoC + AT cross-references** — nothing pointing at working drafts, so the file stands
-alone when those are deleted.
+*(loops per Topic — derived.)* `coverage.md` states what the Topic covers, in **UoC** and workbook
+terms: components C1..Cn, each with its `Teaches:` tags and the workbook tasks it culminates in. It is
+**regenerated from the slide plan** by `scripts/generate_topic_coverage.py` whenever plans change —
+never hand-edited — so the contract always matches reality. **The AT sets the depth ceiling** — don't
+teach deeper than the assessment requires.
 
-The step-3 gate is where the **delivery spine** lives: `validate-delivery-coverage` reads every Topic's
-`coverage.md` tags and confirms their union covers every **assessed** UoC item in `consolidated_uoc.md` —
-the teaching-side mirror of the assessment run-sheet's cluster-coverage check. Because the `coverage.md`
-tags use the same canonical `[UNIT SEC num]` machinery (the shared `valid_tag_set`/`resolve_tags` parser),
-the check is deterministic.
+The generated structure carries what the validators parse: the `**AT<n> content Topic**` marker
+(`validate-topic-breakdown`), `- **C<n> …` component lines and the `UoC mapping` table
+(`validate-slide-plan`), all in canonical unwrapped `[UNIT SEC num]` tags (the shared
+`valid_tag_set`/`resolve_tags` parser).
 
-**Result (S1-CL1):** all 14 Topics specced; canonical tags in each `topic_NN/coverage.md` standardised
-project-wide; `validate-delivery-coverage` **PASSES 90/90**.
+The step-3 gate is the **delivery spine**: `validate-delivery-coverage` confirms the union of every
+Topic's tags covers every **assessed** UoC item in `consolidated_uoc.md`. A mention on a slide is
+enough to count as taught — the bar is "if asked where an item is covered, we can point at the slide" —
+but 100% coverage is hard-gated.
 
 ## §4 — Slide plan → Topic deck
 *(loops per Topic.)* A five-stage pipeline: **author** the Topic's `slide_plan.md` (to the
@@ -256,13 +261,16 @@ recorded demo** (from `planning/aws-recorded-demos-catalogue.md`); activity = a 
 written to the deck on every build.
 
 **The slide-creation process:**
-1. **`slide_plan.md`** — walk the Topic's components top-to-bottom; for each, **teach then its exercise**,
-   in deck order. **For a hands-on AWS practical, insert a `[DEMO]` between them — the flow is `teach →
-   demonstrate → practice`.** Mark each slide `[PRIMER]` (vendor-neutral fundamentals), `[BESPOKE]`
-   (content brief inline), `[AWS Mx Sy]` (an AWS deck slide to reuse), `[DEMO]` (recorded demo), or
-   `[EX]` (exercise). The plan **pins up front exactly which AWS slides the Topic needs** (deck + slide
-   numbers, via `planning/aws-deck-catalogue-draft.md`) — this pin table drives both the agent's reading
-   and the human's image-paste.
+1. **`slide_plan.md`** — walk the Topic's workbook tasks in order; for each block, **teach then its
+   exercise**: every `[EX]` slide names the numbered practice-workbook tasks it runs ("Workbook — tasks
+   5 to 9"), so the deck and the worksheet advance together. **For a hands-on AWS practical, insert a
+   `[DEMO]` between them — the flow is `teach → demonstrate → practice`.** Mark each slide `[PRIMER]`
+   (vendor-neutral fundamentals), `[BESPOKE]` (content brief inline), `[AWS Mx Sy]` (an AWS deck slide
+   to reuse), `[DEMO]` (recorded demo), or `[EX]` (exercise). The plan **pins up front exactly which AWS
+   slides the Topic needs** (deck + slide numbers, via `planning/aws-deck-catalogue-draft.md`).
+   **Knowledge questions:** practice workbooks carry none — the topic owning a question block rehearses
+   the **assessment's** questions against the practice work, answered from the student's own build or
+   design.
 2. **assemble the committed image assets** (before building, so the build has everything in place):
    author each `diagram` spec into `topic_NN/diagrams/<ref>.json`; run `image-gen` for each `gen` slide
    (generate-once → committed under `topic_NN/images/`); extract/export each `reuse` slide's asset into
@@ -275,10 +283,8 @@ written to the deck on every build.
    `scripts/helpers/deck_images.py` — `diagram`→draw-diagram, `gen`→image-gen, `reuse`→the committed
    `images/<file>` (all **placed straight into the deck**; a not-yet-supplied `reuse`/`placeholder`→a
    labelled placeholder; `none`→none) — and **auto-fitting + vertical-centring body text**. Output
-   `Topic_NN_Slides.pptx`. *(**One generic builder for every Topic in every cluster** — CL1 was migrated
-   off its per-Topic scripts onto `slide_plan.md` + `build_topic_deck.py` on 2026-07-09; no per-topic build
-   scripts remain. A Topic delivered as two decks for sizing — e.g. topic_08 → `slide_plan_08a.md` /
-   `slide_plan_08b.md`, each declaring `> **Covers-components: …**` — builds each half the same way.)*
+   `Topic_NN_Slides.pptx`. One generic builder for every Topic in every cluster; a Topic split across
+   two decks declares `> **Covers-components: …**` per plan and builds each half the same way.
 4. **QA the built deck** — `inspect-file-size` (≤25 MB) **and** `review-slides` (render → per-slide PNGs):
    confirm **0 leftover placeholder boxes**, no text overflow/clipping, no image↔text overlap, no garbled
    gen images, and acceptable whitespace/text-fill. Fix (reshape a wide-short diagram, re-extract an asset,
@@ -343,19 +349,25 @@ hand-consolidation (added source slides + images) would be lost.
 with PowerPoint > Compress Pictures (whole deck, 150 ppi, delete cropped areas) or by dropping the
 object, then re-run. Don't assume the culprit — diagnose it.
 
-**Result (S1-CL1):** Topics 1–14 (mixes of bespoke + AWS-sourced); all Kangan-branded; each opener →
-components (*teach → exercise → takeaways*) → close; exercises run on the Accounting practice scenario.
+**Authoring rules the builder makes non-negotiable** (both machine-gated by `validate-slide-plan`'s
+render-safety checks, mirroring the builder's line grammar):
+- **Every bullet on ONE line, however long** — a wrapped continuation line renders as its own broken
+  bullet.
+- **Plain text only in rendered content** (titles, kickers, bullets) — the engine has no markdown, so
+  `**bold**`, `*italic*` and backticks come out literally. Notes blocks are exempt (speaker pane).
 
-**Result (S1-CL2):** the generic `build_topic_deck.py` proven end-to-end on **topic_01** — `slide_plan.md`
-(full content) → 20-slide deck with the web-scale architecture diagram (draw-diagram, in-pipeline) + two
-decorative images (image-gen / Nano Banana) **placed automatically**; 1.86 MB. The remaining CL2 Topics
-need their slide plans authored, then built the same way.
+**Teacher notes are brief:** 3–6 bullets per slide — the intent, one press point, one misconception.
+Not an encyclopedia; a teacher running the deck cold needs hints, not an essay.
 
-**Result (S1-CL3):** all 8 Topics built from their validated slide plans — 6 draw-diagram diagrams
-(2 flowcharts + 4 architecture/allocation) + 8 image-gen heroes placed in-pipeline; 13–18 slides each,
-**each deck size-gated with `inspect-file-size` (all 0.8–0.98 MB, well under guideline) before commit**.
-*(Run the size gate on the built decks **before** committing — it is part of this step, not an
-afterthought.)*
+**Current state:** all 32 S1 Topics (CL1 15 · CL2 9 · CL3 8) built by the generic builder from
+validated plans, size-gated before commit. *(Run the size gate on the built decks **before** committing
+— it is part of this step, not an afterthought.)*
+
+**When an assessment changes shape, the affected decks re-run this loop.** Instruments reopen each
+delivery cycle for the feedback-driven improvement pass — a materially changed workbook means:
+re-extract the task spine → put the task→topic frame to the human (step 2) → redraft the affected plans
+→ regenerate coverage (step 3) → gates → rebuild. The bulk conversion is done; this is the standing
+maintenance loop.
 
 ## §5 — Practice tasks
 *(loops per AT.)* Derive the AT-mirroring **practice task** — re-scenarioed away from the real assessment
@@ -432,9 +444,10 @@ instance-time alongside the first real plan.)*
 
 # Appendix — process-wide gotchas
 
-1. **The `.docx` is the source of truth for each AT, not the `.md`.** The markdown companions were an
-   intermediate step toward the institutional `.docx`; downstream edits may have landed only in the
-   `.docx`. Extract from the `.docx`.
+1. **The generator scripts are the source of truth for each AT, not the built `.docx`.** Instruments
+   are generated (`scripts/s?_cl?/*_run_sheet.py` + builders); read the task spine, tags and prompts
+   from the generators, and never hand-edit a built instrument. (A cross-cutting content sweep must
+   grep the `.py` builders — the binaries can't be grepped.)
 2. **`docx_to_text` extraction on Windows.** The repo's `scripts/validate_uoc.py` has a reusable
    `docx_to_text(Path)`. Printing its output straight to the Windows console fails on non-cp1252 glyphs
    (e.g. `☐`); and native Python doesn't resolve bash's `/tmp`. Write the extracted text to a file under

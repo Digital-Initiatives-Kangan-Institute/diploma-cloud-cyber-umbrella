@@ -44,10 +44,10 @@ Producing the mapping mechanically depends on one discipline in the **assessor i
 - **A criterion-ID scheme that identifies the AT.** Each criterion code maps to exactly one Assessment
   Task. Two conventions are in use and both are acceptable; pick one per cluster and be consistent:
   - **Per-AT prefix** (CL2): one flat criterion list per item; a prefix rule buckets codes into columns
-    (e.g. `A`/`B`/`C` → AT1, `D` → AT2). The split lives in the generator's `_split_codes()`.
+    — the benchmark is inverted per AT at source, so criterion-code letters are readability only.
   - **Per-AT benchmark** (CL3): each AT's benchmark is inverted under its own column directly, so the AT
     is known without a prefix rule. Criterion codes still carry an AT-distinct prefix for readability
-    (CL3: AT1 `D#`, AT2 `I#`, AT3 `E#`).
+    (CL3: AT1 `D#`, AT2 `T#`, AT3 `I#`).
 
 Meet this contract and the mapping document is fully determined by the UoC and the benchmarks.
 

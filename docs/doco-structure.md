@@ -79,7 +79,7 @@ generic language/framework advice, deep detail (→ `docs/`), user-facing framin
 **Cadence.** Stable. A rule lands here when it must bind **every** session — often by *graduating up*
 from `MEMORY` (see the split below). Don't let it grow into a wiki.
 
-### 3. `MEMORY.md` (+ `.claude/memory/`) — the agent's accumulated durable knowledge
+### 3. `.claude/memory/MEMORY.md` (+ topic files) — the agent's accumulated durable knowledge
 
 **Audience.** Claude, across sessions. The **index** (`MEMORY.md`, one line per memory) is loaded
 every session; the **topic files** are pulled in **on demand** when a task touches them.

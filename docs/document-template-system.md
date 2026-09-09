@@ -70,7 +70,7 @@ presenting itself as a standing organisational document.
 
 **The library is the set of templates an assessment asks for.** The intranet Templates page carries
 those and nothing else: offering a template no criterion marks invites a student to write their
-assessment into it. A survey of all nine S1 instruments found three — the Business Case and its
+assessment into it. A survey of all eight S1 instruments found three — the Business Case and its
 board-presentation deck (S1-CL1 AT1), and the Disaster Recovery Plan (S1-CL2 AT1). The Solution
 Design, Deployment Report and Team Plan templates were retired when those assessments became
 workbooks that capture the work themselves. The page lives at the website repo's
@@ -135,21 +135,19 @@ The roles below apply to the templates that do survive.
   supplied-section marker, in normal body styling so it reads as report content. It is not marked, and
   the assessment instrument says so. This removes writing that evidences nothing while keeping the
   deliverable a complete, coherent document.
-- **Deployment-report evidence is described, not fabricated** — `[SCREENSHOT — should show …]`
-  placeholders stand in (no real AWS captures are available). There is deliberately **no student
-  deployment-report model** — it would leak the AT2/AT3 build.
+- **Exemplar evidence is committed beside the generators** (`assessments/AT*/exemplar-evidence/`
+  screenshots) so the assessor copy regenerates worked rather than blank. Student-facing models of the
+  assessed builds stay off the site where they would leak an answer; the served in-world documents
+  (e.g. the LMS deployment report) belong to already-completed scenario history, not the assessed work.
 - **Served artefacts → website repo `public/`; internal exemplars → content repo.**
 - The supplied AT2 baseline design is the branded Solution Design **PDF** on the intranet; it doubles
   as the model for AT3, where students author their own HA Solution Design.
 - **Feedback is captured in-deliverable, not as a standalone Feedback Record.** Each key deliverable
   carries a review/sign-off block where the role-played superior writes comments and signs off — the
-  natural document → feedback → sign-off cycle. The **Solution Design template has a §9 Review and
-  Approval** block: §9.1 is the reviewer-feedback-and-author-response table, §9.2 the sign-off table
-  with an *Approved / Approved with comments / Rejected* decision. On the AT3 HA design this
-  submission-to-superior carries the Group 10 feedback PCs (seek/respond/confirm feedback + provide
-  for approval — 401 4.2, 502 5.2, 517 2.4, 517 3.3), because the *action plan* / *evaluation* a 517
-  PC names rides with the design's "how", not the business case's "should we". The Business Case
-  sign-off block serves the AT1 strategic feedback/approval.
+  natural document → feedback → sign-off cycle. In the surviving templates that block is the
+  reviewer-feedback table plus a sign-off table with an *Approved / Approved with comments / Rejected*
+  decision; in the workbook instruments the same cycle runs as walkthrough → feedback → sign-off
+  tasks.
 - **A block a deliverable's assessment doesn't look at doesn't belong in its template.** A review or
   sign-off block belongs where a criterion marks it; where no criterion does, it is furniture the
   student fills in for nobody.

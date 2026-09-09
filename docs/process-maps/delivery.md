@@ -10,8 +10,8 @@
 flowchart TD
   S1["1 · Cluster specification (delivery frame)<br/><i>🏠 setup-cluster-spec</i><br/><i>📦 cluster-specification.md</i><br/><i>(per cluster; gate is semester-level)</i>"]:::step
   S2["2 · Topic breakdown<br/><i>📦 coverage.md</i><br/><i>👤 human-led</i><br/><i>(loop per AT)</i>"]:::step
-  S3["3 · Topic spec (coverage.md)<br/><i>🏠 run_sheet</i><br/><i>📦 coverage.md, consolidated_uoc.md</i><br/><i>👤 human-led</i><br/><i>(loop per Topic)</i>"]:::step
-  S4["4 · Slide plan → Topic deck<br/><i>🏠 draw-diagram, image-gen, build_topic_deck, deck_images, kangan_deck</i><br/><i>📦 slide_plan.md, coverage.md, aws-recorded-demos-catalogue.md, aws-deck-catalogue-draft.md</i><br/><i>👤 human-led</i><br/><i>(loop per Topic)</i>"]:::step
+  S3["3 · Topic spec (coverage.md)<br/><i>🏠 generate_topic_coverage</i><br/><i>📦 coverage.md, consolidated_uoc.md</i><br/><i>👤 human-led</i><br/><i>(loop per Topic — derived, not hand-authored)</i>"]:::step
+  S4["4 · Slide plan → Topic deck<br/><i>🏠 draw-diagram, image-gen, build_topic_deck, kangan_deck, deck_images</i><br/><i>📦 slide_plan.md, coverage.md, aws-recorded-demos-catalogue.md, aws-deck-catalogue-draft.md</i><br/><i>👤 human-led</i><br/><i>(loop per Topic)</i>"]:::step
   S5["5 · Practice tasks<br/><i>🏠 run_sheet</i><br/><i>🌐 states.ts</i><br/><i>👤 human-led</i><br/><i>(loop per AT)</i>"]:::step
   S6["6 · Delivery plan<br/><i>📦 Delivery_Plan_Template_v0.1.docx, delivery-plan.md, S1_CL1_Delivery_Plan.docx, cl1-delivery-sessions-draft.md</i><br/><i>👤 human-led</i><br/><i>(cluster-level — capstone)</i>"]:::step
   G1_2{{"Gate 1→2<br/>validate-cluster-spec + human"}}:::built
@@ -46,8 +46,8 @@ flowchart TD
 |---|---|---|---|
 | 1 · Cluster specification (delivery frame) | 🛠 `setup-cluster-spec` | 📦 `cluster-specification.md` | ⚙ tool-driven |
 | 2 · Topic breakdown | — | 📦 `coverage.md` | 👤 human-led |
-| 3 · Topic spec (`coverage.md`) | ⚙ `run_sheet` | 📦 `coverage.md`, 📦 `consolidated_uoc.md` | 👤 human-led |
-| 4 · Slide plan → Topic deck | 🛠 `draw-diagram`, 🛠 `image-gen`, ⚙ `build_topic_deck`, ⚙ `deck_images`, ⚙ `kangan_deck` | 📦 `slide_plan.md`, 📦 `coverage.md`, 📦 `aws-recorded-demos-catalogue.md`, 📦 `aws-deck-catalogue-draft.md`, 📦 `Topic_NN_Slides.pptx`, 📦 `slide_plan_08a.md`, 📦 `slide_plan_08b.md` | 👤 human-led |
+| 3 · Topic spec (`coverage.md`) | ⚙ `generate_topic_coverage` | 📦 `coverage.md`, 📦 `consolidated_uoc.md` | 👤 human-led |
+| 4 · Slide plan → Topic deck | 🛠 `draw-diagram`, 🛠 `image-gen`, ⚙ `build_topic_deck`, ⚙ `kangan_deck`, ⚙ `deck_images` | 📦 `slide_plan.md`, 📦 `coverage.md`, 📦 `aws-recorded-demos-catalogue.md`, 📦 `aws-deck-catalogue-draft.md`, 📦 `Topic_NN_Slides.pptx` | 👤 human-led |
 | 5 · Practice tasks | ⚙ `run_sheet` | 🌐 `states.ts` | 👤 human-led |
 | 6 · Delivery plan | — | 📦 `Delivery_Plan_Template_v0.1.docx`, 📦 `delivery-plan.md`, 📦 `S1_CL1_Delivery_Plan.docx`, 📦 `cl1-delivery-sessions-draft.md` | 👤 human-led |
 

@@ -1,18 +1,19 @@
 # Source materials
 
-A map of the `diploma-cloud-cyber-content` source materials — what lives in the workspace and what
-state each piece of source material is in. (Project docs — overview, clusters, the authoring/delivery
-processes — are catalogued in the docs [INDEX.md](INDEX.md).)
+A map of the supplied source materials (`original_materials/`) — what each unit's inherited material
+is and what state it's in. (Project docs — overview, clusters, the authoring/delivery processes — are
+catalogued in the docs [INDEX.md](INDEX.md).)
 
-> **Paths** are relative to the **content repo** root.
+> **Paths** are relative to the **content repo** root (`diploma-cloud-cyber-content-s1` /
+> `…-s2` — one repo per semester).
 
 ## Source-material workspace folders
 
 | Folder | Purpose |
 |---|---|
-| `original_materials/` | All source materials as supplied. **Read-only reference.** Files we decide to reuse get copied out into the workspace (per cluster) and edited there — the originals are never modified, never extended, never "completed". |
-| `templates/` | Workspace-level templates we author cluster outputs against (Assessment Mapping Tool, Delivery Plan, Project Assessment student/assessor, Written Assessment student/assessor). Distinct from the institutional `_TEMPLATES/` folder nested inside `original_materials/`. |
-| `courseware/` | Scaffolded working workspace where finished cluster artefacts live. Organised as `semester_{1,2}/cl_<cluster_name>/units_of_competency/`. Each `units_of_competency/` folder already contains the `<UNIT>_Complete_R1.docx` reference document for the units in that cluster (the training-package UoC definition). |
+| `original_materials/` | All source materials as supplied. **Read-only reference.** Files we decide to reuse get copied out into the working cluster folders and edited there — the originals are never modified, never extended, never "completed". |
+| `kangan-templates/` | The institutional templates we author cluster outputs against (Assessment Mapping Tool, Delivery Plan, Project/Written Assessment student + assessor). Distinct from the `_TEMPLATES/` folder nested inside `original_materials/`. |
+| `SX-CLY-<Name>/` | The working cluster folders (e.g. `S1-CL1-Cloud-Design-Build/`) — each holds `units_of_competency/` (`.md` transcriptions, with the `.docx` sources under `units_of_competency/original/`), `consolidated_uoc.md`, `cluster-specification.md`, `assessments/`, `delivery/` and `mappings/`. |
 
 ## `original_materials/DipIT_20260313/`
 
@@ -81,26 +82,17 @@ Updated teaching-and-learning material for two cloud units delivered separately 
 
 These updates should supersede the equivalent files in `DipIT_20260313/ICTCLD503/` and `ICTCLD504/` — to be verified during the audit phase.
 
-## `courseware/` (workspace root)
+## Working cluster folders
 
-The working destination for finished cluster artefacts. Already scaffolded with seven cluster folders under two semester folders, each containing a `units_of_competency/` subfolder pre-populated with the relevant unit-of-competency reference documents (`<UNIT>_Complete_R1.docx`). These reference docs contain the training-package definition for each unit: Application, Elements & Performance Criteria, Foundation Skills, Performance Evidence, Knowledge Evidence, Assessment Conditions, and Links.
+Finished cluster artefacts live in the `SX-CLY-<Name>/` folders at the repo root — S1's three cloud
+clusters in `diploma-cloud-cyber-content-s1`, S2's four cyber clusters in `…-s2`. Each unit's
+`_Complete_R1.docx` reference (the training-package UoC definition) sits under that cluster's
+`units_of_competency/original/`, transcribed verbatim to `.md` beside it.
 
-```
-courseware/
-  semester_1/
-    cl_cloud_design_build/units_of_competency/         (ICTCLD401, ICTCLD502, ICTICT517)
-    cl_cloud_dissaster_recovery/units_of_competency/   (ICTCLD501, ICTCLD503, ICTCLD505)
-    cl_cloud_improve_infrastructure/units_of_competency/  (BSBXTW401, ICTCLD504)
-  semester_2/
-    cl_cyber_design/units_of_competency/               (ICTCYS613, ICTSAS524, ICTSAS526)
-    cl_cyber_enterprise_systems/units_of_competency/   (ICTCYS610, ICTNWK540, ICTNWK553) + VU23226 missing
-    cl_cyber_policy/units_of_competency/               (BSBXCS402, ICTICT532)
-    cl_threat_hunting/units_of_competency/             (BSBCRT512, ICTCYS407, ICTSAS527)
-```
+19 of 20 cluster-list units have a `_Complete_R1.docx`. **VU23226 does not** — a search of the entire
+supplied source set found no reference to it anywhere.
 
-19 of 20 cluster-list units have a `_Complete_R1.docx`. **VU23226 does not** — and a search of the entire supplied source set found no reference to it anywhere.
-
-## `templates/` (workspace root)
+## `kangan-templates/` (repo root)
 
 Cluster-output templates supplied for use in this project. These are the templates we author *to*, not the templates the source units were authored from.
 

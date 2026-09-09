@@ -28,6 +28,8 @@ rules, and memory load *only* from the launch dir, so launching from a sub-repo 
 shared layer.
 
 ## Read first — REQUIRED
+- **[docs/big-picture.md](docs/big-picture.md)** — the whole factory in one page (UoCs → assessments →
+  practice mirrors → teaching → delivery). Thirty seconds; read it before anything else.
 - **[docs/INDEX.md](docs/INDEX.md) — read this every session.** It is the catalogue of all process +
   course documentation (the single docs surface for the umbrella *and* the sub-repos). Knowing what docs
   exist is mandatory; **load the relevant doc before doing related work** (assessment authoring,
@@ -61,15 +63,10 @@ shared layer plus whichever semester's context you're currently touching.
 ## Working discipline — assumptions & documentation
 
 **Everything we write here is the current working approach, not law.** Docs, standards, conventions and
-memory record what we do *now* and why; they stay open to change the moment a better path shows up. Write
-them that way — *"the current approach"*, *"what we do now"*, *"the ambition is…"* — not *"the rule"*,
-*"never"*, *"must"*, *"invariant"*. Where something is worth protecting, state it as an **ambition** (we
-prefer X wherever it's free) rather than a prohibition, and don't contort the work to defend it. The one
-thing to state firmly is a constraint we have **no capability to change if we needed to** — the Learner Lab
-refusing IAM creation, CloudFormation rejecting a non-ASCII description — because softening a wall just
-misleads. Externally imposed is not enough on its own: an outside constraint we could negotiate or work
-around is still a working approach. See [docs/doco-structure.md](docs/doco-structure.md). *(This principle
-is itself a current working approach, not law.)*
+memory record what we do *now*, open to change when a better path shows up — write *"the current
+approach"*, not *"never"* / *"must"* / *"invariant"*. State firmly only a constraint we have no
+capability to change (e.g. the Learner Lab refusing IAM creation). Full principle:
+[docs/doco-structure.md](docs/doco-structure.md).
 
 Never record anything as *decided / agreed / canonical* unless it was actively discussed **and**
 explicitly approved. Flag anything not yet agreed with `[TBD — needs discussion: <what is open>]`

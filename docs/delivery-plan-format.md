@@ -19,7 +19,9 @@ sequencing is **human judgment and stays human**; this format does not try to re
 the format *does* is capture the outcome of that session as a machine-readable **outline
 (`<cluster>/delivery/delivery-plan.md`)** whose **completeness can be checked** — so the AI knows when
 the juggling session has produced *enough* to generate the docx, and can keep prompting the human for any
-decision still missing. When the outline validates, an automated step fills the docx from it.
+decision still missing. When the outline validates, a docx-fill step generates the institutional
+document — **the generator is not yet built**; it is authored at instance-time alongside the first
+real plan.
 
 **This document is the single source of truth — for what the outline contains *and* for what the
 validator checks.** It informs the producing session and is an **input to validation**: the linter reads

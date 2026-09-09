@@ -1,24 +1,27 @@
-# Diploma of IT (Cloud & Cyber Security) — Suggested Cluster Structure
+# Diploma of IT (Cloud & Cyber Security) — Cluster Structure
 
-> Status: **draft / proposed**. Tim has scope to challenge the clustering if a unit is clearly misplaced. This document captures the clustering as it currently stands so it can be reasoned about, refined and signed off.
+> **S1's three clusters are settled and built** (specs agreed, instruments + delivery materials
+> complete — the working folders are `S1-CL1-Cloud-Design-Build`, `S1-CL2-Cloud-Disaster-Recovery`,
+> `S1-CL3-Cloud-Infrastructure-Improvement` in the S1 content repo). **S2's four clusters are still
+> the proposed grouping** — pre-audit; unit placements may shift.
 
 ## Semester 1 — Cloud focus
 
-### Cluster: Cloud Design and Build
+### S1-CL1 · Cloud Design and Build
 | Unit code | Unit title |
 |---|---|
 | ICTCLD502 | Design and implement highly-available cloud infrastructure |
 | ICTCLD401 | Configure cloud services |
 | ICTICT517 | Match ICT needs with the strategic direction of the organisation |
 
-### Cluster: Cloud Disaster Recovery
+### S1-CL2 · Cloud Disaster Recovery
 | Unit code | Unit title |
 |---|---|
 | ICTCLD501 | Develop cloud disaster recovery plans |
 | ICTCLD503 | Implement web-scale cloud infrastructure |
 | ICTCLD505 | Implement cloud infrastructure with code |
 
-### Cluster: Cloud Improve Infra as a Team
+### S1-CL3 · Cloud Infrastructure Improvement
 | Unit code | Unit title |
 |---|---|
 | ICTCLD504 | Improve cloud-based infrastructure |

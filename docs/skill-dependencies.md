@@ -42,6 +42,13 @@ install guidance into the session so Claude can help — the same defensive patt
 one level up. The hook **ships in every project** (so this reference always resolves); it is **wired**
 into `settings.json` only when the project actually carries a Python skill.
 
+## The umbrella engine's venv (the other dependency home)
+
+The per-skill pattern above covers `.claude/skills/`. The shared engine at the umbrella's `scripts/`
+has its own committed `scripts/requirements.txt` (python-docx, python-pptx) and gitignored
+`scripts/.venv/` — every generator and deck build runs with `scripts/.venv/bin/python`. One venv for
+the whole engine; per-skill venvs for skills.
+
 ## Why this shape
 
 - **Copyable machine** — the dependency setup travels *with* the skill folder; clone it, make the venv,

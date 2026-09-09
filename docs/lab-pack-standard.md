@@ -73,6 +73,11 @@ lab-pack/
   README.md            STUDENT-FACING, click-by-click: open the sandbox -> region -> deploy ->
                        verify -> tear down. Plain language, no jargon, no meta.
   claude-notes.md      Author/assessor notes: findings, deviations, the standard, links. NOT student-facing.
+
+Two variants extend the skeleton: a **practice lab-pack** at `<cluster>/delivery/practice-lab-pack/`
+(same shape, practice baseline, no claude-notes required), and the **apply-as-update pack** (CL3 AT3)
+shipping `baseline.yaml` + `improved.yaml` so the improvement applies as a change-set over the running
+baseline.
   requirements.txt     local-validation deps (cfn-lint always; pytest where useful). Keep LIGHT.
   .gitignore           .venv/  __pycache__/  .pytest_cache/
   .cfnlintrc.yaml      documented lint suppressions only (short + justified)

@@ -4,7 +4,7 @@
 **teaching decks**. These are delivered by Kangan and so wear Kangan/BKI branding.
 
 > **Not to be confused with the YAT brand.** YAT College is the in-world *case study*; its
-> brand (teal/terracotta/ochre — see `scenario/branding/brand-pack.md`) belongs **inside the
+> brand (teal/terracotta/ochre — see the content repo's `scenario/brand-pack.md`) belongs **inside the
 > scenario documents** (business cases, solution designs, the intranet). The teaching deck that
 > *wraps around* the scenario is a Kangan asset and uses **this** brand. Keep the two separate.
 
@@ -78,6 +78,6 @@ sans-serif throughout; tagline "Unleash You". Corporate-but-approachable TAFE po
 - **Key-takeaways slides** = light-tint background, each point on a white card with an accent edge.
 - **Footer** = "Kangan Institute" wordmark + page number on a thin accent rule.
 
-> **Base module:** `scripts/kangan_deck.py` holds all brand + layout code (the same role `pptx_brand.py`
+> **Base module:** `scripts/helpers/kangan_deck.py` holds all brand + layout code (the same role `pptx_brand.py`
 > serves for the YAT board decks). Every teaching deck imports it; per-Topic builders carry content only.
 > To start a new deck: `import kangan_deck as k`, `prs = k.new_deck()`, assemble with the layouts, `k.save(prs, path)`.

@@ -36,11 +36,11 @@
       "num": "3",
       "title": "Topic spec (`coverage.md`)",
       "skill": null,
-      "scope": "loop per Topic",
+      "scope": "loop per Topic \u2014 derived, not hand-authored",
       "status": null,
       "tools": [
         {
-          "name": "run_sheet",
+          "name": "generate_topic_coverage",
           "kind": "engine"
         }
       ],
@@ -77,11 +77,11 @@
           "kind": "engine"
         },
         {
-          "name": "deck_images",
+          "name": "kangan_deck",
           "kind": "engine"
         },
         {
-          "name": "kangan_deck",
+          "name": "deck_images",
           "kind": "engine"
         }
       ],
@@ -109,16 +109,6 @@
         {
           "name": "Topic_NN_Slides.pptx",
           "path": "Topic_NN_Slides.pptx",
-          "locus": "subrepo"
-        },
-        {
-          "name": "slide_plan_08a.md",
-          "path": "slide_plan_08a.md",
-          "locus": "subrepo"
-        },
-        {
-          "name": "slide_plan_08b.md",
-          "path": "slide_plan_08b.md",
           "locus": "subrepo"
         }
       ]

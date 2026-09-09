@@ -1,12 +1,12 @@
 # `.claude/` — capabilities reference
 
-This is the **canonical reference** for what Claude Code can hold at the project level — the
-single place (across the umbrella and both sub-repos) that explains each folder/file. The repo
-carries a **uniform skeleton**: folders that aren't in use yet are held open by a `.gitkeep` and
-are ready to fill (drop a skill in `skills/`, a rule in `rules/`, etc.). Live assets currently in
-use: `settings.json` (incl. the SessionStart memory hook), `hooks/ensure-repo-memory.mjs`,
-`rules/`, and `memory/`. `settings.example.json` is an inert catalogue of keys you can copy into
-`settings.json`.
+This is the **canonical reference** for what Claude Code can hold at the project level — the single
+place (across the umbrella and its sub-repos) that explains each folder/file. Folders not yet in use
+are held open by a `.gitkeep`. Live assets currently in use: `settings.json`, both hooks
+(`hooks/ensure-repo-memory.mjs`, `hooks/ensure-python.mjs`), `rules/`, `memory/`, `output-styles/`,
+`agents/` (two project agents), and `skills/` — the umbrella's main asset: the skills catalogued in
+[`skills/README.md`](skills/README.md), plus the validator suite in `skills/scripts/`.
+`settings.example.json` is an inert catalogue of keys you can copy into `settings.json`.
 
 > Scope note: this is the **project / umbrella** layer. There is also a **user layer**
 > at `~/.claude/` (settings, skills, agents, rules, keybindings, CLAUDE.md) that applies
@@ -25,7 +25,7 @@ use: `settings.json` (incl. the SessionStart memory hook), `hooks/ensure-repo-me
 | `agent-memory-local/<agent>/` | Machine-local subagent memory | ❌ gitignored |
 | `output-styles/<name>/` | Output style definitions (adjust system-prompt tone/format) | ✅ committed |
 | `hooks/` | Hook scripts referenced from `settings.json` | ✅ committed |
-| `status-line.md` | Custom status line script (alternative to `settings.statusLine`) | ✅ committed |
+| `status-line.md` | Custom status line script (alternative to `settings.statusLine`) | — possible, not present |
 
 ## Related files OUTSIDE `.claude/` (at the repo root)
 

@@ -42,7 +42,7 @@ a requirement. The **quality and coherence** of the world stays the Gate 6→7 h
   `#### SE-NN` blocks.
 - **Status** — every item carries `to-build` | `built` | `carry-over`, so one format serves a greenfield
   scenario (items start `to-build`) and a delivered one (items are `built` with real paths).
-- **Locations** are prefixed `website:` (the `diploma-cloud-cyber-website` repo — SSOT for in-world content),
+- **Locations** are prefixed `website:` (the semester's `diploma-cloud-cyber-website-s?` repo — SSOT for in-world content),
   `content:` (this repo: lab-packs, template generators), or `external:` (e.g. AWS Academy). For a `to-build`
   item the location is the **target**; for a `built` item it is the actual path.
 

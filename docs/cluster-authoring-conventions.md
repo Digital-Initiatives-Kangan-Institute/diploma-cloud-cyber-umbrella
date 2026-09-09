@@ -14,16 +14,20 @@ This document captures the standing conventions for authoring cluster assessment
 - **AT-scope discipline:** each AT only evidences UoC items mapped to it; the rest go to other ATs in the cluster. Don't claim AT1 evidences AT2/AT3 items.
 - **Free-floating criteria self-audit (mandatory final pass):** after drafting any marking guide, scan the UoC reference column on every criterion. **Any criterion with a blank UoC column, or with placeholder text like "(scoping context; supports the rest)" or "(institutional)" in place of a real `[UNIT SECTION numbering]` tag, is a free-floating criterion and must be either dropped or properly mapped.** Run this self-audit pass before reporting any marking guide as drafted. Required template sections that *don't* trace to UoC (e.g. an Executive Summary, Engagement Context, Scope) can stay in the template — they aren't assessed criteria, they're scaffolding for a coherent deliverable. The Document Quality criterion implicitly catches weakness in those sections.
 
-## 2. Knowledge Evidence — two locations
+## 2. Knowledge Evidence — where it lives
 
-**Why:** consistent KE coverage across students (written) + assessor flexibility for depth (oral).
+**Why:** KE needs consistent, contextual coverage — questions about the student's own work, not
+abstract recall.
 
 **How to apply:**
-- **Location 1:** Knowledge Evidence Appendix in the Business Case / portfolio. Two question patterns:
-  - **Selection-style:** *"Which of these [X items] did your solution use? Explain why."* — for enumerable KE items.
-  - **Demonstration-style:** *"How does your plan demonstrate [principle]? Identify where it appears in your work."* — for principles/methodologies.
-- **Location 2:** Post-presentation Q&A. Assessor selects from a tagged question bank, may probe deeper than the written appendix.
-- **Questions in context, not abstract recall.** Bad: *"Explain the difference between IaaS, PaaS, SaaS."* Good: *"For each component of your AWS solution, identify whether it is IaaS, PaaS or SaaS, and explain your choice."*
+- **The workbook default (most ATs):** KE is evidenced by numbered workbook tasks and a question block
+  at the end of a part, answered from the student's own build or design. The practice twin carries no
+  questions; teaching rehearses the assessment's questions against the practice work.
+- **The narrative-instrument variant (CL1 AT1):** a Knowledge Evidence appendix in the deliverable plus
+  post-presentation Q&A from a tagged question bank.
+- **Questions in context, not abstract recall.** Bad: *"Explain the difference between IaaS, PaaS,
+  SaaS."* Good: *"For each component of your solution, identify whether it is IaaS, PaaS or SaaS, and
+  explain your choice."*
 
 ## 3. Institutional template workflow
 
@@ -31,7 +35,7 @@ This document captures the standing conventions for authoring cluster assessment
 reproducible from source rather than hand-maintained as a binary.
 
 **How to apply:**
-- The umbrella `kangan-templates/` folder holds the institutional Word templates (Project Assessment -
+- The content repo's `kangan-templates/` folder holds the institutional Word templates (Project Assessment -
   Assessor.docx, Project Assessment - Student.docx, Written Assessment - Assessor.docx, Written Assessment -
   Student.docx, Assessment Mapping Tool.docx, Delivery_Plan_Template_v0.1.docx).
 - **An instrument is generated, not hand-edited.** Its content lives in a Python content module in the
@@ -68,12 +72,12 @@ For how the scenario threads through assessments, see [scenario-flow.md](scenari
 
 **How to apply:**
 - New scenario authoring dependencies surfaced during AT authoring — add them to the scenario checklist's "still to author" backlog (or note in the AT doc's "Authoring notes" section if it's a one-off).
-- New template dependencies — add to `<cluster>/assessments/templates/checklist.md`.
+- A surviving deliverable template lives with the generator that fills it (see document-template-system.md); the workbook is the default and templates are the exception.
 - Status banners (`STATUS: DRAFT`) on every authored artefact per CLAUDE.md Rule 1; mark author-invented specifics with `TBD` per Rule 2.
 
 ## 6. Cross-AT shape comparability
 
-**Why:** when an AT's deliverable shape recurs in a later AT (e.g. AT2 Deployment Report → AT3 HA Deployment Report), students benefit from the **same section structure in the same places**, so the second deliverable is recognisable from the first.
+**Why:** when an AT's deliverable shape recurs in a later AT, students benefit from the **same section structure in the same places**, so the second deliverable is recognisable from the first.
 
 **How to apply:**
 - Use the same major section headings in the same order across comparable deliverables (e.g. §1 Exec Summary, §2 Engagement Context, §3 Scope, §4 Build Narrative, §5 Configuration Decisions, §6 Testing, §7 Handover, §8 Knowledge Evidence, Appendices A–D).
